@@ -148,7 +148,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', syste
     <p>Amazon 全站 · Shopify 独立站 · Chewy 宠物垂直 | VAT 自动剥离 · 多币种显示</p>
   </div>
     <div class="header-right">
-    <button class="btn btn-primary" onclick="openPasteModal()" style="background:linear-gradient(135deg,#f59e0b,#ef4444);border:none;font-weight:700;letter-spacing:.3px;box-shadow:0 2px 12px rgba(245,158,11,.35);">⚡ 粘贴产品页 → 自动识别</button>
     <button class="btn btn-ghost" onclick="resetAll()">↺ 重置</button>
     <button class="btn btn-primary" onclick="generateReport()">📄 生成报告</button>
   </div>
@@ -187,7 +186,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', syste
     <!-- MODULE 1: 产品信息 -->
     <div class="section-title"><span class="dot"></span>模块一：产品与售价</div>
     <div class="field-group">
-      <div class="field-label">产品链接（可选）<span data-tip="粘贴 Amazon / Chewy 产品页 URL，将保存到报告中方便下次查看">ⓘ</span></div>
+      <div class="field-label" style="display:flex;align-items:center;gap:8px;">产品链接（可选）<span data-tip="粘贴 Amazon / Chewy 产品页 URL，将保存到报告中方便下次查看">ⓘ</span><button type="button" onclick="openPasteModal()" style="background:linear-gradient(135deg,#f59e0b,#ef4444);border:none;border-radius:5px;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;cursor:pointer;letter-spacing:.3px;box-shadow:0 1px 6px rgba(245,158,11,.3);white-space:nowrap;">⚡ 粘贴识别</button></div>
       <div class="field-unit" style="gap:6px;">
         <input type="url" class="field-input" id="productUrl" placeholder="https://www.amazon.com/dp/..." style="font-size:11px;" />
       </div>
