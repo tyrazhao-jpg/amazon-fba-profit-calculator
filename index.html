@@ -3,1725 +3,1643 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amazon FBA 客户利润反向推演系统</title>
+<title>全球多平台客户利润反向推演系统</title>
 <style>
 :root {
-  --bg: #0b0e1a;
-  --surface: #141828;
-  --surface2: #1c2138;
-  --surface3: #242a45;
-  --border: #2a3158;
-  --accent: #3d7ef6;
-  --accent2: #7c5cfc;
-  --accent3: #06d6a0;
-  --green: #22c55e;
-  --yellow: #f59e0b;
-  --red: #ef4444;
-  --orange: #f97316;
-  --gray: #6b7280;
-  --text: #e8eaf0;
-  --text2: #9ca3b8;
-  --text3: #6b7a9f;
-  --radius: 10px;
-  --radius-sm: 6px;
+  --bg: #0b0e1a; --surface: #141828; --surface2: #1c2138; --surface3: #242a45;
+  --border: #2a3158; --accent: #3d7ef6; --accent2: #7c5cfc; --accent3: #06d6a0;
+  --green: #22c55e; --yellow: #f59e0b; --red: #ef4444; --orange: #f97316;
+  --gray: #6b7280; --text: #e8eaf0; --text2: #9ca3b8; --text3: #6b7a9f;
+  --radius: 10px; --radius-sm: 6px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  font-size: 13px;
-  min-height: 100vh;
-  line-height: 1.5;
-}
+body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 13px; min-height: 100vh; line-height: 1.5; }
 
-/* ── HEADER ── */
-.header {
-  background: linear-gradient(135deg, #141828 0%, #0b0e1a 100%);
-  border-bottom: 1px solid var(--border);
-  padding: 16px 28px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.header-logo {
-  width: 38px; height: 38px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; flex-shrink: 0;
-}
-.header-info h1 { font-size: 16px; font-weight: 700; letter-spacing: 0.3px; }
-.header-info p { font-size: 11px; color: var(--text2); margin-top: 2px; }
-.header-badge {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff; font-size: 10px; font-weight: 700;
-  padding: 3px 9px; border-radius: 20px; letter-spacing: 0.8px;
-  margin-left: 8px; vertical-align: middle;
-}
-.header-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
-.btn {
-  padding: 7px 16px; border-radius: var(--radius-sm);
-  border: none; cursor: pointer; font-size: 12px; font-weight: 600;
-  transition: all .15s; display: flex; align-items: center; gap: 6px;
-}
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff;
-}
-.btn-primary:hover { opacity: .88; transform: translateY(-1px); }
-.btn-ghost {
-  background: var(--surface2); color: var(--text2);
-  border: 1px solid var(--border);
-}
-.btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+.header { background: linear-gradient(135deg, #141828 0%, #0b0e1a 100%); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.header-logo { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.header-info h1 { font-size: 15px; font-weight: 700; }
+.header-info p { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.header-badge { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.8px; margin-left: 6px; }
+.header-right { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-/* ── URL INPUT BAR ── */
-.url-bar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 14px 28px;
-  display: flex; gap: 10px; align-items: center;
-}
-.url-bar-label { font-size: 11px; color: var(--accent); font-weight: 700;
-  letter-spacing: 0.5px; white-space: nowrap; }
-.url-input-wrap { flex: 1; position: relative; }
-.url-input {
-  width: 100%; background: var(--surface2);
-  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--text); padding: 8px 14px; font-size: 13px; outline: none;
-  transition: border-color .2s;
-}
-.url-input:focus { border-color: var(--accent); }
-.url-input::placeholder { color: var(--text3); }
-.parse-hint { font-size: 11px; color: var(--text3); white-space: nowrap; }
+/* ROUTE BAR */
+.route-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.route-label { font-size: 10px; font-weight: 700; color: var(--accent); letter-spacing: 0.8px; white-space: nowrap; }
+.route-select { background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 6px 12px; font-size: 12px; font-weight: 600; outline: none; cursor: pointer; transition: border-color .2s; }
+.route-select:focus, .route-select:hover { border-color: var(--accent); }
+.route-select option { background: var(--surface2); }
+.route-sep { color: var(--text3); font-size: 14px; }
+.route-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 20px; }
+.route-pill.amazon { background: rgba(255,153,0,.15); color: #ff9900; border: 1px solid rgba(255,153,0,.35); }
+.route-pill.shopify { background: rgba(149,191,71,.15); color: #95bf47; border: 1px solid rgba(149,191,71,.35); }
+.route-pill.chewy { background: rgba(0,163,224,.15); color: #00a3e0; border: 1px solid rgba(0,163,224,.35); }
+.vat-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; background: rgba(6,214,160,.12); color: var(--accent3); border: 1px solid rgba(6,214,160,.3); margin-left: 6px; }
 
-/* ── THREE-COLUMN LAYOUT ── */
-.workspace {
-  display: grid;
-  grid-template-columns: 260px 1fr 300px;
-  gap: 0;
-  height: calc(100vh - 130px);
-  overflow: hidden;
-}
-.col {
-  overflow-y: auto;
-  padding: 20px 18px;
-  border-right: 1px solid var(--border);
-}
+/* LAYOUT */
+.workspace { display: grid; grid-template-columns: 340px 1fr 300px; gap: 0; height: calc(100vh - 118px); overflow: hidden; }
+.col { overflow-y: auto; padding: 18px 16px; border-right: 1px solid var(--border); }
 .col:last-child { border-right: none; }
 
-/* ── SECTION TITLE ── */
-.section-title {
-  font-size: 10px; font-weight: 700; color: var(--accent);
-  letter-spacing: 1px; text-transform: uppercase;
-  padding-bottom: 10px; margin-bottom: 14px;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 7px;
-}
-.section-title .dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--accent); display: inline-block;
-}
+.section-title { font-size: 10px; font-weight: 700; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 7px; }
+.section-title .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
 
-/* ── FORM FIELDS ── */
-.field-group { margin-bottom: 16px; }
-.field-label {
-  font-size: 11px; color: var(--text2); margin-bottom: 5px;
-  display: flex; align-items: center; gap: 6px;
-}
-.field-label .tag-auto {
-  font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px;
-  background: rgba(61,126,246,.18); color: var(--accent); letter-spacing: 0.3px;
-}
-.field-label .tag-manual {
-  font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px;
-  background: rgba(6,214,160,.18); color: var(--accent3); letter-spacing: 0.3px;
-}
-.field-input {
-  width: 100%; background: var(--surface2);
-  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--text); padding: 7px 11px; font-size: 13px; outline: none;
-  transition: border-color .2s;
-}
+.field-group { margin-bottom: 14px; }
+.field-label { font-size: 11px; color: var(--text2); margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+.field-input { width: 100%; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 7px 11px; font-size: 13px; outline: none; transition: border-color .2s; }
 .field-input:focus { border-color: var(--accent); }
-.field-input.auto-filled {
-  background: var(--surface3); border-color: rgba(61,126,246,.3);
-  color: var(--text2); cursor: not-allowed;
-}
-.field-input.auto-filled.unlocked {
-  border-color: var(--yellow); color: var(--text); cursor: text;
-}
-.field-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-.field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.field-unit {
-  position: relative;
-}
-.field-unit input { padding-right: 36px; }
-.field-unit .unit {
-  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-  font-size: 11px; color: var(--text3); pointer-events: none;
-}
-.unlock-btn {
-  font-size: 10px; color: var(--text3); cursor: pointer;
-  padding: 2px 5px; border-radius: 3px;
-  border: 1px solid var(--border); background: none;
-  transition: all .15s; margin-left: auto;
-}
-.unlock-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+.field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.field-unit { position: relative; }
+.field-unit input { padding-right: 38px; }
+.field-unit .unit { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--text3); pointer-events: none; }
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
 
-/* ── DIVIDER ── */
-.divider {
-  height: 1px; background: var(--border);
-  margin: 16px 0;
-}
+/* VAT split display */
+.vat-split-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 10px; background: rgba(6,214,160,.07); border: 1px solid rgba(6,214,160,.2); border-radius: var(--radius-sm); font-size: 11px; margin-top: 5px; }
+.vat-split-row .v-label { color: var(--text3); }
+.vat-split-row .v-val { font-weight: 700; color: var(--accent3); }
 
-/* ── LEFT COL: DONUT CHART ── */
-.donut-wrap {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 10px 0 16px;
-}
+/* UNIT SELECT */
+.unit-select { background: var(--surface3); border: 1px solid var(--border); border-radius: 4px; color: var(--accent); font-size: 11px; font-weight: 700; padding: 2px 4px; cursor: pointer; outline: none; margin-left: auto; transition: border-color .15s; }
+.unit-select:hover, .unit-select:focus { border-color: var(--accent); }
+.unit-select option { background: var(--surface2); color: var(--text); }
+
+/* DONUT */
+.donut-wrap { display: flex; flex-direction: column; align-items: center; padding: 8px 0 14px; }
 .donut-canvas { position: relative; }
-.donut-center {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center; pointer-events: none;
-}
-.donut-center-val { font-size: 20px; font-weight: 800; color: var(--text); }
+.donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
+.donut-center-val { font-size: 19px; font-weight: 800; color: var(--text); }
 .donut-center-lbl { font-size: 10px; color: var(--text3); margin-top: 1px; }
-.legend { width: 100%; margin-top: 14px; display: flex; flex-direction: column; gap: 7px; }
-.legend-item {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 11px; color: var(--text2);
-}
-.legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.legend { width: 100%; margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text2); }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .legend-val { margin-left: auto; font-weight: 600; color: var(--text); }
-.legend-pct { font-size: 10px; color: var(--text3); }
 
-/* ── COST BREAKDOWN BARS (left col) ── */
-.cost-bar-item { margin-bottom: 10px; }
-.cost-bar-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
-.cost-bar-name { font-size: 11px; color: var(--text2); }
-.cost-bar-val { font-size: 11px; font-weight: 700; }
-.cost-bar-track {
-  height: 5px; background: var(--surface3); border-radius: 3px; overflow: hidden;
-}
-.cost-bar-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
-
-/* ── RIGHT COL: PROFIT KPIs ── */
-.kpi-card {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px;
-  position: relative; overflow: hidden;
-}
-.kpi-card::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-  width: 3px; border-radius: 3px 0 0 3px;
-}
+/* KPI */
+.kpi-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 15px; margin-bottom: 10px; position: relative; overflow: hidden; }
+.kpi-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 3px 0 0 3px; }
 .kpi-card.green::before { background: var(--green); }
 .kpi-card.yellow::before { background: var(--yellow); }
 .kpi-card.blue::before { background: var(--accent); }
 .kpi-card.red::before { background: var(--red); }
-.kpi-label { font-size: 10px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 5px; }
-.kpi-value { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+.kpi-label { font-size: 10px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 4px; }
+.kpi-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
 .kpi-value.green { color: var(--green); }
 .kpi-value.yellow { color: var(--yellow); }
 .kpi-value.blue { color: var(--accent); }
 .kpi-value.red { color: var(--red); }
-.kpi-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+.kpi-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
 
-/* ── STATUS BADGE ── */
-.status-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 10px; font-weight: 700; padding: 3px 9px;
-  border-radius: 20px; letter-spacing: 0.5px;
-}
+/* BACKSOLVE */
+.backsolve-box { background: linear-gradient(135deg, rgba(61,126,246,.1), rgba(124,92,252,.1)); border: 1px solid rgba(61,126,246,.3); border-radius: var(--radius); padding: 13px 15px; margin-bottom: 10px; }
+.backsolve-title { font-size: 10px; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; margin-bottom: 9px; }
+.backsolve-row { display: flex; align-items: center; gap: 8px; }
+.backsolve-row .field-input { flex: 1; }
+.backsolve-result { margin-top: 10px; padding: 10px 12px; background: rgba(0,0,0,.3); border-radius: var(--radius-sm); font-size: 12px; color: var(--text2); line-height: 1.6; }
+.backsolve-result strong { color: var(--accent3); font-size: 15px; }
+
+/* STATUS BADGE */
+.status-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; letter-spacing: 0.5px; }
 .status-badge.healthy { background: rgba(34,197,94,.15); color: var(--green); }
 .status-badge.warning { background: rgba(245,158,11,.15); color: var(--yellow); }
-.status-badge.danger  { background: rgba(239,68,68,.15);  color: var(--red); }
+.status-badge.danger  { background: rgba(239,68,68,.15); color: var(--red); }
 .status-badge.neutral { background: rgba(107,114,128,.15); color: var(--gray); }
 .status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
-/* ── BACKSOLVE BOX ── */
-.backsolve-box {
-  background: linear-gradient(135deg, rgba(61,126,246,.1), rgba(124,92,252,.1));
-  border: 1px solid rgba(61,126,246,.3);
-  border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px;
-}
-.backsolve-title { font-size: 10px; font-weight: 700; color: var(--accent);
-  letter-spacing: 0.5px; margin-bottom: 10px; }
-.backsolve-row { display: flex; align-items: center; gap: 8px; }
-.backsolve-row .field-input { flex: 1; }
-.backsolve-result {
-  margin-top: 10px; padding: 10px 12px;
-  background: rgba(0,0,0,.3); border-radius: var(--radius-sm);
-  font-size: 12px; color: var(--text2);
-}
-.backsolve-result strong { color: var(--accent3); font-size: 16px; }
-
-/* ── PDF BUTTON ── */
-.pdf-btn {
-  width: 100%; padding: 12px;
-  background: linear-gradient(135deg, #f97316, #ef4444);
-  border: none; border-radius: var(--radius);
-  color: #fff; font-size: 13px; font-weight: 700;
-  cursor: pointer; letter-spacing: 0.3px;
-  transition: all .15s; margin-top: 8px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.pdf-btn:hover { opacity: .88; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(239,68,68,.3); }
-
-/* ── TIER BADGE ── */
-.tier-badge {
-  display: inline-flex; padding: 4px 10px; border-radius: var(--radius-sm);
-  font-size: 11px; font-weight: 700; border: 1px solid;
-}
-.tier-small-standard { background: rgba(34,197,94,.12); color: var(--green); border-color: rgba(34,197,94,.3); }
-.tier-large-standard { background: rgba(61,126,246,.12); color: var(--accent); border-color: rgba(61,126,246,.3); }
-.tier-small-oversize { background: rgba(245,158,11,.12); color: var(--yellow); border-color: rgba(245,158,11,.3); }
-.tier-medium-oversize { background: rgba(249,115,22,.12); color: var(--orange); border-color: rgba(249,115,22,.3); }
-.tier-large-oversize  { background: rgba(239,68,68,.12);  color: var(--red);    border-color: rgba(239,68,68,.3); }
-
-/* ── EMPTY STATE ── */
-.empty-state {
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; height: 200px; gap: 10px;
-  color: var(--text3); font-size: 12px; text-align: center;
-}
-.empty-state .icon { font-size: 36px; opacity: .4; }
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #3a4060; }
-
-/* ── TOOLTIP ── */
-[data-tip] { position: relative; cursor: help; }
-[data-tip]::after {
-  content: attr(data-tip);
-  position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
-  background: #1c2138; border: 1px solid var(--border);
-  color: var(--text); font-size: 11px; padding: 5px 9px;
-  border-radius: 5px; white-space: nowrap; pointer-events: none;
-  opacity: 0; transition: opacity .15s; z-index: 99;
-}
-[data-tip]:hover::after { opacity: 1; }
-
-/* ── PRINT / PDF ── */
-@media print {
-  .url-bar, .header-right, .pdf-btn, .btn { display: none !important; }
-  .workspace { height: auto; overflow: visible; display: block; }
-  .col { overflow: visible; border: none; }
-  body { background: #fff; color: #111; }
-}
-
-/* ── UNIT SELECT (per-field dropdown) ── */
-.unit-select {
-  background: var(--surface3); border: 1px solid var(--border);
-  border-radius: 4px; color: var(--accent); font-size: 11px;
-  font-weight: 700; padding: 2px 4px; cursor: pointer;
-  outline: none; margin-left: auto;
-  transition: border-color .15s;
-}
-.unit-select:hover, .unit-select:focus { border-color: var(--accent); }
-.unit-select option { background: var(--surface2); color: var(--text); }
-
-/* ── UNIT TOGGLE ── */
-.unit-toggle {
-  background: var(--surface3); border: 1.5px solid var(--border);
-  border-radius: 20px; padding: 6px 14px; cursor: pointer;
-  font-size: 12px; font-weight: 700; color: var(--accent);
-  transition: all .15s; white-space: nowrap; user-select: none;
-  flex-shrink: 0; outline: none;
-}
-.unit-toggle:hover { border-color: var(--accent); background: rgba(61,126,246,.15); transform: translateY(-1px); }
-.unit-toggle:active { transform: translateY(0); }
-.unit-toggle.metric { color: var(--accent3); border-color: rgba(6,214,160,.5);
-  background: rgba(6,214,160,.1); }
-
-/* ── PARSE STATUS ── */
-.parse-status {
-  padding: 8px 12px; border-radius: var(--radius-sm);
-  font-size: 11px; display: flex; align-items: center; gap: 8px;
-  margin-top: 6px;
-}
-.parse-status.ok  { background: rgba(34,197,94,.12); color: var(--green); }
-.parse-status.err { background: rgba(239,68,68,.12);  color: var(--red); }
-.parse-status.ing { background: rgba(61,126,246,.10); color: var(--accent); }
-
-/* ── LOADING SPINNER ── */
-.spinner {
-  width: 16px; height: 16px;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin .6s linear infinite;
-  display: inline-block;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.info-row {
-  display: flex; justify-content: space-between;
-  font-size: 11px; padding: 5px 0;
-  border-bottom: 1px solid rgba(255,255,255,.04);
-}
+/* INFO ROW */
+.info-row { display: flex; justify-content: space-between; font-size: 11px; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
 .info-row:last-child { border-bottom: none; }
 .info-row .lbl { color: var(--text3); }
 .info-row .val { color: var(--text); font-weight: 600; }
+
+/* PDF BTN */
+.pdf-btn { width: 100%; padding: 11px; background: linear-gradient(135deg, #f97316, #ef4444); border: none; border-radius: var(--radius); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; letter-spacing: 0.3px; transition: all .15s; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.pdf-btn:hover { opacity: .88; transform: translateY(-1px); }
+.btn { padding: 7px 14px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: all .15s; display: flex; align-items: center; gap: 5px; }
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
+.btn-primary:hover { opacity: .88; }
+.btn-ghost { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+
+/* PLATFORM SECTION (conditional) */
+.platform-section { display: none; }
+.platform-section.active { display: block; }
+
+/* TOOLTIP */
+[data-tip] { position: relative; cursor: help; }
+[data-tip]::after { content: attr(data-tip); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); background: #1c2138; border: 1px solid var(--border); color: var(--text); font-size: 11px; padding: 6px 10px; border-radius: 5px; white-space: normal; width: max-content; max-width: 280px; line-height: 1.55; pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 99; }
+[data-tip]:hover::after { opacity: 1; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Tier ref table */
+#tierRefTable table { width: 100%; border-collapse: collapse; font-size: 11px; line-height: 1.5; }
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
 <div class="header">
-  <div class="header-logo">📦</div>
+  <div class="header-logo">🌍</div>
   <div class="header-info">
-    <h1>Amazon FBA 客户利润反向推演系统 <span class="header-badge">一客一策</span></h1>
-    <p>输入客户商品链接，一键透视其真实利润底牌，以"利润改善专家"姿态主导谈判</p>
+    <h1>全球多平台客户利润反向推演系统 <span class="header-badge">一客一策</span></h1>
+    <p>Amazon 全站 · Shopify 独立站 · Chewy 宠物垂直 | VAT 自动剥离 · 多币种显示</p>
   </div>
-  <div class="header-right">
+    <div class="header-right">
+    <button class="btn btn-primary" onclick="openPasteModal()" style="background:linear-gradient(135deg,#f59e0b,#ef4444);border:none;font-weight:700;letter-spacing:.3px;box-shadow:0 2px 12px rgba(245,158,11,.35);">⚡ 粘贴产品页 → 自动识别</button>
     <button class="btn btn-ghost" onclick="resetAll()">↺ 重置</button>
-    <button class="btn btn-primary" onclick="window.print()">🖨 打印报告</button>
+    <button class="btn btn-primary" onclick="generateReport()">📄 生成报告</button>
   </div>
 </div>
 
-<!-- STEP 1: PASTE AREA BAR -->
-<div class="url-bar" style="flex-wrap:wrap;gap:8px;">
-  <div style="display:flex;align-items:center;gap:10px;width:100%;">
-    <span class="url-bar-label" style="flex-shrink:0;">STEP 1</span>
-    <button class="btn btn-primary" id="parseBtn" onclick="openPasteModal()" style="flex-shrink:0;">
-      <span id="parseBtnText">📋 粘贴产品页内容 → 自动识别</span>
-    </button>
-
-    <span class="parse-hint" id="parseHint" style="flex:1;">
-      在 Amazon 产品页按 <kbd style="background:var(--surface3);padding:1px 5px;border-radius:3px;font-size:10px;border:1px solid var(--border)">Ctrl+A</kbd> 全选 → <kbd style="background:var(--surface3);padding:1px 5px;border-radius:3px;font-size:10px;border:1px solid var(--border)">Ctrl+C</kbd> 复制 → 点左侧按钮粘贴，系统自动提取数据
-    </span>
-  </div>
+<!-- ROUTE BAR：平台 + 市场 双路由 -->
+<div class="route-bar">
+  <span class="route-label">PLATFORM</span>
+  <select class="route-select" id="routePlatform" onchange="onRouteChange()">
+    <option value="amazon_eu">🏪 Amazon</option>
+    <option value="shopify">🛍 Shopify 独立站</option>
+    <option value="chewy">🐾 Chewy 宠物垂直</option>
+  </select>
+  <span class="route-sep">›</span>
+  <select class="route-select" id="routeMarket" onchange="onRouteChange()">
+    <option value="GB">🇬🇧 英国 (GBP · VAT 20%)</option>
+    <option value="DE">🇩🇪 德国 (EUR · VAT 19%)</option>
+    <option value="FR">🇫🇷 法国 (EUR · VAT 20%)</option>
+    <option value="IT">🇮🇹 意大利 (EUR · VAT 22%)</option>
+    <option value="ES">🇪🇸 西班牙 (EUR · VAT 21%)</option>
+    <option value="US" selected>🇺🇸 美国 (USD · No VAT)</option>
+    <option value="CA">🇨🇦 加拿大 (CAD · No VAT)</option>
+    <option value="AU">🇦🇺 澳大利亚 (AUD · GST 10%)</option>
+  </select>
+  <div id="routeActivePill" class="route-pill amazon">Amazon EU</div>
+  <div id="vatActivePill" class="vat-pill" style="display:none;">VAT 已剥离</div>
+  <span style="margin-left:auto;font-size:11px;color:var(--text3);" id="routeSubtitle">FBA 欧洲费率 | 佣金 15% | 计费重取大值</span>
 </div>
 
-<!-- PASTE MODAL -->
-<div id="pasteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;align-items:center;justify-content:center;">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;width:620px;max-width:95vw;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.5);">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <div>
-        <div style="font-size:15px;font-weight:700;">粘贴 Amazon 产品页内容</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:3px;">打开产品页 → Ctrl+A 全选 → Ctrl+C 复制 → 在下方粘贴</div>
-      </div>
-      <button onclick="closePasteModal()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:4px;">✕</button>
-    </div>
-    <textarea id="pasteArea"
-      style="width:100%;height:220px;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:12px;font-size:12px;resize:vertical;outline:none;font-family:monospace;"
-      placeholder="在此粘贴（Ctrl+V）Amazon 产品页的完整文字内容…&#10;&#10;提示：在浏览器产品页按 Ctrl+A 全选，再 Ctrl+C 复制，然后在这里 Ctrl+V 粘贴即可。&#10;不需要复制 HTML 源码，直接复制页面上显示的文字就行。"></textarea>
-    <div style="display:flex;gap:10px;margin-top:12px;align-items:center;">
-      <button class="btn btn-primary" onclick="extractFromPaste()" style="flex:1;padding:10px;">
-        ⚡ 立即识别提取
-      </button>
-      <button class="btn btn-ghost" onclick="closePasteModal()">取消</button>
-    </div>
-    <div id="pasteResult" style="margin-top:10px;font-size:11px;min-height:16px;"></div>
-  </div>
-</div>
-
-<!-- THREE-COLUMN WORKSPACE -->
+<!-- WORKSPACE -->
 <div class="workspace">
 
-  <!-- LEFT: COST STRUCTURE -->
-  <div class="col" id="colLeft">
-    <div class="section-title"><span class="dot"></span>客户成本大盘透视</div>
+  <!-- LEFT: INPUTS -->
+  <div class="col">
 
-    <!-- Donut Chart -->
-    <div class="donut-wrap">
-      <div class="donut-canvas" style="width:160px;height:160px;">
-        <canvas id="donutChart" width="160" height="160"></canvas>
-        <div class="donut-center">
-          <div class="donut-center-val" id="donutCenterVal">—</div>
-          <div class="donut-center-lbl">售价</div>
-        </div>
-      </div>
-      <div class="legend" id="donutLegend">
-        <div class="legend-item"><span class="legend-dot" style="background:#3d7ef6"></span>供货成本<span class="legend-pct" id="lpct0">—</span><span class="legend-val" id="lval0">$—</span></div>
-        <div class="legend-item"><span class="legend-dot" style="background:#7c5cfc"></span>头程海运<span class="legend-pct" id="lpct1">—</span><span class="legend-val" id="lval1">$—</span></div>
-        <div class="legend-item"><span class="legend-dot" style="background:#06d6a0"></span>FBA 配送<span class="legend-pct" id="lpct2">—</span><span class="legend-val" id="lval2">$—</span></div>
-        <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>平台佣金<span class="legend-pct" id="lpct3">—</span><span class="legend-val" id="lval3">$—</span></div>
-        <div class="legend-item"><span class="legend-dot" style="background:#f97316"></span>关税<span class="legend-pct" id="lpct4">—</span><span class="legend-val" id="lval4">$—</span></div>
-        <div class="legend-item"><span class="legend-dot" style="background:#e879f9"></span>广告PPC<span class="legend-pct" id="lpct5">—</span><span class="legend-val" id="lval5">$—</span></div>
-        <div class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>客户毛利<span class="legend-pct" id="lpct6">—</span><span class="legend-val" id="lval6">$—</span></div>
-      </div>
-    </div>
+    <!-- MODULE 1: 产品信息 -->
+    <div class="section-title"><span class="dot"></span>模块一：产品与售价</div>
 
-    <div class="divider"></div>
-    <div class="section-title" style="margin-top:4px;"><span class="dot"></span>成本占比明细</div>
-    <div id="costBars">
-      <div class="empty-state"><span class="icon">📊</span><span>填写参数后<br>自动生成</span></div>
-    </div>
-  </div>
-
-  <!-- CENTER: INPUT AREA -->
-  <div class="col" id="colCenter">
-
-    <!-- MODULE 1: PRODUCT DATA -->
-    <div class="section-title"><span class="dot"></span>模块一：商品数据（从产品页抄入）</div>
-
-    <div class="field-group">
-      <div class="field-label">前台售价 (USD)</div>
-      <div class="field-unit">
-        <input type="number" class="field-input" id="price" placeholder="例：39.99" oninput="recalc()" />
-        <span class="unit">$</span>
-      </div>
-    </div>
-
+    <!-- 前台含税售价 -->
     <div class="field-group">
       <div class="field-label">
-        包装尺寸
-        <span style="font-size:10px;color:var(--text3)">产品页「Product Dimensions」</span>
+        前台含税售价
+        <span data-tip="输入平台展示的售价。欧洲市场含 VAT，系统自动剥离后以净价作为所有利润计算基准">ⓘ</span>
+        <span id="currencyLabel" style="margin-left:auto;font-size:11px;font-weight:700;color:var(--accent);">£ GBP</span>
+      </div>
+      <div class="field-unit">
+        <input type="number" class="field-input" id="grossPrice" oninput="recalc()" placeholder="如：39.99" />
+        <span class="unit" id="currencySymbol">£</span>
+      </div>
+      <!-- VAT 剥离展示行（欧洲市场显示） -->
+      <div id="vatSplitDisplay" style="display:none;">
+        <div class="vat-split-row" style="margin-top:5px;">
+          <span class="v-label">净售价（计算基准）</span><span class="v-val" id="vatNetPrice">—</span>
+        </div>
+        <div class="vat-split-row" style="background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.2);">
+          <span class="v-label">其中 VAT 税额</span><span class="v-val" style="color:var(--yellow);" id="vatAmount">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 品类 -->
+    <div class="field-group">
+      <div class="field-label">品类（决定平台佣金率）</div>
+      <select class="field-input" id="category" onchange="onCategoryChange()">
+        <option value="pet">🐾 Pet Supplies（宠物用品）</option>
+        <option value="home">🏠 Home & Kitchen（家居）</option>
+        <option value="electronics">⚡ Electronics（电子）</option>
+        <option value="toys">🧸 Toys & Games（玩具）</option>
+        <option value="sports">🏃 Sports & Outdoors（户外）</option>
+        <option value="beauty">💄 Beauty（美妆）</option>
+        <option value="clothing">👔 Clothing（服装）</option>
+        <option value="other">📦 Other（通用）</option>
+      </select>
+    </div>
+
+    <!-- 尺寸 + 重量 -->
+    <div class="field-group">
+      <div class="field-label">
+        包装尺寸（长 × 宽 × 高）
         <select class="unit-select" id="dimUnit" title="切换尺寸单位">
           <option value="in">in</option>
           <option value="cm">cm</option>
         </select>
       </div>
       <div class="field-row">
-        <div class="field-unit"><input type="number" class="field-input" id="dimL" placeholder="长 L" oninput="recalc()" /><span class="unit">L</span></div>
-        <div class="field-unit"><input type="number" class="field-input" id="dimW" placeholder="宽 W" oninput="recalc()" /><span class="unit">W</span></div>
-        <div class="field-unit"><input type="number" class="field-input" id="dimH" placeholder="高 H" oninput="recalc()" /><span class="unit">H</span></div>
+        <input type="number" class="field-input" id="dimL" oninput="recalc()" placeholder="长" />
+        <input type="number" class="field-input" id="dimW" oninput="recalc()" placeholder="宽" />
+        <input type="number" class="field-input" id="dimH" oninput="recalc()" placeholder="高" />
       </div>
     </div>
-
     <div class="field-group">
       <div class="field-label">
-        实际重量
-        <span style="font-size:10px;color:var(--text3)">「Item Weight」</span>
+        重量
         <select class="unit-select" id="weightUnit" title="切换重量单位">
           <option value="lb">lb</option>
           <option value="oz">oz</option>
           <option value="kg">kg</option>
           <option value="g">g</option>
         </select>
+        <span id="uWeight" style="font-size:11px;color:var(--accent3);margin-left:2px;">lb</span>
       </div>
       <div class="field-unit">
-        <input type="number" class="field-input" id="weight" placeholder="例：2.5" oninput="recalc()" />
-        <span class="unit" id="uWeight">←选单位</span>
+        <input type="number" class="field-input" id="weight" oninput="recalc()" placeholder="实际重量" />
+        <span class="unit" id="weightUnitSuffix">lb</span>
       </div>
     </div>
 
-    <div class="field-row-2">
-      <div class="field-group">
-        <div class="field-label">Amazon 品类</div>
-        <select class="field-input" id="category" onchange="onCategoryChange()">
-          <option value="pet">Pet Supplies</option>
-          <option value="home">Home &amp; Kitchen</option>
-          <option value="sports">Sports &amp; Outdoors</option>
-          <option value="toys">Toys &amp; Games</option>
-          <option value="electronics">Electronics</option>
-          <option value="clothing">Clothing &amp; Accessories</option>
-          <option value="beauty">Beauty &amp; Personal Care</option>
-          <option value="grocery">Grocery &amp; Gourmet</option>
-          <option value="other">其他（通用8%）</option>
-        </select>
+    <!-- FBA 尺寸分级 -->
+    <div class="field-group">
+      <div class="field-label">FBA / 履约分级 <span style="font-size:10px;color:var(--text3)">自动</span></div>
+      <div class="field-input" id="sizeTier" style="display:flex;align-items:center;min-height:34px;background:var(--surface3);cursor:default;">
+        <span class="status-badge neutral" id="tierBadge">填入尺寸后自动</span>
       </div>
-      <div class="field-group">
-        <div class="field-label">FBA 尺寸分级 <span style="font-size:10px;color:var(--text3)">自动计算</span></div>
-        <div class="field-input" id="sizeTier" style="display:flex;align-items:center;min-height:34px;background:var(--surface3);cursor:default;">
-          <span class="status-badge neutral" id="tierBadge">填入尺寸后自动</span>
-        </div>
-        <!-- 折叠速查表 -->
-        <div style="margin-top:6px;">
-          <button type="button" id="tierRefToggle" onclick="toggleTierRef()"
-            style="display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--border);border-radius:6px;
-                   padding:4px 10px;font-size:11px;color:var(--text2);cursor:pointer;transition:all .2s;">
-            <span id="tierRefArrow" style="transition:transform .2s;display:inline-block;">▶</span>
-            尺寸分级速查表
-          </button>
-          <div id="tierRefTable" style="display:none;margin-top:8px;overflow:hidden;border-radius:8px;border:1px solid var(--border);">
-            <table style="width:100%;border-collapse:collapse;font-size:11px;line-height:1.5;">
-              <thead>
-                <tr style="background:var(--surface3);color:var(--text2);">
-                  <th style="padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);">分级</th>
-                  <th style="padding:6px 8px;text-align:center;border-bottom:1px solid var(--border);">最长边</th>
-                  <th style="padding:6px 8px;text-align:center;border-bottom:1px solid var(--border);">次长边</th>
-                  <th style="padding:6px 8px;text-align:center;border-bottom:1px solid var(--border);">最短边</th>
-                  <th style="padding:6px 8px;text-align:center;border-bottom:1px solid var(--border);">重量上限</th>
-                  <th style="padding:6px 8px;text-align:center;border-bottom:1px solid var(--border);">参考费率</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="background:rgba(34,197,94,.07);">
-                  <td style="padding:5px 8px;color:var(--green);font-weight:600;border-bottom:1px solid var(--border);">📦 Small Standard</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 15"</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 12"</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 0.75"</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 1 lb</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">$3.06–$3.65</td>
-                </tr>
-                <tr style="background:rgba(61,126,246,.07);">
-                  <td style="padding:5px 8px;color:var(--accent);font-weight:600;border-bottom:1px solid var(--border);">📦 Large Standard</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 18"</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 14"</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 8"</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 20 lb</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">$3.86–$7.17</td>
-                </tr>
-                <tr style="background:rgba(245,158,11,.07);">
-                  <td style="padding:5px 8px;color:var(--yellow);font-weight:600;border-bottom:1px solid var(--border);">🟡 Small Oversize</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 60"</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 30"</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">—</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 70 lb</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">$9.61–$13.81</td>
-                </tr>
-                <tr style="background:rgba(249,115,22,.07);">
-                  <td style="padding:5px 8px;color:var(--orange);font-weight:600;border-bottom:1px solid var(--border);">🟠 Medium Oversize</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 108"</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">—</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">—</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 150 lb</td>
-                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">$17.46–$46.34</td>
-                </tr>
-                <tr style="background:rgba(239,68,68,.07);">
-                  <td style="padding:5px 8px;color:var(--red);font-weight:600;">🔴 Large Oversize</td>
-                  <td style="padding:5px 8px;text-align:center;">＞108"</td>
-                  <td style="padding:5px 8px;text-align:center;">—</td>
-                  <td style="padding:5px 8px;text-align:center;">—</td>
-                  <td style="padding:5px 8px;text-align:center;">＞150 lb</td>
-                  <td style="padding:5px 8px;text-align:center;">$76.57+</td>
-                </tr>
-              </tbody>
-            </table>
-            <div style="padding:5px 8px 7px;font-size:10px;color:var(--text3);background:var(--surface3);">
-              ℹ️ 体积重公式：L×W×H÷139（单位 in）；计费重取实际重与体积重中的较大值（Small Standard 除外，只用实际重）
-            </div>
-          </div>
+      <div style="margin-top:5px;">
+        <button type="button" id="tierRefToggle" onclick="toggleTierRef()" style="display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:11px;color:var(--text2);cursor:pointer;transition:all .2s;">
+          <span id="tierRefArrow" style="transition:transform .2s;display:inline-block;">▶</span> 分级速查
+        </button>
+        <div id="tierRefTable" style="display:none;margin-top:6px;overflow:hidden;border-radius:8px;border:1px solid var(--border);">
+          <table>
+            <thead><tr style="background:var(--surface3);color:var(--text2);">
+              <th style="padding:5px 7px;text-align:left;border-bottom:1px solid var(--border);">分级</th>
+              <th style="padding:5px 7px;text-align:center;border-bottom:1px solid var(--border);">最长边</th>
+              <th style="padding:5px 7px;text-align:center;border-bottom:1px solid var(--border);">重量上限</th>
+              <th style="padding:5px 7px;text-align:center;border-bottom:1px solid var(--border);">参考费率</th>
+            </tr></thead>
+            <tbody>
+              <tr><td style="padding:4px 7px;color:var(--green);font-weight:600;">📦 Small Standard</td><td style="padding:4px 7px;text-align:center;">≤15"</td><td style="padding:4px 7px;text-align:center;">≤1 lb</td><td style="padding:4px 7px;text-align:center;">$3.06–$3.65</td></tr>
+              <tr><td style="padding:4px 7px;color:var(--accent);font-weight:600;">📦 Large Standard</td><td style="padding:4px 7px;text-align:center;">≤18"</td><td style="padding:4px 7px;text-align:center;">≤20 lb</td><td style="padding:4px 7px;text-align:center;">$3.86–$7.17</td></tr>
+              <tr><td style="padding:4px 7px;color:var(--yellow);font-weight:600;">🟡 Small Oversize</td><td style="padding:4px 7px;text-align:center;">≤60"</td><td style="padding:4px 7px;text-align:center;">≤70 lb</td><td style="padding:4px 7px;text-align:center;">$9.61+</td></tr>
+              <tr><td style="padding:4px 7px;color:var(--orange);font-weight:600;">🟠 Medium Oversize</td><td style="padding:4px 7px;text-align:center;">≤108"</td><td style="padding:4px 7px;text-align:center;">≤150 lb</td><td style="padding:4px 7px;text-align:center;">$17.46+</td></tr>
+              <tr><td style="padding:4px 7px;color:var(--red);font-weight:600;">🔴 Large Oversize</td><td style="padding:4px 7px;text-align:center;">>108"</td><td style="padding:4px 7px;text-align:center;">>150 lb</td><td style="padding:4px 7px;text-align:center;">$76.57+</td></tr>
+            </tbody>
+          </table>
+          <div style="padding:4px 7px 6px;font-size:10px;color:var(--text3);background:var(--surface3);">体积重：L×W×H÷139（in）</div>
         </div>
       </div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- MODULE 2: SUPPLIER INPUT -->
-    <div class="section-title"><span class="dot"></span>模块二：供应链成本（您的核心控盘区）</div>
+    <!-- MODULE 2: 供应链成本 -->
+    <div class="section-title"><span class="dot"></span>模块二：供应链成本</div>
 
-    <div class="field-row-2">
+    <!-- 贸易条款切换 -->
+    <div style="display:flex;gap:6px;margin-bottom:12px;">
+      <button id="tabFob" onclick="switchTradeMode('fob')"
+        style="flex:1;padding:6px 4px;border-radius:7px;border:1.5px solid var(--accent);background:var(--accent);color:#fff;font-size:11px;font-weight:700;cursor:pointer;">
+        🚢 传统海运<br><span style="font-weight:400;font-size:10px;opacity:.85;">FOB + 头程海运费</span>
+      </button>
+      <button id="tabDdp" onclick="switchTradeMode('ddp')"
+        style="flex:1;padding:6px 4px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text3);font-size:11px;font-weight:700;cursor:pointer;">
+        📦 DDP 双清包税<br><span style="font-weight:400;font-size:10px;">EXW + 空/海派运费</span>
+      </button>
+    </div>
+
+    <!-- ── 传统海运字段 ── -->
+    <div id="modeFob">
       <div class="field-group">
-        <div class="field-label">单件供货报价 <span class="tag-manual">您输入</span></div>
+        <div class="field-label">供货价 FOB <span data-tip="装船价，含国内到港费用，买家承担海运+关税">ⓘ</span></div>
         <div class="field-unit">
-          <input type="number" class="field-input" id="fobPrice" placeholder="0.00" oninput="recalc()" />
+          <input type="number" class="field-input" id="fobPrice" oninput="recalc()" placeholder="USD" />
           <span class="unit">$</span>
         </div>
       </div>
       <div class="field-group">
-        <div class="field-label">单件头程海运费 <span class="tag-manual">您输入</span></div>
+        <div class="field-label">头程海运费（单件）<span data-tip="按 CBM 摊到每件的海运成本（USD）">ⓘ</span></div>
         <div class="field-unit">
-          <input type="number" class="field-input" id="seaFreight" placeholder="0.00" oninput="recalc()" />
+          <input type="number" class="field-input" id="seaFreight" value="1.50" oninput="recalc()" placeholder="USD/件" />
+          <span class="unit">$</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">
+          进口关税率 (%)
+          <span data-tip="基于 FOB+海运 CIF 计税。中国出口适用 MFN + Section 301 叠加税率。买家自付关税，是其真实成本的一部分">ⓘ</span>
+          <button type="button" onclick="openTariffModal()" style="margin-left:auto;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:5px;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;cursor:pointer;letter-spacing:.3px;">🔍 查关税</button>
+        </div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="tariffRate" value="0" oninput="recalc()" placeholder="如：25" />
+          <span class="unit">%</span>
+        </div>
+        <div id="tariffHint" style="display:none;font-size:10px;color:var(--text3);margin-top:3px;"></div>
+      </div>
+    </div>
+
+    <!-- ── DDP 双清字段 ── -->
+    <div id="modeDdp" style="display:none;">
+      <div style="background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(16,185,129,.08));border:1px solid rgba(99,102,241,.3);border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:var(--text3);line-height:1.6;">
+        📦 <b style="color:var(--accent2);">DDP 模式</b>：关税 + 清关费由<b>你</b>承担，已打进报价成本中。<br>买家落地价里<b>无关税项</b>，从买家视角看关税 = 0。
+      </div>
+      <div class="field-group">
+        <div class="field-label">供货价 EXW <span data-tip="出厂价，不含任何运费，DDP 模式下你承担全程物流+关税">ⓘ</span></div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="exwPrice" oninput="recalc()" placeholder="USD" />
+          <span class="unit">$</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">
+          空/海派运费（单件）
+          <span data-tip="DDP all-in 价：含目的国关税、清关费、末端派送，全部摊到每件填入">ⓘ</span>
+        </div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="ddpFreight" value="3.00" oninput="recalc()" placeholder="USD/件" />
+          <span class="unit">$</span>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:3px;">关税 + 清关费已含在运费报价中，无需单独填写</div>
+      </div>
+      <input type="hidden" id="ddpTariffCost" value="0" />
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- MODULE 3: 运营费用 -->
+    <div class="section-title"><span class="dot"></span>模块三：运营费用</div>
+
+    <!-- Shopify 网关费（条件显示） -->
+    <div class="platform-section" id="sec_shopify_gateway">
+      <div class="field-group">
+        <div class="field-label">支付网关费率 (%) <span data-tip="Stripe 标准：2.9% + $0.30；PayPal：3.49% + $0.49">ⓘ</span></div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="gatewayRate" value="2.9" oninput="recalc()" placeholder="2.9" />
+          <span class="unit">%</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">网关固定手续费 (每笔)</div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="gatewayFixed" value="0.30" oninput="recalc()" placeholder="0.30" step="0.01" />
+          <span class="unit">$</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">3PL 仓储配送费（单件）<span data-tip="含拣货、打包、出库费用">ⓘ</span></div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="thirdplFee" value="4.50" oninput="recalc()" placeholder="USD" />
           <span class="unit">$</span>
         </div>
       </div>
     </div>
 
-    <div class="field-row-2">
+    <!-- Chewy 专项费用 -->
+    <div class="platform-section" id="sec_chewy">
       <div class="field-group">
-        <div class="field-label">HTS 关税税率 (%)
-          <span data-tip="含 Section 301 加征税。宠物用品典型：7.5%–25%，切换品类自动推荐">ⓘ</span>
-        </div>
+        <div class="field-label">Chewy 佣金率 (%) <span data-tip="宠物品类典型 20–25%，新供应商 25%">ⓘ</span></div>
         <div class="field-unit">
-          <input type="number" class="field-input" id="tariffRate" value="7.5" oninput="recalc()" />
+          <input type="number" class="field-input" id="chewyCommission" value="22" oninput="recalc()" placeholder="如：22" />
           <span class="unit">%</span>
         </div>
       </div>
       <div class="field-group">
-        <div class="field-label">广告费 ACOS (%)
-          <span data-tip="广告花费÷广告销售额。亚马逊大卖家典型值 15%–30%，新品期可达 40%+">ⓘ</span>
-        </div>
+        <div class="field-label">Chewy 配送费（官方仓）<span data-tip="Chewy 自营仓配送，按体积重计费，此处填入估算单件费用">ⓘ</span></div>
         <div class="field-unit">
-          <input type="number" class="field-input" id="acosRate" value="20" oninput="recalc()" placeholder="例：20" />
-          <span class="unit">%</span>
+          <input type="number" class="field-input" id="chewyFulfillment" value="5.50" oninput="recalc()" placeholder="USD" />
+          <span class="unit">$</span>
         </div>
       </div>
-      <div class="field-group">
-        <div class="field-label">退货损耗率 (%)
-          <span data-tip="行业参考：普通商品 2–5%，电子/宠物 5–10%，服装 15–30%。退货损耗 = 售价 × 退货率，代表客户因退货承担的库存/处理成本">ⓘ</span>
-          <span style="font-size:10px;color:var(--text3);margin-left:4px;">行业均值 ~5%</span>
-        </div>
-        <div class="field-unit">
-          <input type="number" class="field-input" id="returnRate" value="5" oninput="recalc()" placeholder="例：5" min="0" max="100" step="0.5" />
-          <span class="unit">%</span>
-        </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">广告 / 推广费率 (%) <span data-tip="Amazon ACOS / Shopify Meta广告 / Chewy 赞助：费用 = 净售价 × 此比例">ⓘ</span></div>
+      <div class="field-unit">
+        <input type="number" class="field-input" id="acosRate" value="20" oninput="recalc()" placeholder="如：20" />
+        <span class="unit">%</span>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">退货损耗率 (%) <span data-tip="普通商品 2–5%，宠物/电子 5–10%，服装 15–30%">ⓘ</span> <span style="font-size:10px;color:var(--text3);margin-left:auto;">均值 ~5%</span></div>
+      <div class="field-unit">
+        <input type="number" class="field-input" id="returnRate" value="5" oninput="recalc()" placeholder="如：5" step="0.5" />
+        <span class="unit">%</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CENTER: FEE BREAKDOWN -->
+  <div class="col">
+    <div class="section-title"><span class="dot"></span>费用拆解（系统计算）</div>
+
+    <!-- 售价分解 -->
+    <div class="field-group">
+      <div class="field-label" style="color:var(--accent3);">💰 售价构成</div>
+      <div class="info-row"><span class="lbl">前台含税价</span><span class="val" id="displayGross">—</span></div>
+      <div class="info-row" id="rowNetPrice" style="display:none;"><span class="lbl">净售价（剥离 VAT 后）</span><span class="val" style="color:var(--accent3);" id="displayNet">—</span></div>
+      <div class="info-row" id="rowVatAmount" style="display:none;"><span class="lbl">VAT 税额</span><span class="val" style="color:var(--yellow);" id="displayVat">—</span></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 平台费用明细 -->
+    <div class="field-label" style="color:var(--accent3);margin-bottom:8px;">🏪 平台 & 履约费用</div>
+    <div id="platformFeeRows">
+      <div class="info-row" id="rowFba"><span class="lbl">FBA 配送费</span><span class="val" id="fbaFee">$ —</span></div>
+      <div class="info-row" id="rowStorage"><span class="lbl">FBA 仓储费（月均）</span><span class="val" id="storageFee">$ —</span></div>
+      <div class="info-row" id="rowGateway" style="display:none;"><span class="lbl">支付网关费</span><span class="val" id="gatewayFeeDisplay">$ —</span></div>
+      <div class="info-row" id="row3pl" style="display:none;"><span class="lbl">3PL 配送费</span><span class="val" id="thirdplDisplay">$ —</span></div>
+      <div class="info-row" id="rowChewyFulfill" style="display:none;"><span class="lbl">Chewy 配送费</span><span class="val" id="chewyFulfillDisplay">$ —</span></div>
+      <div class="info-row"><span class="lbl">平台佣金 <span style="font-size:10px;color:var(--text3);" id="referralPct"></span></span><span class="val" id="referralFee">$ —</span></div>
+      <div class="info-row"><span class="lbl">进口关税</span><span class="val" id="tariffFee">$ —</span></div>
+      <div class="info-row"><span class="lbl">广告费 <span style="font-size:10px;color:var(--text3);" id="acosDisplay"></span></span><span class="val" style="color:var(--orange);" id="adFee">$ —</span></div>
+      <div class="info-row"><span class="lbl">退货损耗 <span style="font-size:10px;color:var(--text3);" id="returnDisplay"></span></span><span class="val" style="color:var(--orange);" id="returnLossFee">$ —</span></div>
+      <div class="info-row" style="margin-top:7px;padding-top:7px;border-top:1px solid var(--border);">
+        <span class="lbl" style="font-weight:700;color:var(--text2);">总运营成本</span>
+        <span class="val" style="color:var(--red);" id="totalOpCost">$ —</span>
       </div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- MODULE 3: PLATFORM FEES (auto) -->
-    <div class="section-title"><span class="dot"></span>模块三：亚马逊官方运营费用（系统计算）</div>
-
-    <div id="platformFees">
-      <div class="info-row">
-        <span class="lbl">FBA 配送费</span>
-        <span class="val" id="fbaFee">$ —</span>
-      </div>
-      <div class="info-row">
-        <span class="lbl">FBA 仓储费（月均）</span>
-        <span class="val" id="storageFee">$ —</span>
-      </div>
-      <div class="info-row">
-        <span class="lbl">平台销售佣金</span>
-        <span class="val" id="referralFee">$ — <span style="color:var(--text3);font-weight:400;" id="referralPct"></span></span>
-      </div>
-      <div class="info-row">
-        <span class="lbl">进口关税</span>
-        <span class="val" id="tariffFee">$ —</span>
-      </div>
-      <div class="info-row">
-        <span class="lbl">广告费 PPC <span style="font-size:10px;color:var(--text3);" id="acosDisplay"></span></span>
-        <span class="val" id="adFee" style="color:var(--orange);">$ —</span>
-      </div>
-      <div class="info-row">
-        <span class="lbl">退货损耗 <span style="font-size:10px;color:var(--text3);" id="returnDisplay"></span></span>
-        <span class="val" id="returnLossFee" style="color:var(--orange);">$ —</span>
-      </div>
-      <div class="info-row" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
-        <span class="lbl" style="font-weight:700;color:var(--text2);">平台+广告+退货总费用</span>
-        <span class="val" id="totalPlatformFees" style="color:var(--red);">$ —</span>
+    <!-- P&L 明细表 -->
+    <div class="section-title"><span class="dot"></span>单件 P&amp;L 明细</div>
+    <div id="plBreakdown">
+      <div class="info-row"><span class="lbl">① 前台售价（净售价基准）</span><span class="val" id="plPrice" style="color:var(--green);">$—</span></div>
+      <div class="info-row"><span class="lbl">② 供货价 FOB</span><span class="val" id="plFob">−$—</span></div>
+      <div class="info-row"><span class="lbl">③ 头程海运</span><span class="val" id="plSea">−$—</span></div>
+      <div class="info-row" id="plRowTariff"><span class="lbl">④ 关税</span><span class="val" id="plTariff">−$—</span></div>
+      <div class="info-row" id="plRowFba"><span class="lbl">⑤ FBA 配送+仓储</span><span class="val" id="plFba">−$—</span></div>
+      <div class="info-row" id="plRowGateway" style="display:none;"><span class="lbl">⑤ 网关+3PL</span><span class="val" id="plGateway">−$—</span></div>
+      <div class="info-row" id="plRowChewy" style="display:none;"><span class="lbl">⑤ Chewy 配送</span><span class="val" id="plChewy">−$—</span></div>
+      <div class="info-row"><span class="lbl">⑥ 平台佣金</span><span class="val" id="plRef">−$—</span></div>
+      <div class="info-row"><span class="lbl">⑦ 广告费</span><span class="val" id="plAd" style="color:var(--orange);">−$—</span></div>
+      <div class="info-row"><span class="lbl">⑧ 退货损耗</span><span class="val" id="plReturn" style="color:var(--orange);">−$—</span></div>
+      <div class="info-row" style="margin-top:7px;padding-top:7px;border-top:1.5px solid var(--border);font-weight:700;">
+        <span class="lbl" style="color:var(--text);">净毛利（含全部费用）</span>
+        <span class="val" style="font-size:14px;" id="plNet">$—</span>
       </div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- CALC DETAIL -->
-    <div class="section-title"><span class="dot"></span>计算过程详情</div>
-    <div id="calcDetail">
-      <div class="info-row"><span class="lbl">体积重 (lb)</span><span class="val" id="dimWeight">—</span></div>
-      <div class="info-row"><span class="lbl">计费重 (lb)</span><span class="val" id="billWeight">—</span></div>
-      <div class="info-row"><span class="lbl">佣金规则</span><span class="val" id="commissionRule">—</span></div>
-    </div>
-
+    <!-- 计算明细 -->
+    <div class="section-title"><span class="dot"></span>计算过程</div>
+    <div class="info-row"><span class="lbl">体积重 (lb)</span><span class="val" id="dimWeight">—</span></div>
+    <div class="info-row"><span class="lbl">计费重 (lb)</span><span class="val" id="billWeight">—</span></div>
+    <div class="info-row"><span class="lbl">VAT 税率</span><span class="val" id="vatRateDisplay">—</span></div>
+    <div class="info-row"><span class="lbl">佣金规则</span><span class="val" id="commissionRule">—</span></div>
   </div>
 
   <!-- RIGHT: PROFIT DASHBOARD -->
   <div class="col" id="colRight">
     <div class="section-title"><span class="dot"></span>客户利润说服模型</div>
 
-    <!-- KPI 1: Gross Profit -->
     <div class="kpi-card green" id="kpiGross">
-      <div class="kpi-label">客户预估单件毛利</div>
-      <div class="kpi-value green" id="grossProfit">$ —</div>
+      <div class="kpi-label">客户预估单件净毛利</div>
+      <div class="kpi-value green" id="grossProfit">— </div>
       <div class="kpi-sub" id="grossProfitSub">等待输入参数</div>
     </div>
-
-    <!-- KPI 2: Margin -->
     <div class="kpi-card yellow" id="kpiMargin">
-      <div class="kpi-label">客户预估毛利率</div>
+      <div class="kpi-label">客户毛利率（基于净售价）</div>
       <div class="kpi-value yellow" id="grossMargin">— %</div>
-      <div class="kpi-sub" id="grossMarginSub">毛利 ÷ 前台售价</div>
+      <div class="kpi-sub" id="grossMarginSub">毛利 ÷ 净售价</div>
     </div>
-
-    <!-- KPI 3: ROI -->
     <div class="kpi-card blue" id="kpiROI">
-      <div class="kpi-label">客户投资回报率 (ROI)</div>
+      <div class="kpi-label">客户 ROI（采购+头程投入回报）</div>
       <div class="kpi-value blue" id="roiVal">— %</div>
-      <div class="kpi-sub" id="roiSub">毛利 ÷ (供货价 + 海运)</div>
-    </div>
-
-    <!-- Health Status -->
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
-      <span class="status-badge neutral" id="healthBadge"><span class="status-dot"></span>待评估</span>
-      <span style="font-size:11px;color:var(--text3);" id="healthText">输入所有参数后自动评估</span>
+      <div class="kpi-sub">毛利 ÷（供货价 + 头程）</div>
     </div>
 
     <div class="divider"></div>
 
     <!-- BACKSOLVE -->
     <div class="backsolve-box">
-      <div class="backsolve-title">⚡ 报价底线反推器</div>
+      <div class="backsolve-title">🎯 报价底线反推（采购耐受上限）</div>
       <div class="backsolve-row">
-        <span style="font-size:12px;color:var(--text2);white-space:nowrap;">客户目标毛利率</span>
-        <div class="field-unit" style="flex:1">
-          <input type="number" class="field-input" id="targetMargin" value="30" oninput="backsolve()" />
+        <span style="font-size:11px;color:var(--text2);white-space:nowrap;">客户目标毛利率</span>
+        <div class="field-unit" style="flex:1;">
+          <input type="number" class="field-input" id="targetMargin" value="20" oninput="backsolve()" placeholder="20" />
           <span class="unit">%</span>
         </div>
+        <button class="btn btn-ghost" style="font-size:11px;" onclick="backsolve()">反推</button>
       </div>
       <div class="backsolve-result" id="backsolveResult">
-        <span style="color:var(--text3)">填写售价和平台费用后自动反推…</span>
+        <span style="color:var(--text3)">填写售价 + 成本后自动计算…</span>
       </div>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- FULL P&L -->
-    <div class="section-title"><span class="dot"></span>完整利润拆解</div>
-    <div id="fullPL">
-      <div class="info-row"><span class="lbl">① 前台售价</span><span class="val" id="plPrice">$—</span></div>
-      <div class="info-row"><span class="lbl">② 供货成本（您报价）</span><span class="val" id="plFob" style="color:var(--red)">−$—</span></div>
-      <div class="info-row"><span class="lbl">③ 头程海运费</span><span class="val" id="plSea" style="color:var(--red)">−$—</span></div>
-      <div class="info-row"><span class="lbl">④ FBA 配送费</span><span class="val" id="plFba" style="color:var(--red)">−$—</span></div>
-      <div class="info-row"><span class="lbl">⑤ FBA 仓储费</span><span class="val" id="plStorage" style="color:var(--red)">−$—</span></div>
-      <div class="info-row"><span class="lbl">⑥ 平台佣金</span><span class="val" id="plRef" style="color:var(--red)">−$—</span></div>
-      <div class="info-row"><span class="lbl">⑦ 进口关税</span><span class="val" id="plTariff" style="color:var(--red)">−$—</span></div>
-      <div class="info-row"><span class="lbl">⑧ 广告费 PPC</span><span class="val" id="plAd" style="color:var(--orange)">−$—</span></div>
-      <div class="info-row"><span class="lbl">⑨ 退货损耗</span><span class="val" id="plReturn" style="color:var(--orange)">−$—</span></div>
-      <div class="info-row" style="margin-top:8px;padding-top:8px;border-top:1.5px solid var(--border);font-weight:700;">
-        <span class="lbl" style="color:var(--text);">净毛利（含广告+退货）</span>
-        <span class="val" id="plNet" style="font-size:15px;">$—</span>
+    <!-- 谈判建议 -->
+    <div class="backsolve-box" style="background:linear-gradient(135deg,rgba(6,214,160,.08),rgba(61,126,246,.08));border-color:rgba(6,214,160,.25);">
+      <div class="backsolve-title" style="color:var(--accent3);">💬 谈判话术建议</div>
+      <div id="negotiationTips" style="font-size:11px;color:var(--text2);line-height:1.7;">
+        <span style="color:var(--text3)">计算完成后自动生成…</span>
       </div>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- PDF / REPORT -->
-    <button class="pdf-btn" onclick="generateReport()">
-      📄 生成《供应链优化与利润推演报告》
-    </button>
+    <button class="pdf-btn" onclick="generateReport()">📄 生成完整谈判报告</button>
   </div>
-
 </div>
 
+<!-- ── PASTE MODAL ── -->
+<div id="pasteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;width:640px;max-width:95vw;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.6);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <div style="font-size:14px;font-weight:700;">📋 粘贴产品页内容自动识别</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">支持 Amazon US / UK / DE / FR / Chewy | 在产品页 <kbd style="background:var(--surface3);padding:1px 5px;border-radius:3px;font-size:10px;">Ctrl+A</kbd> → <kbd style="background:var(--surface3);padding:1px 5px;border-radius:3px;font-size:10px;">Ctrl+C</kbd>，然后在下方粘贴</div>
+      </div>
+      <button onclick="closePasteModal()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:4px;line-height:1;">✕</button>
+    </div>
+    <textarea id="pasteArea"
+      style="width:100%;height:210px;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:12px;font-size:12px;resize:vertical;outline:none;font-family:monospace;line-height:1.5;"
+      placeholder="粘贴产品页文字内容（支持中英文、£€$ 多货币价格）
+
+系统会自动识别：
+  · 前台售价（$39.99 / £29.99 / €34.99）
+  · 产品尺寸（12 x 8 x 6 inches / 30 x 20 x 15 cm）
+  · 商品重量（2.08 ounces / 500 grams / 1.5 kg）
+  · 商品品类（Pet Supplies / Home & Kitchen…）"></textarea>
+    <div style="display:flex;gap:10px;margin-top:12px;align-items:center;">
+      <button class="btn btn-primary" onclick="extractFromPaste()" style="flex:1;padding:10px;">⚡ 立即识别填充</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('pasteArea').value=''">清空</button>
+      <button class="btn btn-ghost" onclick="closePasteModal()">取消</button>
+    </div>
+    <div id="pasteResult" style="margin-top:10px;font-size:12px;line-height:1.6;min-height:18px;"></div>
+  </div>
+</div>
+
+<!-- ─── 关税查询 Modal ─── -->
+<div id="tariffModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9000;display:none;align-items:center;justify-content:center;">
+  <div style="background:var(--surface1);border:1px solid var(--border);border-radius:14px;padding:22px 24px;width:min(620px,96vw);max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div>
+        <div style="font-size:14px;font-weight:700;">🔍 进口关税速查</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">内置常用品类 HTS 数据（美国 MFN + 对华 301 加征 / 欧盟 TARIC）</div>
+      </div>
+      <button onclick="closeTariffModal()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;">✕</button>
+    </div>
+
+    <!-- 搜索框 -->
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <input id="tariffSearch" type="text" placeholder="输入 HTS 编码或品类关键词（如 宠物 / 3924）"
+        style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:8px 12px;font-size:13px;outline:none;"
+        oninput="renderTariffTable()" />
+    </div>
+
+    <!-- 品类快选 -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;" id="catChips">
+      <button class="tariff-chip active-chip" onclick="filterCat(this,'')">全部</button>
+      <button class="tariff-chip" onclick="filterCat(this,'宠物')">宠物用品</button>
+      <button class="tariff-chip" onclick="filterCat(this,'家居')">家居/智能家居</button>
+      <button class="tariff-chip" onclick="filterCat(this,'电子')">消费电子</button>
+      <button class="tariff-chip" onclick="filterCat(this,'玩具')">玩具</button>
+      <button class="tariff-chip" onclick="filterCat(this,'运动')">运动户外</button>
+      <button class="tariff-chip" onclick="filterCat(this,'服装')">服装</button>
+      <button class="tariff-chip" onclick="filterCat(this,'美妆')">美妆个护</button>
+    </div>
+
+    <!-- 结果表格 -->
+    <div id="tariffTableWrap" style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead>
+          <tr style="background:var(--surface3);color:var(--text3);">
+            <th style="padding:7px 10px;text-align:left;border-radius:6px 0 0 6px;white-space:nowrap;">HTS 编码</th>
+            <th style="padding:7px 10px;text-align:left;">品类描述</th>
+            <th style="padding:7px 10px;text-align:center;white-space:nowrap;">美国 MFN</th>
+            <th style="padding:7px 10px;text-align:center;white-space:nowrap;">对华 301</th>
+            <th style="padding:7px 10px;text-align:center;white-space:nowrap;">美国合计</th>
+            <th style="padding:7px 10px;text-align:center;white-space:nowrap;">欧盟 TARIC</th>
+            <th style="padding:7px 10px;text-align:center;border-radius:0 6px 6px 0;">填入</th>
+          </tr>
+        </thead>
+        <tbody id="tariffTableBody"></tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:14px;font-size:10px;color:var(--text3);line-height:1.6;">
+      ⚠️ 数据仅供参考，以清关时 USITC / 海关实际裁定为准。对华商品当前还叠加 IEEPA 145% 特别加征（2025 年 5 月起），建议以实际情况核查。
+      <a href="https://hts.usitc.gov" target="_blank" style="color:var(--accent);text-decoration:none;margin-left:6px;">→ 查 USITC 官网</a>
+      <a href="https://ec.europa.eu/taxation_customs/dds2/taric/taric_consultation.jsp" target="_blank" style="color:var(--accent);text-decoration:none;margin-left:6px;">→ 查 TARIC 官网</a>
+    </div>
+  </div>
+</div>
+
+<style>
+.tariff-chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;color:var(--text3);font-size:11px;padding:3px 10px;cursor:pointer;transition:all .15s;}
+.tariff-chip:hover,.active-chip{background:var(--accent);border-color:var(--accent);color:#fff;}
+.tariff-row{border-bottom:1px solid var(--border);transition:background .12s;}
+.tariff-row:hover{background:var(--surface2);}
+.apply-btn{background:var(--accent);border:none;border-radius:5px;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;cursor:pointer;}
+.apply-btn:hover{opacity:.85;}
+</style>
+
+</body>
+
 <script>
-/* ═══════════════════════════════════════════════════════════════
-   DATA TABLES
-   ═══════════════════════════════════════════════════════════════ */
+'use strict';
 
-// ── Amazon Referral Fee Table (2024 rates) ──
-const REFERRAL_RULES = {
-  pet: {
-    name: 'Pet Supplies',
-    rules: [
-      { max: 15,       rate: 0.15, label: '≤$15 部分 15%' },
-      { max: Infinity, rate: 0.22, label: '>$15 部分 22%（含宠物用品特别加费）' }
-    ],
-    // tiered: for prices crossing the threshold, apply blended
-    tiered: true
-  },
-  home:        { name: 'Home & Kitchen',          rules: [{ max: Infinity, rate: 0.15 }] },
-  sports:      { name: 'Sports & Outdoors',       rules: [{ max: Infinity, rate: 0.15 }] },
-  toys:        { name: 'Toys & Games',            rules: [{ max: Infinity, rate: 0.15 }] },
-  electronics: { name: 'Electronics',             rules: [{ max: Infinity, rate: 0.08 }] },
-  clothing:    { name: 'Clothing & Accessories',  rules: [
-    { max: 15,       rate: 0.17, label: '≤$15 → 17%' },
-    { max: Infinity, rate: 0.17, label: '>$15 → 17%' }
-  ]},
-  beauty:      { name: 'Beauty & Personal Care',  rules: [
-    { max: 10,       rate: 0.08, label: '≤$10 → 8%' },
-    { max: Infinity, rate: 0.15, label: '>$10 → 15%' }
-  ], tiered: true },
-  grocery:     { name: 'Grocery & Gourmet',       rules: [
-    { max: 15,       rate: 0.08, label: '≤$15 → 8%' },
-    { max: Infinity, rate: 0.15, label: '>$15 → 15%' }
-  ], tiered: true },
-  other:       { name: '通用品类',                 rules: [{ max: Infinity, rate: 0.08 }] }
-};
-
-// ── FBA Size Tiers & Fulfillment Fees (2024) ──
-// Units: dimensions in inches, weight in lb, fee in USD
-const SIZE_TIERS = [
-  {
-    id: 'small_standard',
-    label: '标准小件 Small Standard',
-    cls: 'tier-small-standard',
-    maxL: 15, maxM: 12, maxS: 0.75, maxW: 1,
-    // fee schedule: [{maxBW, fee}]  (billing weight ≤ maxBW → fee)
-    fees: [
-      { maxBW: 0.25, fee: 3.06 },
-      { maxBW: 0.50, fee: 3.15 },
-      { maxBW: 0.75, fee: 3.24 },
-      { maxBW: 1.00, fee: 3.33 }
-    ],
-    storagePer: 0.87   // $/cubic ft/month (Jan-Sep)
-  },
-  {
-    id: 'large_standard',
-    label: '标准大件 Large Standard',
-    cls: 'tier-large-standard',
-    maxL: 18, maxM: 14, maxS: 8, maxW: 20,
-    // Amazon 2024 official fee schedule (non-apparel, non-dangerous goods)
-    fees: [
-      { maxBW: 0.25, fee: 3.06 },
-      { maxBW: 0.50, fee: 3.48 },
-      { maxBW: 0.75, fee: 3.57 },
-      { maxBW: 1.00, fee: 3.61 },
-      { maxBW: 1.50, fee: 4.37 },
-      { maxBW: 2.00, fee: 4.54 },
-      { maxBW: 2.50, fee: 5.06 },
-      { maxBW: 3.00, fee: 5.21 },
-      { maxBW: 4.00, fee: 5.48 },
-      { maxBW: 5.00, fee: 5.74 },
-      { maxBW: 6.00, fee: 6.00 },
-      { maxBW: 7.00, fee: 6.26 },
-      { maxBW: 8.00, fee: 6.52 },
-      { maxBW: 9.00, fee: 6.78 },
-      { maxBW: 10.0, fee: 7.04 },
-      { maxBW: 20.0, fee: null, base: 7.04, perLb: 0.26, baseW: 10 }
-    ],
-    storagePer: 0.87
-  },
-  {
-    id: 'small_oversize',
-    label: '小超大件 Small Oversize',
-    cls: 'tier-small-oversize',
-    maxL: 60, maxM: 30, maxS: Infinity, maxW: 70,
-    fees: [
-      { maxBW: Infinity, fee: null, base: 9.73, perLb: 0.42, baseW: 1, minFee: 9.73 }
-    ],
-    storagePer: 0.56
-  },
-  {
-    id: 'medium_oversize',
-    label: '中超大件 Medium Oversize',
-    cls: 'tier-medium-oversize',
-    maxL: 108, maxM: Infinity, maxS: Infinity, maxW: 150,
-    fees: [
-      { maxBW: Infinity, fee: null, base: 19.05, perLb: 0.42, baseW: 1, minFee: 19.05 }
-    ],
-    storagePer: 0.56
-  },
-  {
-    id: 'large_oversize',
-    label: '大超大件 Large Oversize',
-    cls: 'tier-large-oversize',
-    maxL: Infinity, maxM: Infinity, maxS: Infinity, maxW: Infinity,
-    fees: [
-      { maxBW: Infinity, fee: null, base: 89.98, perLb: 0.83, baseW: 90, minFee: 89.98 }
-    ],
-    storagePer: 0.56
-  }
+/* ══════════════════════════════════════════
+   HTS 关税速查表
+   来源：USITC 2025 + USTR Section 301 / EU TARIC 2025
+   结构：{ hts, desc, us_mfn, us_301_cn, eu_mfn }
+   us_mfn    = 美国 MFN 基础税率（%）
+   us_301_cn = 对华 Section 301 加征税率（%），us_total = us_mfn + us_301_cn
+   eu_mfn    = 欧盟 TARIC MFN 税率（%）
+   注：当前 2025 对华加税为 IEEPA 145%（含 301），实际以清关时为准，此处标注 301 层
+══════════════════════════════════════════ */
+const HTS_TABLE = [
+  // ── 宠物用品 ──────────────────────────────────────────
+  { hts:'4201.00.30', desc:'犬/猫项圈、牵引绳（皮革）',         us_mfn:3.7,  us_301_cn:25, eu_mfn:2.7  },
+  { hts:'4201.00.60', desc:'犬/猫项圈、牵引绳（其他材质）',     us_mfn:2.8,  us_301_cn:25, eu_mfn:2.7  },
+  { hts:'3924.90.56', desc:'宠物碗、饮水器（塑料）',            us_mfn:3.4,  us_301_cn:25, eu_mfn:6.5  },
+  { hts:'6307.90.98', desc:'宠物垫、宠物毯（纺织品）',          us_mfn:7.0,  us_301_cn:25, eu_mfn:12.0 },
+  { hts:'9508.90.00', desc:'宠物玩具',                          us_mfn:0,    us_301_cn:25, eu_mfn:4.7  },
+  { hts:'8543.70.96', desc:'宠物自动喂食器（电子）',             us_mfn:0,    us_301_cn:25, eu_mfn:2.7  },
+  { hts:'6307.90.85', desc:'宠物服装',                          us_mfn:7.0,  us_301_cn:25, eu_mfn:12.0 },
+  { hts:'8479.89.98', desc:'宠物自动饮水机（循环泵）',           us_mfn:0,    us_301_cn:25, eu_mfn:1.7  },
+  { hts:'4016.99.35', desc:'宠物玩具（橡胶）',                  us_mfn:3.4,  us_301_cn:25, eu_mfn:4.7  },
+  { hts:'4420.90.80', desc:'宠物木制用品/猫抓板框架',            us_mfn:3.2,  us_301_cn:25, eu_mfn:2.7  },
+  // ── 家居 / 智能家居 ──────────────────────────────────
+  { hts:'9405.10.60', desc:'智能 LED 灯具',                     us_mfn:3.9,  us_301_cn:25, eu_mfn:4.0  },
+  { hts:'8516.60.40', desc:'智能厨电（料理机/烤箱类）',          us_mfn:0,    us_301_cn:25, eu_mfn:3.7  },
+  { hts:'8516.79.00', desc:'家用小家电（其他）',                 us_mfn:0,    us_301_cn:25, eu_mfn:2.0  },
+  { hts:'6304.91.00', desc:'家居纺织品（靠枕/窗帘）',            us_mfn:5.8,  us_301_cn:25, eu_mfn:12.0 },
+  { hts:'3924.10.40', desc:'塑料餐具/厨房用品',                 us_mfn:6.5,  us_301_cn:25, eu_mfn:6.5  },
+  { hts:'9403.90.80', desc:'家具配件/收纳架（金属/木）',         us_mfn:0,    us_301_cn:25, eu_mfn:2.7  },
+  { hts:'8414.51.30', desc:'桌面/立式风扇',                     us_mfn:4.7,  us_301_cn:25, eu_mfn:2.0  },
+  { hts:'8509.80.50', desc:'真空吸尘器（其他）',                 us_mfn:0,    us_301_cn:25, eu_mfn:1.4  },
+  // ── 电子 / 消费电子 ──────────────────────────────────
+  { hts:'8471.60.10', desc:'电脑键盘/鼠标',                     us_mfn:0,    us_301_cn:25, eu_mfn:0    },
+  { hts:'8517.62.00', desc:'蓝牙/WiFi 模块',                    us_mfn:0,    us_301_cn:25, eu_mfn:0    },
+  { hts:'8518.30.20', desc:'耳机（有线）',                      us_mfn:4.9,  us_301_cn:7.5, eu_mfn:3.7 },
+  { hts:'8518.30.10', desc:'无线耳机/蓝牙耳机',                 us_mfn:0,    us_301_cn:7.5, eu_mfn:0   },
+  { hts:'8543.70.40', desc:'无线充电器',                        us_mfn:0,    us_301_cn:25, eu_mfn:0    },
+  { hts:'8507.60.00', desc:'锂电池组',                          us_mfn:3.4,  us_301_cn:25, eu_mfn:2.8  },
+  // ── 玩具 ────────────────────────────────────────────
+  { hts:'9503.00.00', desc:'玩具（非电动）',                    us_mfn:0,    us_301_cn:0,  eu_mfn:4.7  },
+  { hts:'9504.50.00', desc:'电子游戏机/手柄',                   us_mfn:0,    us_301_cn:0,  eu_mfn:0    },
+  { hts:'9502.10.00', desc:'玩偶/毛绒玩具',                     us_mfn:0,    us_301_cn:0,  eu_mfn:4.7  },
+  // ── 运动户外 ─────────────────────────────────────────
+  { hts:'9506.91.00', desc:'露营装备（帐篷等）',                 us_mfn:8.5,  us_301_cn:25, eu_mfn:3.7  },
+  { hts:'9506.99.60', desc:'健身器材',                          us_mfn:4.6,  us_301_cn:25, eu_mfn:2.7  },
+  { hts:'6210.10.50', desc:'户外功能性服装（冲锋衣等）',         us_mfn:16.0, us_301_cn:0,  eu_mfn:12.0 },
+  // ── 服装 ─────────────────────────────────────────────
+  { hts:'6104.62.20', desc:'针织棉质裤子（女）',                 us_mfn:14.9, us_301_cn:7.5, eu_mfn:12.0},
+  { hts:'6105.10.00', desc:'针织棉质衬衫（男）',                 us_mfn:19.7, us_301_cn:7.5, eu_mfn:12.0},
+  // ── 美妆个护 ─────────────────────────────────────────
+  { hts:'3304.99.50', desc:'护肤品（乳霜/精华）',               us_mfn:0,    us_301_cn:25, eu_mfn:6.5  },
+  { hts:'3305.10.00', desc:'洗发水',                            us_mfn:0,    us_301_cn:25, eu_mfn:6.5  },
 ];
 
-// ── Default tariff by category ──
-const DEFAULT_TARIFF = {
-  pet: 7.5, home: 25, sports: 7.5, toys: 7.5,
-  electronics: 7.5, clothing: 22.4, beauty: 6.5, grocery: 0, other: 7.5
+/* ══════════════════════════════════════════
+   数据表
+══════════════════════════════════════════ */
+const VAT_TABLE = {
+  GB:0.20, DE:0.19, FR:0.20, IT:0.22, ES:0.21, AU:0.10,
+  US:0, CA:0
+};
+const CURRENCY = {
+  GB:{sym:'£',code:'GBP'}, DE:{sym:'€',code:'EUR'}, FR:{sym:'€',code:'EUR'},
+  IT:{sym:'€',code:'EUR'}, ES:{sym:'€',code:'EUR'}, AU:{sym:'A$',code:'AUD'},
+  US:{sym:'$',code:'USD'}, CA:{sym:'C$',code:'CAD'}
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   CORE ALGORITHMS
-   ═══════════════════════════════════════════════════════════════ */
+/* Amazon 平台佣金（欧洲与美国费率相近，同品类保持一致） */
+const REFERRAL_RATES = {
+  pet:[{max:15,rate:.15},{max:Infinity,rate:.22}],
+  home:[{max:Infinity,rate:.15}],
+  electronics:[{max:Infinity,rate:.08}],
+  toys:[{max:Infinity,rate:.15}],
+  sports:[{max:Infinity,rate:.15}],
+  beauty:[{max:Infinity,rate:.08}],
+  clothing:[{max:Infinity,rate:.17}],
+  other:[{max:Infinity,rate:.15}],
+};
+const CHEWY_RATES = {
+  pet:[{max:Infinity,rate:.22}],
+  other:[{max:Infinity,rate:.22}],
+};
+const SHOPIFY_RATES = { pet:[{max:Infinity,rate:0}] }; // Shopify 无平台佣金
 
-function calcReferralFee(price, cat) {
-  const rule = REFERRAL_RULES[cat] || REFERRAL_RULES.other;
-  if (!rule.tiered || rule.rules.length === 1) {
-    return { fee: +(price * rule.rules[0].rate).toFixed(2), label: rule.rules[0].label || (rule.rules[0].rate * 100).toFixed(0) + '%', rate: rule.rules[0].rate };
+/* Amazon FBA 尺寸分级 */
+const FBA_TIERS = [
+  { name:'Small Standard', cls:'tier-small-standard',
+    check:(L,W,H,bw)=> L<=15&&W<=12&&H<=0.75&&bw<=1,
+    fees:[{maxBW:1,base:3.06,perLb:0}] },
+  { name:'Large Standard', cls:'tier-large-standard',
+    check:(L,W,H,bw)=> L<=18&&W<=14&&H<=8&&bw<=20,
+    fees:[{maxBW:1,base:3.86,perLb:0},{maxBW:2,base:4.63,perLb:0},
+          {maxBW:2.5,base:4.90,perLb:0},{maxBW:3,base:5.06,perLb:0},
+          {maxBW:4,base:5.43,perLb:0},{maxBW:5,base:5.80,perLb:0},
+          {maxBW:6,base:6.08,perLb:0},{maxBW:7,base:6.37,perLb:0},
+          {maxBW:8,base:6.67,perLb:0},{maxBW:20,base:7.17,perLb:0.16}] },
+  { name:'Small Oversize', cls:'tier-small-oversize',
+    check:(L,W,H,bw)=> L<=60&&W<=30&&bw<=70,
+    fees:[{maxBW:70,base:9.61,perLb:0.38}] },
+  { name:'Medium Oversize', cls:'tier-medium-oversize',
+    check:(L,W,H,bw)=> L<=108&&bw<=150,
+    fees:[{maxBW:150,base:17.46,perLb:0.39}] },
+  { name:'Large Oversize', cls:'tier-large-oversize',
+    check:()=>true,
+    fees:[{maxBW:Infinity,base:76.57,perLb:0.39}] },
+];
+
+/* FBA 月仓储费（$/立方英尺）：欧洲与美国相近 */
+const STORAGE_RATE = { jan_sep:0.87, oct_dec:2.40 };
+const currentMonth = new Date().getMonth() + 1;
+const storagePer = currentMonth >= 10 ? STORAGE_RATE.oct_dec : STORAGE_RATE.jan_sep;
+
+/* ══════════════════════════════════════════
+   单位换算追踪变量
+══════════════════════════════════════════ */
+let _prevDimUnit = 'in', _prevWeightUnit = 'lb';
+const WT_TO_LB = { lb:1, oz:0.0625, kg:2.2046226, g:0.0022046226 };
+
+/* ══════════════════════════════════════════
+   路由状态
+══════════════════════════════════════════ */
+let _platform = 'amazon_eu';
+let _market   = 'US';
+let _isVatMarket = false;
+
+function onRouteChange() {
+  _platform = document.getElementById('routePlatform').value;
+  _market   = document.getElementById('routeMarket').value;
+  _isVatMarket = (VAT_TABLE[_market] || 0) > 0;
+
+  // 货币标签
+  const cur = CURRENCY[_market] || {sym:'$',code:'USD'};
+  document.getElementById('currencyLabel').textContent = cur.sym + ' ' + cur.code;
+  document.getElementById('currencySymbol').textContent = cur.sym;
+
+  // VAT 剥离提示
+  document.getElementById('vatSplitDisplay').style.display = _isVatMarket ? 'block' : 'none';
+  document.getElementById('vatActivePill').style.display   = _isVatMarket ? 'flex' : 'none';
+  document.getElementById('rowNetPrice').style.display     = _isVatMarket ? 'flex' : 'none';
+  document.getElementById('rowVatAmount').style.display    = _isVatMarket ? 'flex' : 'none';
+
+  // 平台 pill — 动态显示所选市场站点
+  const pillEl = document.getElementById('routeActivePill');
+  const marketLabel = { GB:'UK', DE:'DE', FR:'FR', IT:'IT', ES:'ES', US:'US', CA:'CA', AU:'AU' };
+  if (_platform === 'amazon_eu') {
+    pillEl.className = 'route-pill amazon';
+    pillEl.textContent = 'Amazon ' + (marketLabel[_market] || _market);
+  } else if (_platform === 'shopify') {
+    pillEl.className = 'route-pill shopify'; pillEl.textContent = 'Shopify';
+  } else {
+    pillEl.className = 'route-pill chewy'; pillEl.textContent = 'Chewy';
   }
-  // Tiered: price straddles threshold
-  let fee = 0;
-  let prev = 0;
-  let labels = [];
-  for (const r of rule.rules) {
-    if (price > prev) {
-      const portion = Math.min(price, r.max === Infinity ? price : r.max) - prev;
-      fee += portion * r.rate;
-      labels.push(r.label || (r.rate*100)+'%');
-    }
-    if (r.max >= price) break;
-    prev = r.max;
-  }
-  const effectiveRate = fee / price;
-  return { fee: +fee.toFixed(2), label: labels.join(' / '), rate: effectiveRate };
+
+  // 路由说明 — Amazon 区分有/无 FBA VAT 市场
+  const isAmazonVat = _platform === 'amazon_eu' && _isVatMarket;
+  const subtitles = {
+    amazon_eu: isAmazonVat ? 'FBA 费率 | 品类佣金 | 计费重取大值 | VAT 自动剥离'
+                           : 'FBA 费率 | 品类佣金 | 计费重取大值',
+    shopify:   '支付网关 2.9% | 3PL 独立配送 | 无平台佣金',
+    chewy:     '宠物垂直佣金 22% | 官方仓配送 | 体积重计费',
+  };
+  document.getElementById('routeSubtitle').textContent = subtitles[_platform] || '';
+
+  // 条件显示区块
+  ['sec_shopify_gateway','sec_chewy'].forEach(id =>
+    document.getElementById(id).classList.remove('active'));
+  if (_platform === 'shopify') document.getElementById('sec_shopify_gateway').classList.add('active');
+  if (_platform === 'chewy')   document.getElementById('sec_chewy').classList.add('active');
+
+  // P&L 行
+  document.getElementById('plRowFba').style.display    = _platform === 'amazon_eu' ? 'flex' : 'none';
+  document.getElementById('plRowGateway').style.display= _platform === 'shopify'   ? 'flex' : 'none';
+  document.getElementById('plRowChewy').style.display  = _platform === 'chewy'     ? 'flex' : 'none';
+  document.getElementById('rowFba').style.display      = _platform === 'amazon_eu' ? 'flex' : 'none';
+  document.getElementById('rowStorage').style.display  = _platform === 'amazon_eu' ? 'flex' : 'none';
+  document.getElementById('rowGateway').style.display  = _platform === 'shopify'   ? 'flex' : 'none';
+  document.getElementById('row3pl').style.display      = _platform === 'shopify'   ? 'flex' : 'none';
+  document.getElementById('rowChewyFulfill').style.display = _platform === 'chewy' ? 'flex' : 'none';
+
+  recalc();
 }
 
-function getSizeTier(L, W, H, weight) {
-  // Sort dims descending: long, median, short
-  const dims = [L, W, H].sort((a, b) => b - a);
-  const long = dims[0], med = dims[1], short = dims[2];
-  const dimWeightLb = +(L * W * H / 139).toFixed(3);
-
-  for (const tier of SIZE_TIERS) {
-    if (long  <= tier.maxL &&
-        med   <= tier.maxM &&
-        (tier.maxS === Infinity || short <= tier.maxS) &&
-        weight <= tier.maxW) {
-      // billing weight
-      let billW;
-      if (tier.id === 'small_standard') {
-        billW = weight; // small standard uses actual weight
-      } else {
-        billW = Math.max(weight, dimWeightLb);
-      }
-      billW = +billW.toFixed(3);
-      return { tier, dimWeightLb, billW, long, med, short };
-    }
-  }
-  // fallback: large oversize
-  const dimW2 = +(L * W * H / 139).toFixed(3);
-  const billW2 = Math.max(weight, dimW2);
-  return { tier: SIZE_TIERS[SIZE_TIERS.length - 1], dimWeightLb: dimW2, billW: billW2, long, med, short };
+/* ══════════════════════════════════════════
+   VAT 算法
+══════════════════════════════════════════ */
+function calcVat(grossPrice, market) {
+  const rate = VAT_TABLE[market] || 0;
+  if (rate === 0) return { netPrice: grossPrice, vatTax: 0, vatRate: 0 };
+  const netPrice = grossPrice / (1 + rate);
+  return { netPrice: +netPrice.toFixed(2), vatTax: +(grossPrice - netPrice).toFixed(2), vatRate: rate };
 }
 
-function calcFBAFee(tierResult) {
-  const { tier, billW } = tierResult;
-  let fee = 0;
+/* ══════════════════════════════════════════
+   佣金计算
+══════════════════════════════════════════ */
+function calcReferral(netPrice, platform, category) {
+  let table;
+  if (platform === 'shopify') return { fee: 0, rate: 0, label: '无平台佣金' };
+  if (platform === 'chewy')   table = CHEWY_RATES[category]   || CHEWY_RATES.other;
+  else                        table = REFERRAL_RATES[category] || REFERRAL_RATES.other;
+
+  let fee = 0, prev = 0, label = '';
+  for (const b of table) {
+    const base = Math.min(netPrice, b.max) - prev;
+    if (base > 0) { fee += base * b.rate; label += `${(b.rate*100).toFixed(0)}%`; }
+    if (netPrice <= b.max) break;
+    prev = b.max;
+  }
+  return { fee: +fee.toFixed(2), rate: fee/netPrice, label };
+}
+
+/* ══════════════════════════════════════════
+   尺寸换算
+══════════════════════════════════════════ */
+function getDimsInImperial() {
+  const du = document.getElementById('dimUnit').value;
+  const wu = document.getElementById('weightUnit').value;
+  const factor = du === 'cm' ? 1/2.54 : 1;
+  const L = (parseFloat(document.getElementById('dimL').value) || 0) * factor;
+  const W = (parseFloat(document.getElementById('dimW').value) || 0) * factor;
+  const H = (parseFloat(document.getElementById('dimH').value) || 0) * factor;
+  const wRaw = parseFloat(document.getElementById('weight').value) || 0;
+  const wt = wRaw * (WT_TO_LB[wu] || 1);
+  return { L, W, H, wt };
+}
+
+/* ══════════════════════════════════════════
+   FBA 分级 + 费率
+══════════════════════════════════════════ */
+function calcFba(L, W, H, wt) {
+  const dims   = [L,W,H].sort((a,b)=>b-a);
+  const dL=dims[0], dW=dims[1], dH=dims[2];
+  const dimWt  = (dL*dW*dH)/139;
+  const billWt = Math.max(wt, dimWt);
+  const cubFt  = (dL*dW*dH)/1728;
+
+  let tier = null;
+  for (const t of FBA_TIERS) {
+    if (t.check(dL,dW,dH,billWt)) { tier = t; break; }
+  }
+
+  let fbaFee = 0, prevMax = 0;
   for (const f of tier.fees) {
-    if (billW <= f.maxBW) {
-      if (f.fee !== null) {
-        fee = f.fee;
-      } else {
-        // Variable: base + (billW - baseW) * perLb
-        fee = f.base + Math.max(0, billW - f.baseW) * f.perLb;
-        if (f.minFee) fee = Math.max(fee, f.minFee);
-      }
+    if (billWt <= f.maxBW) {
+      fbaFee = f.base + Math.max(0, billWt - prevMax) * f.perLb;
       break;
     }
+    prevMax = f.maxBW;
   }
-  return +fee.toFixed(2);
+  const storageFee = cubFt * storagePer;
+  return { tier, dimWt, billWt, fbaFee: +fbaFee.toFixed(2), storageFee: +storageFee.toFixed(3), cubFt };
 }
 
-function calcStorageFee(L, W, H, tier) {
-  // cubic feet = L*W*H/1728
-  const cubicFt = L * W * H / 1728;
-  return +(cubicFt * (tier.storagePer || 0.87)).toFixed(2);
+/* ══════════════════════════════════════════
+   主计算
+══════════════════════════════════════════ */
+let lastResult = null;
+
+function recalc() {
+  // 同步单位标签
+  const wtUnit = document.getElementById('weightUnit').value;
+  document.getElementById('uWeight').textContent = wtUnit;
+  document.getElementById('weightUnitSuffix').textContent = wtUnit;
+
+  const grossPrice  = parseFloat(document.getElementById('grossPrice').value)  || 0;
+  const acosRate    = parseFloat(document.getElementById('acosRate').value)    || 0;
+
+  // ── 贸易条款分支 ──
+  let fobPrice, seaFreight, tariffRate, ddpTariffCostPerUnit;
+  if (_tradeMode === 'ddp') {
+    // DDP：供货价=EXW，头程=空/海派运费，关税买家不承担（从买家视角=0）
+    fobPrice              = parseFloat(document.getElementById('exwPrice').value)      || 0;
+    seaFreight            = parseFloat(document.getElementById('ddpFreight').value)    || 0;
+    ddpTariffCostPerUnit  = parseFloat(document.getElementById('ddpTariffCost').value) || 0;
+    tariffRate            = 0; // 买家落地价无关税项
+  } else {
+    // FOB：传统海运，买家自付关税
+    fobPrice              = parseFloat(document.getElementById('fobPrice').value)      || 0;
+    seaFreight            = parseFloat(document.getElementById('seaFreight').value)    || 0;
+    ddpTariffCostPerUnit  = 0;
+    tariffRate            = parseFloat(document.getElementById('tariffRate').value)    || 0;
+  }
+  const returnRate  = parseFloat(document.getElementById('returnRate').value)  || 0;
+  const category    = document.getElementById('category').value;
+  const cur         = CURRENCY[_market] || {sym:'$'};
+
+  if (grossPrice <= 0) { clearOutputs(); return; }
+
+  // 1. VAT 剥离
+  const vatResult = calcVat(grossPrice, _market);
+  const netPrice  = vatResult.netPrice;
+  const vatTax    = vatResult.vatTax;
+  const vatRate   = vatResult.vatRate;
+
+  // 更新 VAT 显示
+  document.getElementById('vatNetPrice').textContent = cur.sym + netPrice.toFixed(2);
+  document.getElementById('vatAmount').textContent   = cur.sym + vatTax.toFixed(2);
+  document.getElementById('displayGross').textContent= cur.sym + grossPrice.toFixed(2);
+  document.getElementById('displayNet').textContent  = cur.sym + netPrice.toFixed(2);
+  document.getElementById('displayVat').textContent  = cur.sym + vatTax.toFixed(2);
+  document.getElementById('vatRateDisplay').textContent = vatRate > 0 ? (vatRate*100).toFixed(0)+'%' : '无';
+
+  // 2. 尺寸 + 重量
+  const { L, W, H, wt } = getDimsInImperial();
+  let fbaFeeVal=0, storageFeeVal=0, tierLabel='', dimWtVal=0, billWtVal=0;
+
+  if (L>0 && W>0 && H>0 && wt>0) {
+    const fbaResult = calcFba(L,W,H,wt);
+    fbaFeeVal    = fbaResult.fbaFee;
+    storageFeeVal= fbaResult.storageFee;
+    dimWtVal     = fbaResult.dimWt;
+    billWtVal    = fbaResult.billWt;
+    tierLabel    = fbaResult.tier.name;
+
+    const badge = document.getElementById('tierBadge');
+    badge.textContent = tierLabel;
+    badge.className   = 'status-badge healthy';
+    document.getElementById('dimWeight').textContent  = dimWtVal.toFixed(3)+' lb';
+    document.getElementById('billWeight').textContent = billWtVal.toFixed(3)+' lb';
+  }
+
+  // 3. 平台佣金
+  const refResult   = calcReferral(netPrice, _platform, category);
+  const referralFee = refResult.fee;
+  document.getElementById('referralPct').textContent    = refResult.label;
+  document.getElementById('commissionRule').textContent = refResult.label || '—';
+
+  // 4. 关税（基于 FOB+海运）
+  const tariffFee = (fobPrice + seaFreight) * tariffRate / 100;
+
+  // 5. 平台履约费（路由分支）
+  let fulfillmentFee = 0, gatewayFeeVal = 0, thirdplVal = 0, chewyFulfillVal = 0;
+  if (_platform === 'amazon_eu') {
+    fulfillmentFee = fbaFeeVal + storageFeeVal;
+  } else if (_platform === 'shopify') {
+    const gwRate   = parseFloat(document.getElementById('gatewayRate').value)  || 0;
+    const gwFixed  = parseFloat(document.getElementById('gatewayFixed').value) || 0;
+    const tplFee   = parseFloat(document.getElementById('thirdplFee').value)   || 0;
+    gatewayFeeVal  = +(netPrice * gwRate/100 + gwFixed).toFixed(2);
+    thirdplVal     = tplFee;
+    fulfillmentFee = gatewayFeeVal + thirdplVal;
+  } else if (_platform === 'chewy') {
+    chewyFulfillVal = parseFloat(document.getElementById('chewyFulfillment').value) || 0;
+    fulfillmentFee  = chewyFulfillVal;
+  }
+
+  // 6. 广告 + 退货（基于净售价）
+  const adFee      = +(netPrice * acosRate  / 100).toFixed(2);
+  const returnLoss = +(netPrice * returnRate / 100).toFixed(2);
+
+  // 7. 汇总
+  // DDP 模式：ddpTariffCostPerUnit 是你承担的关税，从你的利润里扣；tariffFee=0（买家无此项）
+  const totalCosts   = fobPrice + seaFreight + tariffFee + ddpTariffCostPerUnit
+                     + fulfillmentFee + referralFee + adFee + returnLoss;
+  const grossProfit  = +(netPrice - totalCosts).toFixed(2);
+  const grossMarginPct = netPrice > 0 ? +((grossProfit/netPrice)*100).toFixed(1) : 0;
+  // ROI 分母：DDP 模式包含 EXW+运费+关税（全是前端资金占用），FOB 模式含 FOB+头程
+  const capitalOut   = fobPrice + seaFreight + ddpTariffCostPerUnit;
+  const roi          = capitalOut > 0 ? +((grossProfit/capitalOut)*100).toFixed(1) : 0;
+
+  // ── 更新 UI ──
+  const fmt = (v,minus=false) => v>0 ? (minus?'−':'')+cur.sym+v.toFixed(2) : cur.sym+'0.00';
+
+  document.getElementById('fbaFee').textContent       = _platform==='amazon_eu' ? fmt(fbaFeeVal)     : '—';
+  document.getElementById('storageFee').textContent   = _platform==='amazon_eu' ? fmt(storageFeeVal) : '—';
+  document.getElementById('gatewayFeeDisplay').textContent = fmt(gatewayFeeVal);
+  document.getElementById('thirdplDisplay').textContent    = fmt(thirdplVal);
+  document.getElementById('chewyFulfillDisplay').textContent = fmt(chewyFulfillVal);
+  document.getElementById('referralFee').textContent   = fmt(referralFee);
+  document.getElementById('tariffFee').textContent     = fmt(tariffFee);
+  document.getElementById('adFee').textContent         = fmt(adFee);
+  document.getElementById('returnLossFee').textContent = fmt(returnLoss);
+  document.getElementById('acosDisplay').textContent   = acosRate>0 ? `ACOS ${acosRate}%` : '';
+  document.getElementById('returnDisplay').textContent = returnRate>0 ? `${returnRate}%` : '';
+  document.getElementById('totalOpCost').textContent   = fmt(totalCosts);
+
+  // P&L 明细
+  document.getElementById('plPrice').textContent  = cur.sym+netPrice.toFixed(2);
+  document.getElementById('plFob').textContent    = fmt(fobPrice,true);
+  document.getElementById('plSea').textContent    = fmt(seaFreight,true);
+  document.getElementById('plTariff').textContent = _tradeMode==='ddp' ? fmt(ddpTariffCostPerUnit,true) : fmt(tariffFee,true);
+  document.getElementById('plFba').textContent    = fmt(fbaFeeVal+storageFeeVal,true);
+  document.getElementById('plGateway').textContent= fmt(gatewayFeeVal+thirdplVal,true);
+  document.getElementById('plChewy').textContent  = fmt(chewyFulfillVal,true);
+  document.getElementById('plRef').textContent    = fmt(referralFee,true);
+  document.getElementById('plAd').textContent     = fmt(adFee,true);
+  document.getElementById('plReturn').textContent = fmt(returnLoss,true);
+  const netEl = document.getElementById('plNet');
+  netEl.textContent = (grossProfit>=0?'':'-')+cur.sym+Math.abs(grossProfit).toFixed(2);
+  netEl.style.color = grossProfit>=0 ? 'var(--green)' : 'var(--red)';
+
+  // KPI
+  const gpEl = document.getElementById('grossProfit');
+  gpEl.textContent = (grossProfit>=0?'':'-')+cur.sym+Math.abs(grossProfit).toFixed(2);
+  gpEl.className   = 'kpi-value ' + (grossProfit>=0?'green':'red');
+  document.getElementById('kpiGross').className = 'kpi-card '+(grossProfit>=0?'green':'red');
+  document.getElementById('grossProfitSub').textContent = `净售价 ${cur.sym}${netPrice.toFixed(2)} − 总成本 ${cur.sym}${totalCosts.toFixed(2)}`;
+
+  const gmEl = document.getElementById('grossMargin');
+  gmEl.textContent = grossMarginPct+'%';
+  gmEl.className   = 'kpi-value '+(grossMarginPct>=25?'green':grossMarginPct>=15?'yellow':'red');
+  document.getElementById('kpiMargin').className = 'kpi-card '+(grossMarginPct>=25?'green':grossMarginPct>=15?'yellow':'red');
+  document.getElementById('grossMarginSub').textContent = grossMarginPct>=25?'✅ 健康':'⚠ 偏低，关注成本结构';
+
+  const roiEl = document.getElementById('roiVal');
+  roiEl.textContent = roi+'%';
+  roiEl.className   = 'kpi-value '+(roi>=30?'green':roi>=15?'yellow':'red');
+  document.getElementById('kpiROI').className = 'kpi-card '+(roi>=30?'green':roi>=15?'yellow':'red');
+
+  // 保存结果
+  lastResult = { grossPrice, netPrice, vatTax, vatRate, fobPrice, seaFreight,
+    tariffFee, ddpTariffCostPerUnit, fbaFeeVal, storageFeeVal, referralFee, adFee, returnLoss,
+    grossProfit, grossMarginPct, roi, category, cur,
+    fulfillmentFee, gatewayFeeVal, thirdplVal, chewyFulfillVal, totalCosts,
+    acosRate, returnRate, refLabel: refResult.label, tradeMode: _tradeMode };
+
+  backsolve();
+  updateNegotiationTips();
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   CATEGORY CHANGE: auto-set tariff default
-   ═══════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   Backsolve 反推采购上限
+══════════════════════════════════════════ */
+function backsolve() {
+  if (!lastResult) return;
+  const r   = lastResult;
+  const tgt = parseFloat(document.getElementById('targetMargin').value) || 20;
+  const res = document.getElementById('backsolveResult');
+  const T   = 1 + (parseFloat(document.getElementById('tariffRate').value)||0)/100;
+
+  if (_tradeMode === 'ddp') {
+    // DDP 反推 maxEXW：关税+运费是固定成本，从可用空间里直接扣
+    // maxEXW = netPrice - fulfillment - referral - ddpFreight - ddpTariff - adFee - returnLoss - netPrice*tgt/100
+    const ddpFixed = r.seaFreight + r.ddpTariffCostPerUnit;
+    const maxExw = r.netPrice - r.fulfillmentFee - r.referralFee
+      - ddpFixed - r.adFee - r.returnLoss
+      - r.netPrice * tgt / 100;
+    if (maxExw <= 0) {
+      res.innerHTML = `<span style="color:var(--red)">⚠ 目标毛利 ${tgt}% 不可达。建议：①提升售价 ②降低空派成本 ③优化广告/退货率</span>`;
+      return;
+    }
+    res.innerHTML = `
+      目标毛利 <strong style="color:var(--yellow)">${tgt}%</strong>，VAT 剥离后净售价 <strong>${r.cur.sym}${r.netPrice.toFixed(2)}</strong><br>
+      您的最大可报出厂价（EXW）：<strong style="color:var(--accent3);font-size:15px;">$${maxExw.toFixed(2)} USD</strong><br>
+      <span style="font-size:10px;color:var(--text3);display:block;margin-top:3px;">
+        空/海派(含关税清关) ${r.cur.sym}${r.seaFreight.toFixed(2)} | 履约 ${r.cur.sym}${r.fulfillmentFee.toFixed(2)} | 佣金 ${r.cur.sym}${r.referralFee.toFixed(2)} | 广告 ${r.cur.sym}${r.adFee.toFixed(2)}
+      </span>`;
+    return;
+  }
+
+  // FOB 传统模式反推
+  // maxFob = (netPrice - fulfillment - referral - sea*T - adFee - returnLoss - netPrice*tgt/100) / T
+  const maxFob = (r.netPrice - r.fulfillmentFee - r.referralFee
+    - r.seaFreight*T - r.adFee - r.returnLoss
+    - r.netPrice * tgt/100) / T;
+
+  if (maxFob <= 0) {
+    res.innerHTML = `<span style="color:var(--red)">⚠ 目标毛利 ${tgt}% 不可达。建议：①提升前台售价 ②降低广告/退货率 ③优化履约成本</span>`;
+    return;
+  }
+  res.innerHTML = `
+    目标毛利 <strong style="color:var(--yellow)">${tgt}%</strong>，VAT 剥离后净售价 <strong>${r.cur.sym}${r.netPrice.toFixed(2)}</strong><br>
+    您的最大可报供货价（FOB）：<strong style="color:var(--accent3);font-size:15px;">$${maxFob.toFixed(2)} USD</strong><br>
+    <span style="font-size:10px;color:var(--text3);display:block;margin-top:3px;">
+      履约 ${r.cur.sym}${r.fulfillmentFee.toFixed(2)} | 佣金 ${r.cur.sym}${r.referralFee.toFixed(2)} | 广告 ${r.cur.sym}${r.adFee.toFixed(2)} | 退货 ${r.cur.sym}${r.returnLoss.toFixed(2)}
+    </span>`;
+}
+
+/* ══════════════════════════════════════════
+   谈判话术建议
+══════════════════════════════════════════ */
+function updateNegotiationTips() {
+  if (!lastResult) return;
+  const r = lastResult;
+  const el = document.getElementById('negotiationTips');
+  const tips = [];
+  const platformName = {amazon_eu:'Amazon 欧洲站',shopify:'Shopify 独立站',chewy:'Chewy'}[_platform] || '平台';
+
+  if (r.vatRate > 0) {
+    tips.push(`📋 <b>VAT 剥离</b>：您的客户在 ${CURRENCY[_market]?.code} 市场实际可用利润基准是净售价 ${r.cur.sym}${r.netPrice.toFixed(2)}，而非前台价 ${r.cur.sym}${r.grossPrice.toFixed(2)}，这 ${(r.vatRate*100).toFixed(0)}% VAT 是必须交给税务局的，请他们不要把含税价误当利润空间。`);
+  }
+  if (r.grossMarginPct < 20) {
+    tips.push(`⚠️ <b>利润预警</b>：客户当前毛利率仅 ${r.grossMarginPct}%，低于 ${platformName} 行业健康线（20–25%）。可以帮客户分析哪块成本最具压缩潜力，比如优化 ACOS 或压缩退货率。`);
+  }
+  if (r.adFee > r.referralFee) {
+    tips.push(`💡 <b>广告占比高</b>：客户广告费 ${r.cur.sym}${r.adFee.toFixed(2)} 已超过平台佣金 ${r.cur.sym}${r.referralFee.toFixed(2)}。建议推荐优化 Listing 质量，降低 ACOS，释放的广告预算可部分转化为更高采购弹性。`);
+  }
+  if (r.roi > 0) {
+    tips.push(`🎯 <b>ROI 说服点</b>：客户每投入 $1 采购成本，可获得约 $${(r.roi/100).toFixed(2)} 回报（ROI ${r.roi}%）。对比银行理财，这是您报价合理性的有力背书。`);
+  }
+  if (tips.length === 0) tips.push('📊 计算完成后，系统将自动生成针对本次报价的谈判建议。');
+  el.innerHTML = tips.join('<br><br>');
+}
+
+/* ══════════════════════════════════════════
+   品类切换（关税默认值）
+══════════════════════════════════════════ */
+const CAT_TARIFF = {pet:5,home:5,electronics:7.5,toys:0,sports:5,beauty:5,clothing:12,other:5};
 function onCategoryChange() {
   const cat = document.getElementById('category').value;
-  document.getElementById('tariffRate').value = DEFAULT_TARIFF[cat] || 7.5;
+  if (CAT_TARIFF[cat] !== undefined) {
+    document.getElementById('tariffRate').value = CAT_TARIFF[cat];
+  }
   recalc();
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   UNIT SWITCH — convert field values when user changes the unit dropdown
-   ═══════════════════════════════════════════════════════════════ */
-// lb ↔ any: how many lb per 1 unit
-const WT_TO_LB = { lb: 1, oz: 0.0625, kg: 2.2046226, g: 0.0022046226 };
-
-// JS variables track current unit (more reliable than data-* attributes)
-let _prevDimUnit    = 'in';
-let _prevWeightUnit = 'lb';
-
+/* ══════════════════════════════════════════
+   单位切换自动换算
+══════════════════════════════════════════ */
 function onDimUnitChange() {
-  const sel  = document.getElementById('dimUnit');
-  const prev = _prevDimUnit;
-  const next = sel.value;
+  const sel = document.getElementById('dimUnit');
+  const prev = _prevDimUnit, next = sel.value;
   if (prev !== next) {
-    const factor = (prev === 'in' && next === 'cm') ? 2.54 : 1 / 2.54;
-    ['dimL', 'dimW', 'dimH'].forEach(function(id) {
-      const el = document.getElementById(id);
-      const v  = parseFloat(el.value);
-      if (v > 0) el.value = +(v * factor).toFixed(2);
+    const f = next==='cm' ? 2.54 : 1/2.54;
+    ['dimL','dimW','dimH'].forEach(id => {
+      const el=document.getElementById(id);
+      const v=parseFloat(el.value);
+      if (v>0) el.value=+(v*f).toFixed(2);
     });
   }
-  _prevDimUnit = next;
-  recalc();
+  _prevDimUnit = next; recalc();
 }
-
 function onWeightUnitChange() {
-  const sel  = document.getElementById('weightUnit');
-  const prev = _prevWeightUnit;
-  const next = sel.value;
+  const sel = document.getElementById('weightUnit');
+  const prev = _prevWeightUnit, next = sel.value;
   if (prev !== next) {
-    const el = document.getElementById('weight');
-    const v  = parseFloat(el.value);
-    if (v > 0) {
-      const inLb   = v * (WT_TO_LB[prev] || 1);
-      const inNext = inLb / (WT_TO_LB[next] || 1);
-      const dp = { lb: 3, oz: 2, kg: 4, g: 1 }[next] || 3;
-      el.value = +inNext.toFixed(dp);
+    const el=document.getElementById('weight');
+    const v=parseFloat(el.value);
+    if (v>0) {
+      const inLb=v*(WT_TO_LB[prev]||1);
+      const inNext=inLb/(WT_TO_LB[next]||1);
+      const dp={lb:3,oz:2,kg:4,g:1}[next]||3;
+      el.value=+inNext.toFixed(dp);
     }
   }
-  _prevWeightUnit = next;
-  recalc();
+  _prevWeightUnit = next; recalc();
 }
 
-// 读取尺寸和重量，按下拉选择的单位统一换算为英制（FBA算法只用 in / lb）
-function getDimsInImperial() {
-  const L   = parseFloat(document.getElementById('dimL').value)    || 0;
-  const W   = parseFloat(document.getElementById('dimW').value)    || 0;
-  const H   = parseFloat(document.getElementById('dimH').value)    || 0;
-  const wt  = parseFloat(document.getElementById('weight').value)  || 0;
-  const dimU = document.getElementById('dimUnit')?.value    || 'in';
-  const wtU  = document.getElementById('weightUnit')?.value || 'lb';
-
-  // 尺寸换算
-  const toIn = dimU === 'cm' ? 1/2.54 : 1;
-  // 重量换算
-  const toLb = { lb: 1, oz: 1/16, kg: 2.2046, g: 1/453.592 }[wtU] || 1;
-
-  return {
-    L:  +(L  * toIn).toFixed(4),
-    W:  +(W  * toIn).toFixed(4),
-    H:  +(H  * toIn).toFixed(4),
-    wt: +(wt * toLb).toFixed(4)
-  };
+/* ══════════════════════════════════════════
+   折叠分级表
+══════════════════════════════════════════ */
+function toggleTierRef() {
+  const p=document.getElementById('tierRefTable');
+  const a=document.getElementById('tierRefArrow');
+  const b=document.getElementById('tierRefToggle');
+  const open=p.style.display!=='none';
+  p.style.display=open?'none':'block';
+  a.style.transform=open?'':'rotate(90deg)';
+  b.style.borderColor=open?'var(--border)':'var(--accent)';
+  b.style.color=open?'var(--text2)':'var(--accent)';
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   PASTE MODAL：粘贴产品页文字 → 正则提取数据
-   ═══════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   清空输出
+══════════════════════════════════════════ */
+function clearOutputs() {
+  const ids=['fbaFee','storageFee','referralFee','tariffFee','adFee','returnLossFee',
+    'totalOpCost','plFob','plSea','plTariff','plFba','plGateway','plChewy',
+    'plRef','plAd','plReturn','vatNetPrice','vatAmount','displayGross','displayNet','displayVat',
+    'gatewayFeeDisplay','thirdplDisplay','chewyFulfillDisplay'];
+  ids.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
+  document.getElementById('grossProfit').textContent='—';
+  document.getElementById('grossMargin').textContent='— %';
+  document.getElementById('roiVal').textContent='— %';
+  document.getElementById('plNet').textContent='$—';
+  document.getElementById('plPrice').textContent='$—';
+  document.getElementById('backsolveResult').innerHTML='<span style="color:var(--text3)">填写售价后自动计算…</span>';
+}
+
+/* ══════════════════════════════════════════
+   重置
+══════════════════════════════════════════ */
+function resetAll() {
+  ['grossPrice','dimL','dimW','dimH','weight','fobPrice'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('seaFreight').value='1.50';
+  document.getElementById('tariffRate').value='5';
+  document.getElementById('acosRate').value='20';
+  document.getElementById('returnRate').value='5';
+  document.getElementById('category').value='pet';
+  document.getElementById('dimUnit').value='in'; _prevDimUnit='in';
+  document.getElementById('weightUnit').value='lb'; _prevWeightUnit='lb';
+  document.getElementById('uWeight').textContent='lb';
+  lastResult=null; clearOutputs();
+}
+
+/* ══════════════════════════════════════════
+   生成报告
+══════════════════════════════════════════ */
+function generateReport() {
+  if (!lastResult) { alert('请先完成计算再生成报告'); return; }
+  const r = lastResult;
+  const platName = {amazon_eu:'Amazon 欧洲站',shopify:'Shopify 独立站',chewy:'Chewy 宠物垂直'}[_platform]||'';
+  const now = new Date().toLocaleDateString('zh-CN');
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>全球利润分析报告 ${now}</title>
+  <style>
+    body{font-family:'Segoe UI',sans-serif;max-width:720px;margin:40px auto;color:#222;font-size:13px;line-height:1.6;}
+    h1{font-size:20px;border-bottom:2px solid #3d7ef6;padding-bottom:8px;color:#3d7ef6;}
+    h2{font-size:13px;margin:20px 0 8px;color:#555;text-transform:uppercase;letter-spacing:.5px;}
+    table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+    td,th{padding:7px 10px;border-bottom:1px solid #eee;font-size:12px;}
+    th{background:#f5f7ff;color:#555;text-align:left;}
+    .green{color:#22c55e;font-weight:700;} .red{color:#ef4444;font-weight:700;}
+    .yellow{color:#f59e0b;font-weight:700;} .blue{color:#3d7ef6;font-weight:700;}
+    .profit-row td{background:#f0fdf4;font-weight:700;font-size:14px;}
+    .kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+    .kpi-box{border:1px solid #e5e7eb;border-radius:8px;padding:12px 16px;text-align:center;}
+    .kpi-lbl{font-size:11px;color:#888;margin-bottom:4px;}
+    .kpi-val{font-size:22px;font-weight:800;}
+  </style></head><body>
+  <h1>🌍 全球多平台客户利润分析报告</h1>
+  <p style="color:#888;font-size:12px;">生成日期：${now} | 平台：${platName} | 市场：${_market} | 货币：${r.cur.code}</p>
+  <div class="kpi-grid">
+    <div class="kpi-box"><div class="kpi-lbl">净毛利</div><div class="kpi-val ${r.grossProfit>=0?'green':'red'}">${r.cur.sym}${r.grossProfit.toFixed(2)}</div></div>
+    <div class="kpi-box"><div class="kpi-lbl">毛利率</div><div class="kpi-val ${r.grossMarginPct>=20?'green':'red'}">${r.grossMarginPct}%</div></div>
+    <div class="kpi-box"><div class="kpi-lbl">ROI</div><div class="kpi-val blue">${r.roi}%</div></div>
+  </div>
+  <h2>P&L 明细</h2>
+  <table><tr><th>项目</th><th>金额</th><th>占净售价%</th></tr>
+  <tr><td>① 前台含税价</td><td>${r.cur.sym}${r.grossPrice.toFixed(2)}</td><td>—</td></tr>
+  ${r.vatRate>0?`<tr><td>　└ VAT 税额（${(r.vatRate*100).toFixed(0)}%）</td><td class="red">−${r.cur.sym}${r.vatTax.toFixed(2)}</td><td>${(r.vatTax/r.netPrice*100).toFixed(1)}%</td></tr>`:''}
+  <tr><td><b>计算基准（净售价）</b></td><td class="blue"><b>${r.cur.sym}${r.netPrice.toFixed(2)}</b></td><td>100%</td></tr>
+  <tr><td>② 供货价 FOB</td><td>−${r.cur.sym}${r.fobPrice.toFixed(2)}</td><td>${(r.fobPrice/r.netPrice*100).toFixed(1)}%</td></tr>
+  <tr><td>③ 头程海运</td><td>−${r.cur.sym}${r.seaFreight.toFixed(2)}</td><td>${(r.seaFreight/r.netPrice*100).toFixed(1)}%</td></tr>
+  <tr><td>④ 关税</td><td>−${r.cur.sym}${r.tariffFee.toFixed(2)}</td><td>${(r.tariffFee/r.netPrice*100).toFixed(1)}%</td></tr>
+  <tr><td>⑤ 履约费</td><td>−${r.cur.sym}${r.fulfillmentFee.toFixed(2)}</td><td>${(r.fulfillmentFee/r.netPrice*100).toFixed(1)}%</td></tr>
+  <tr><td>⑥ 平台佣金（${r.refLabel}）</td><td>−${r.cur.sym}${r.referralFee.toFixed(2)}</td><td>${(r.referralFee/r.netPrice*100).toFixed(1)}%</td></tr>
+  <tr><td>⑦ 广告费（ACOS ${r.acosRate}%）</td><td>−${r.cur.sym}${r.adFee.toFixed(2)}</td><td>${(r.adFee/r.netPrice*100).toFixed(1)}%</td></tr>
+  <tr><td>⑧ 退货损耗（${r.returnRate}%）</td><td>−${r.cur.sym}${r.returnLoss.toFixed(2)}</td><td>${(r.returnLoss/r.netPrice*100).toFixed(1)}%</td></tr>
+  <tr class="profit-row"><td>净毛利</td><td class="${r.grossProfit>=0?'green':'red'}">${r.cur.sym}${r.grossProfit.toFixed(2)}</td><td class="${r.grossMarginPct>=20?'green':'red'}">${r.grossMarginPct}%</td></tr>
+  </table>
+  <p style="font-size:11px;color:#aaa;margin-top:24px;">本报告由「全球多平台客户利润反向推演系统」生成，仅供商业谈判参考。</p>
+  </body></html>`;
+
+  const blob = new Blob([html],{type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `全球利润报告_${_market}_${now.replace(/\//g,'-')}.html`;
+  a.click();
+}
+
+/* ══════════════════════════════════════════
+   粘贴识别模块
+══════════════════════════════════════════ */
 function openPasteModal() {
   const modal = document.getElementById('pasteModal');
   modal.style.display = 'flex';
   document.getElementById('pasteArea').value = '';
   document.getElementById('pasteResult').innerHTML = '';
-  setTimeout(() => document.getElementById('pasteArea').focus(), 100);
+  setTimeout(() => document.getElementById('pasteArea').focus(), 80);
 }
-
 function closePasteModal() {
   document.getElementById('pasteModal').style.display = 'none';
 }
-
-// 点击 modal 背景关闭
-document.getElementById('pasteModal').addEventListener('click', function(e) {
-  if (e.target === this) closePasteModal();
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pasteModal').addEventListener('click', function(e) {
+    if (e.target === this) closePasteModal();
+  });
 });
+
+// 品类关键词映射（中英文混合，兼容 Amazon 各站）
+const CAT_KEYWORDS = {
+  pet:         ['pet supply','pet supplies','pet food','dog','cat','bird','aquatic','reptile','宠物'],
+  home:        ['home & kitchen','home&kitchen','kitchen','bedding','furniture','home decor','家居','厨房'],
+  electronics: ['electronics','camera','computer','phone','laptop','headphone','电子'],
+  toys:        ['toy','toys & games','games','puzzle','玩具'],
+  sports:      ['sport','outdoor','fitness','hiking','camping','运动','户外'],
+  beauty:      ['beauty','personal care','skin care','cosmetic','美妆','护肤'],
+  clothing:    ['clothing','apparel','shoes','fashion','服装','鞋'],
+};
+
+// 通用辅助函数
+function setField(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val;
+}
+
+// 将原始重量值统一换算为 lb（内部存储标准）
+const toLib = (val, unit) => {
+  const u = unit.toLowerCase();
+  if (u.startsWith('kg') || u.startsWith('kilo')) return +(val * 2.2046).toFixed(4);
+  if (u === 'g' || u.startsWith('gram'))           return +(val * 0.002205).toFixed(4);
+  if (u.startsWith('oz') || u.startsWith('ounce')) return +(val / 16).toFixed(4);
+  return val; // lb / pound
+};
+
+function parsePageText(text) {
+  const result = { dimUnit: 'in' };
+
+  // ── 售价（多货币：$ £ € A$ C$）──
+  // 优先匹配显著价格行，避免误命中运费或小计
+  const pricePatterns = [
+    /(?:£|GBP\s*)([\d,]+\.\d{2})\b/,             // 英镑
+    /(?:€|EUR\s*)([\d,]+\.\d{2})\b/,             // 欧元
+    /(?:A\$|AUD\s*)([\d,]+\.\d{2})\b/,           // 澳元
+    /(?:C\$|CAD\s*)([\d,]+\.\d{2})\b/,           // 加元
+    /\$\s*([\d,]+\.\d{2})\b/,                     // 美元
+    /Price[^£$€\d]{0,20}([\d,]+\.?\d*)/i,
+  ];
+  // 货币符号 → market 映射（用于自动切换路由）
+  const currencyToMarket = { '£':['GB'], '€':['DE','FR','IT','ES'], 'A$':['AU'], 'C$':['CA'], '$':['US'] };
+  const currencySymbols  = { '£':'£', '€':'€', 'A$':'A$', 'C$':'C$', '$':'$' };
+
+  for (const p of pricePatterns) {
+    const m = text.match(p);
+    if (m) {
+      const v = parseFloat(m[1].replace(/,/g,''));
+      if (v > 0.5 && v < 10000) {
+        result.price = v;
+        // 推断货币
+        const raw = m[0];
+        if (raw.includes('£'))      result.detectedCurrency = 'GB';
+        else if (raw.includes('€')) result.detectedCurrency = 'EU'; // 二次确认国家
+        else if (raw.includes('A$'))result.detectedCurrency = 'AU';
+        else if (raw.includes('C$'))result.detectedCurrency = 'CA';
+        else                        result.detectedCurrency = 'US';
+        break;
+      }
+    }
+  }
+
+  // ── 尺寸（支持 in / cm，兼容 Amazon 各国格式）──
+  const dimPatterns = [
+    // "Product Dimensions  ‏ : ‎ 12 x 8 x 6 inches"（Amazon 常见格式含隐藏字符）
+    /Product\s+Dimensions[\s\S]{0,30}?([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(inches|inch|in|cm|centimeters?)/i,
+    /Abmessungen[\s\S]{0,30}?([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(cm|mm|inches?|in)/i, // 德文
+    /Dimensions[\s\S]{0,20}?([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(cm|inches?|in)/i,
+    /([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(inches|inch|in)\b/i,
+    /([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(cm|centimeters?)\b/i,
+    /([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)/,   // fallback 无单位
+  ];
+  for (const p of dimPatterns) {
+    const m = text.match(p);
+    if (!m) continue;
+    let a = +m[1], b = +m[2], c = +m[3];
+    if (a <= 0 || b <= 0 || c <= 0) continue;
+    const unit = (m[4] || '').toLowerCase();
+    const isCm = unit.includes('cm') || unit.includes('centimeter') || unit.includes('mm');
+    if (isCm && !unit.includes('mm')) {
+      result.dimUnit = 'cm';
+      // 内部存储用 in，但回填时用 cm 显示
+    } else if (unit.includes('mm')) {
+      a = a/25.4; b = b/25.4; c = c/25.4; // mm → in
+    }
+    // 内部存储标准：inches
+    if (isCm && !unit.includes('mm')) {
+      // 保留 cm 原始值，回填时展示 cm
+      result.dimL = +(a/2.54).toFixed(3); result.dimW = +(b/2.54).toFixed(3); result.dimH = +(c/2.54).toFixed(3);
+    } else {
+      const sorted = [a,b,c].sort((x,y)=>y-x);
+      [result.dimL, result.dimW, result.dimH] = sorted;
+    }
+    break;
+  }
+
+  // ── 重量（支持 oz/lb/kg/g，中英文 + 德语 Gramm/Kilogramm）──
+  const unitGroup = '(pounds?|lbs?|ounces?|oz|kilograms?|kilogramm?|kg|grams?|gramm?|g)';
+  const wtPatterns = [
+    new RegExp(`(?:Item\\s+Weight|Gewicht|Peso|Poids)[^\\d]{0,30}?([\\d.,]+)\\s*${unitGroup}`, 'i'),
+    new RegExp(`Weight[^\\d]{0,20}?([\\d.,]+)\\s*${unitGroup}`, 'i'),
+    new RegExp(`([\\d.,]+)\\s*${unitGroup}\\b`, 'i'),
+  ];
+  for (const p of wtPatterns) {
+    const m = text.match(p);
+    if (!m) continue;
+    const val = parseFloat(m[1].replace(',','.'));
+    const unit = (m[2] || '').toLowerCase();
+    if (!val || val <= 0) continue;
+    if ((unit === 'g') && !/[\d.]\s*g\s*($|\n|\r|[,;)])/i.test(text.slice(m.index, m.index+20))) continue;
+    const lb = toLib(val, unit);
+    if (lb > 0 && lb < 300) {
+      result.weight = lb;
+      result.wtRaw  = `${val} ${unit}`;
+      break;
+    }
+  }
+
+  // ── 品类 ──
+  const lower = text.toLowerCase();
+  for (const [cat, keywords] of Object.entries(CAT_KEYWORDS)) {
+    if (keywords.some(k => lower.includes(k))) { result.category = cat; break; }
+  }
+
+  return result;
+}
 
 function extractFromPaste() {
   const text = document.getElementById('pasteArea').value.trim();
   const resultEl = document.getElementById('pasteResult');
 
-  if (text.length < 50) {
-    resultEl.innerHTML = '<span style="color:var(--red)">内容太少，请确认已复制完整产品页</span>';
+  if (text.length < 30) {
+    resultEl.innerHTML = '<span style="color:var(--red)">内容太少，请确认已复制完整产品页文字</span>';
     return;
   }
 
   const d = parsePageText(text);
   const filled = [], missing = [];
 
+  // ── 售价 + 推断市场 ──
   if (d.price > 0) {
-    setField('price', d.price.toFixed(2)); filled.push(`售价 $${d.price.toFixed(2)}`);
+    setField('grossPrice', d.price.toFixed(2));
+    // 自动切换市场路由
+    if (d.detectedCurrency) {
+      const sel = document.getElementById('routeMarket');
+      if (d.detectedCurrency === 'GB' && sel.value !== 'GB') sel.value = 'GB';
+      else if (d.detectedCurrency === 'AU' && sel.value !== 'AU') sel.value = 'AU';
+      else if (d.detectedCurrency === 'CA' && sel.value !== 'CA') sel.value = 'CA';
+      // 欧元市场保持用户当前选择（DE/FR/IT/ES 都用欧元，不强制切）
+      onRouteChange();
+    }
+    const sym = CURRENCY[_market]?.sym || '$';
+    filled.push(`售价 ${sym}${d.price.toFixed(2)}`);
   } else { missing.push('售价'); }
 
+  // ── 尺寸 ──
   if (d.dimL > 0) {
     if (d.dimUnit === 'cm') {
-      // 产品页是 cm，回填 cm 原始值，下拉切到 cm
       const cL = +(d.dimL*2.54).toFixed(2), cW = +(d.dimW*2.54).toFixed(2), cH = +(d.dimH*2.54).toFixed(2);
       setField('dimL', cL); setField('dimW', cW); setField('dimH', cH);
-      const duEl = document.getElementById('dimUnit');
-      if (duEl) duEl.value = 'cm';
-      _prevDimUnit = 'cm';
+      document.getElementById('dimUnit').value = 'cm'; _prevDimUnit = 'cm';
       filled.push(`尺寸 ${cL}×${cW}×${cH} cm`);
     } else {
       setField('dimL', d.dimL); setField('dimW', d.dimW); setField('dimH', d.dimH);
-      const duEl = document.getElementById('dimUnit');
-      if (duEl) duEl.value = 'in';
-      _prevDimUnit = 'in';
+      document.getElementById('dimUnit').value = 'in'; _prevDimUnit = 'in';
       filled.push(`尺寸 ${d.dimL}×${d.dimW}×${d.dimH} in`);
     }
   } else { missing.push('尺寸'); }
 
-  if (d.weight > 0) {
-    // 直接回填原始数值+原始单位，让用户看到和产品页一致的数字
-    if (d.wtRaw) {
-      const rawVal  = parseFloat(d.wtRaw);
-      const rawUnit = d.wtRaw.replace(/[\d.\s]/g,'').toLowerCase().trim();
-      // 映射到下拉选项值
-      const unitMap = { oz: 'oz', ounce: 'oz', ounces: 'oz',
-                        lb: 'lb', lbs: 'lb', pound: 'lb', pounds: 'lb',
-                        kg: 'kg', kilogram: 'kg', kilograms: 'kg',
-                        g: 'g', gram: 'g', grams: 'g' };
-      const selectVal = unitMap[rawUnit] || 'lb';
-      setField('weight', rawVal);
-      const wuEl = document.getElementById('weightUnit');
-      if (wuEl) wuEl.value = selectVal;
-      _prevWeightUnit = selectVal;
-      filled.push(`重量 ${rawVal} ${selectVal}`);
-    } else {
-      setField('weight', +d.weight.toFixed(3));
-      filled.push(`重量 ${d.weight.toFixed(3)} lb`);
-    }
+  // ── 重量 ──
+  if (d.weight > 0 && d.wtRaw) {
+    const rawVal  = parseFloat(d.wtRaw);
+    const rawUnit = d.wtRaw.replace(/[\d.\s,]/g,'').toLowerCase().trim();
+    const unitMap = { oz:'oz', ounce:'oz', ounces:'oz', lb:'lb', lbs:'lb', pound:'lb', pounds:'lb',
+                      kg:'kg', kilogram:'kg', kilograms:'kg', kilogramm:'kg',
+                      g:'g', gram:'g', grams:'g', gramm:'g' };
+    const selectVal = unitMap[rawUnit] || 'lb';
+    setField('weight', rawVal);
+    document.getElementById('weightUnit').value = selectVal; _prevWeightUnit = selectVal;
+    filled.push(`重量 ${rawVal} ${selectVal}`);
   } else { missing.push('重量'); }
 
+  // ── 品类 ──
   if (d.category) {
     document.getElementById('category').value = d.category;
-    document.getElementById('tariffRate').value = DEFAULT_TARIFF[d.category] || 7.5;
-    filled.push(`品类 ${REFERRAL_RULES[d.category].name}`);
+    document.getElementById('tariffRate').value = CAT_TARIFF[d.category] || 5;
+    const catNames = {pet:'宠物用品',home:'家居',electronics:'电子',toys:'玩具',
+                      sports:'户外',beauty:'美妆',clothing:'服装',other:'其他'};
+    filled.push(`品类 ${catNames[d.category]||d.category}`);
   } else { missing.push('品类（请手动选择）'); }
 
   recalc();
 
+  // ── 结果提示 ──
   if (filled.length === 0) {
-    resultEl.innerHTML = '<span style="color:var(--red)">⚠ 未识别到数据。请确认粘贴的是 Amazon 英文产品页的文字内容（含 Price、Product Dimensions、Item Weight 等字段）</span>';
+    resultEl.innerHTML = '<span style="color:var(--red)">⚠ 未识别到数据。请确认复制了产品页的完整文字（含价格、尺寸、重量字段）</span>';
     return;
   }
+  resultEl.innerHTML =
+    `<span style="color:var(--green)">✅ 已识别：${filled.join(' | ')}</span>` +
+    (missing.length ? `<br><span style="color:var(--yellow)">⚠ 请手动补充：${missing.join('、')}</span>` : '');
 
-  resultEl.innerHTML = `<span style="color:var(--green)">✅ 已识别：${filled.join(' | ')}</span>`
-    + (missing.length ? `<br><span style="color:var(--yellow)">请手动补充：${missing.join('、')}</span>` : '');
-
-  // 成功后1.5秒自动关闭
-  if (missing.length === 0 || (missing.length === 1 && missing[0].includes('品类'))) {
+  // 全部识别成功则 1.5 秒后自动关闭
+  if (missing.filter(m => !m.includes('品类')).length === 0) {
     setTimeout(closePasteModal, 1500);
   }
-
-  // 更新顶部提示
-  const hint = document.getElementById('parseHint');
-  hint.innerHTML = filled.length > 0
-    ? `<span style="color:var(--accent3)">✅ 已自动填充：${filled.join(' | ')}${missing.length ? ' | 请补：'+missing.join('、') : ''}</span>`
-    : hint.innerHTML;
 }
 
-// ── 从纯文本中提取产品数据（针对 Amazon 英文页面复制内容优化）──
-function parsePageText(text) {
-  const result = { dimUnit: 'in' };
+/* ══════════════════════════════════════════
+   DOMContentLoaded 初始化
+══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('dimUnit').addEventListener('change', onDimUnitChange);
+  document.getElementById('weightUnit').addEventListener('change', onWeightUnitChange);
+  onRouteChange();
 
-  // ── 售价 ──
-  // 匹配 "$39.99" / "Price: $39.99" / "$39\n.99"
-  const pricePatterns = [
-    /\$\s*([\d,]+\.\d{2})\b/,           // $39.99
-    /Price[^$]{0,20}\$\s*([\d,]+\.?\d*)/i,
-    /^[\s$]*([\d]+\.[\d]{2})\s*$/m,    // 单独一行数字
-  ];
-  for (const p of pricePatterns) {
-    const m = text.match(p);
-    if (m) {
-      const v = parseFloat(m[1].replace(/,/g,''));
-      if (v > 0.5 && v < 10000) { result.price = v; break; }
-    }
-  }
-
-  // ── 尺寸 ──
-  // Amazon 产品页文字：通常出现 "12 x 8 x 6 inches" 或 "30.5 x 20.3 x 15.2 cm"
-  const dimPatterns = [
-    /([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(inches|inch|in)\b/i,
-    /Product\s+Dimensions[^\d]*([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(inches|inch|in|cm)/i,
-    /([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(cm|centimeters?)\b/i,
-    /([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)/,  // 无单位 fallback
-  ];
-  for (const p of dimPatterns) {
-    const m = text.match(p);
-    if (m) {
-      let a = +m[1], b = +m[2], c = +m[3];
-      const unit = (m[4]||'').toLowerCase();
-      if (unit.includes('cm') || unit.includes('centimeter')) {
-        a = +(a/2.54).toFixed(3); b = +(b/2.54).toFixed(3); c = +(c/2.54).toFixed(3);
-        result.dimUnit = 'cm';
+  // 全局 Ctrl+V 快捷键：任意位置按下直接弹粘贴框
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+      const active = document.activeElement;
+      const isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT');
+      if (!isInput) {
+        e.preventDefault();
+        openPasteModal();
+        // 稍等 textarea 渲染后自动聚焦并触发粘贴
+        setTimeout(() => {
+          const area = document.getElementById('pasteArea');
+          if (area) { area.focus(); document.execCommand('paste'); }
+        }, 80);
       }
-      const sorted = [a,b,c].sort((x,y) => y-x);
-      [result.dimL, result.dimW, result.dimH] = sorted;
-      break;
     }
+  });
+});
+
+/* ══════════════════════════════════════════
+   贸易条款模式切换
+══════════════════════════════════════════ */
+let _tradeMode = 'fob'; // 'fob' | 'ddp'
+
+function switchTradeMode(mode) {
+  _tradeMode = mode;
+  const isFob = mode === 'fob';
+  document.getElementById('modeFob').style.display = isFob ? '' : 'none';
+  document.getElementById('modeDdp').style.display = isFob ? 'none' : '';
+  // tab 样式
+  const tabFob = document.getElementById('tabFob');
+  const tabDdp = document.getElementById('tabDdp');
+  if (isFob) {
+    tabFob.style.cssText += ';background:var(--accent);border-color:var(--accent);color:#fff;';
+    tabDdp.style.cssText += ';background:var(--surface2);border-color:var(--border);color:var(--text3);';
+  } else {
+    tabDdp.style.cssText += ';background:var(--accent);border-color:var(--accent);color:#fff;';
+    tabFob.style.cssText += ';background:var(--surface2);border-color:var(--border);color:var(--text3);';
   }
-
-  // ── 重量（统一转 lb 存储，支持 oz / ounces / lbs / pounds / kg / g / grams）──
-  // 优先匹配 "Item Weight" 字段，再 fallback 到任意位置
-  // 单位换算：1 lb=16 oz, 1 kg=2.2046 lb, 1 g=0.002205 lb
-  const toLib = (val, unit) => {
-    const u = unit.toLowerCase();
-    if (u.startsWith('kg') || u.startsWith('kilo')) return +(val * 2.2046).toFixed(4);
-    if (u === 'g' || u.startsWith('gram'))           return +(val * 0.002205).toFixed(4);
-    if (u.startsWith('oz') || u.startsWith('ounce')) return +(val / 16).toFixed(4);
-    return val;  // lb / pound
-  };
-
-  // 所有支持的单位（顺序很重要：长的放前面防止 g 误匹配 grams）
-  const unitGroup = '(pounds?|lbs?|ounces?|oz|kilograms?|kg|grams?|g)';
-  const wtPatterns = [
-    new RegExp(`Item\\s+Weight[^\\d]{0,30}?([\\d.]+)\\s*${unitGroup}`, 'i'),
-    new RegExp(`Weight[^\\d]{0,20}?([\\d.]+)\\s*${unitGroup}`, 'i'),
-    new RegExp(`([\\d.]+)\\s*${unitGroup}\\b`, 'i'),   // fallback: 任意位置
-  ];
-
-  for (const p of wtPatterns) {
-    const m = text.match(p);
-    if (!m) continue;
-    const val = parseFloat(m[1]);
-    const unit = m[2] || '';
-    if (!val || val <= 0) continue;
-
-    // 单位 'g' 单独一字母时要防止误命中"图形g"——要求前后有空白或数字边界
-    if ((unit === 'g' || unit === 'G') && !/[\d.]\s*g\s*($|\n|\r|[,;)])/i.test(text.slice(m.index, m.index+20))) continue;
-
-    const lb = toLib(val, unit);
-    if (lb > 0 && lb < 300) {
-      result.weight = lb;
-      result.wtRaw  = `${val} ${unit}`;   // 保留原始值供显示
-      break;
-    }
-  }
-
-  // ── 品类 ──
-  const catMap = [
-    ['pet',         /pet\s+supplies|dog\s+food|cat\s+food|aquatic|reptile|bird\s+food|small\s+animal/i],
-    ['home',        /home\s*&\s*kitchen|kitchen\s*&\s*dining|household|bedding|furniture/i],
-    ['sports',      /sports\s*&\s*outdoors|fitness|exercise|hiking|camping/i],
-    ['toys',        /toys\s*&\s*games|children|kids|infant|baby\s+toy/i],
-    ['electronics', /electronics|computers|camera|cell\s+phone|headphone/i],
-    ['clothing',    /clothing|apparel|shoes|fashion|accessories/i],
-    ['beauty',      /beauty\s*&\s*personal\s+care|skin\s+care|hair\s+care|cosmetic/i],
-    ['grocery',     /grocery|gourmet\s+food|food\s*&\s*drink/i],
-  ];
-  for (const [cat, re] of catMap) {
-    if (re.test(text)) { result.category = cat; break; }
-  }
-
-  return result;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   DEMO FILL (for quick demo / testing)
-   ═══════════════════════════════════════════════════════════════ */
-function demoFill() {
-  // 典型智能宠物喂食器示例数据
-  setField('price', 39.99);
-  setField('dimL', 12); setField('dimW', 8); setField('dimH', 6);
-  setField('weight', 2.5);
-  setField('tariffRate', 7.5);
-  setField('acosRate', 22);
-  document.getElementById('category').value = 'pet';
-  setField('fobPrice', 12.5);
-  setField('seaFreight', 2.8);
+  // P&L 标签随模式切换
+  const plFobLabel = document.querySelector('#plFob')?.closest('.info-row')?.querySelector('.lbl');
+  const plSeaLabel = document.querySelector('#plSea')?.closest('.info-row')?.querySelector('.lbl');
+  if (plFobLabel) plFobLabel.textContent = isFob ? '供货价 FOB' : '供货价 EXW';
+  if (plSeaLabel) plSeaLabel.textContent = isFob ? '头程海运费' : '空/海派运费（含关税清关）';
+  // DDP 模式关税行隐藏（已含在运费中，不单列）
+  const plRowTariff = document.getElementById('plRowTariff');
+  if (plRowTariff) plRowTariff.style.display = isFob ? '' : 'none';
   recalc();
 }
 
-function setField(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.value = val;
+/* ══════════════════════════════════════════
+   关税 Modal 逻辑
+══════════════════════════════════════════ */
+let _tariffCatFilter = '';
+
+function openTariffModal() {
+  const m = document.getElementById('tariffModal');
+  m.style.display = 'flex';
+  document.getElementById('tariffSearch').value = '';
+  _tariffCatFilter = '';
+  document.querySelectorAll('.tariff-chip').forEach(c => c.classList.remove('active-chip'));
+  document.querySelectorAll('.tariff-chip')[0].classList.add('active-chip');
+  renderTariffTable();
+}
+function closeTariffModal() {
+  document.getElementById('tariffModal').style.display = 'none';
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   MAIN CALCULATION ENGINE
-   ═══════════════════════════════════════════════════════════════ */
-let lastResult = null;
-
-function recalc() {
-  const price          = parseFloat(document.getElementById('price').value)      || 0;
-  const fobPrice       = parseFloat(document.getElementById('fobPrice').value)   || 0;
-  const seaFreight     = parseFloat(document.getElementById('seaFreight').value) || 0;
-  const tariffRateActual = parseFloat(document.getElementById('tariffRate').value) || 0;
-  const acosRate       = parseFloat(document.getElementById('acosRate').value)   || 0;
-  const returnRate     = parseFloat(document.getElementById('returnRate').value) || 0;
-  const cat            = document.getElementById('category').value;
-
-  // 同步重量单位显示标签
-  const wtUnitVal = document.getElementById('weightUnit')?.value || 'lb';
-  const uWtEl = document.getElementById('uWeight');
-  if (uWtEl) uWtEl.textContent = wtUnitVal;
-
-  // 读取尺寸和重量，统一换算为英制（FBA算法只使用 in / lb）
-  const { L: dimL, W: dimW, H: dimH, wt: weight } = getDimsInImperial();
-
-  // ── FBA Calculation ──
-  let fbaFee = 0, storageFee = 0, dimWeightLb = 0, billWeightLb = 0, tierResult = null, tierLabel = '—';
-  if (dimL > 0 && dimW > 0 && dimH > 0 && weight > 0) {
-    tierResult   = getSizeTier(dimL, dimW, dimH, weight);
-    fbaFee       = calcFBAFee(tierResult);
-    storageFee   = calcStorageFee(dimL, dimW, dimH, tierResult.tier);
-    dimWeightLb  = tierResult.dimWeightLb;
-    billWeightLb = tierResult.billW;
-    tierLabel    = tierResult.tier.label;
-    // Update tier badge
-    const badge = document.getElementById('tierBadge');
-    badge.className = 'status-badge ' + tierResult.tier.cls.replace('tier-','').replace(/-/g, ' ');
-    badge.className = 'tier-badge ' + tierResult.tier.cls;
-    badge.textContent = tierResult.tier.label;
-  } else {
-    const badge = document.getElementById('tierBadge');
-    badge.className = 'status-badge neutral';
-    badge.textContent = '待计算';
-  }
-
-  // ── Referral Fee ──
-  let referralFee = 0, referralLabel = '—', referralRate = 0;
-  if (price > 0) {
-    const ref = calcReferralFee(price, cat);
-    referralFee = ref.fee;
-    referralLabel = ref.label;
-    referralRate = ref.rate;
-  }
-
-  // ── Tariff ──
-  // Tariff is applied on FOB + sea freight (CIF basis simplified)
-  const tariffFee = fobPrice > 0 ? +((fobPrice + seaFreight) * tariffRateActual / 100).toFixed(2) : 0;
-
-  // ── Ad Fee (ACOS × price) ──
-  const adFee = price > 0 ? +(price * acosRate / 100).toFixed(2) : 0;
-
-  // ── Return Loss (退货损耗 = 售价 × 退货率%) ──
-  // 代表每卖出1件，客户需计提的退货处理成本（退款+处理费+二次销售折损）
-  const returnLoss = price > 0 ? +(price * returnRate / 100).toFixed(2) : 0;
-
-  // ── Totals ──
-  const totalCosts = fobPrice + seaFreight + fbaFee + storageFee + referralFee + tariffFee + adFee + returnLoss;
-  const grossProfit = price > 0 ? +(price - totalCosts).toFixed(2) : 0;
-  const grossMarginPct = price > 0 ? +(grossProfit / price * 100).toFixed(1) : 0;
-  // ROI分母：供货价 + 头程 + 关税（客户真实前端资金投入）
-  const investBase = fobPrice + seaFreight + tariffFee;
-  const roi = investBase > 0 ? +(grossProfit / investBase * 100).toFixed(1) : 0;
-
-  lastResult = { price, fobPrice, seaFreight, fbaFee, storageFee, referralFee,
-    tariffFee, adFee, acosRate, returnLoss, returnRate, grossProfit, grossMarginPct, roi,
-    referralRate, referralLabel, dimWeightLb, billWeightLb, tierLabel, tariffRateActual, cat };
-
-  // ── Update Module 3 ──
-  document.getElementById('fbaFee').textContent     = fbaFee     > 0 ? '$'+fbaFee.toFixed(2)     : '$ —';
-  // 仓储费即使极小也显示实际值，不显示 —（避免误判为0）
-  document.getElementById('storageFee').textContent = (dimL > 0 && dimW > 0 && dimH > 0)
-    ? '$' + storageFee.toFixed(2) : '$ —';
-  document.getElementById('referralFee').innerHTML  = referralFee > 0
-    ? `$${referralFee.toFixed(2)} <span style="color:var(--text3);font-weight:400;">(${(referralRate*100).toFixed(1)}%)</span>` : '$ —';
-  document.getElementById('tariffFee').textContent  = tariffFee  > 0 ? '$'+tariffFee.toFixed(2)  : '$ —';
-  document.getElementById('adFee').textContent        = adFee       > 0 ? '$'+adFee.toFixed(2)       : '$ —';
-  document.getElementById('acosDisplay').textContent  = acosRate    > 0 ? `ACOS ${acosRate}%`         : '';
-  document.getElementById('returnLossFee').textContent= returnLoss  > 0 ? '$'+returnLoss.toFixed(2)   : '$ —';
-  document.getElementById('returnDisplay').textContent= returnRate  > 0 ? `${returnRate}%`            : '';
-  const totalPlat = fbaFee + storageFee + referralFee + tariffFee + adFee + returnLoss;
-  document.getElementById('totalPlatformFees').textContent = totalPlat > 0 ? '$'+totalPlat.toFixed(2) : '$ —';
-
-  // ── Calc Detail ──
-  document.getElementById('dimWeight').textContent    = dimWeightLb  > 0 ? dimWeightLb.toFixed(3)+' lb'  : '—';
-  document.getElementById('billWeight').textContent   = billWeightLb > 0 ? billWeightLb.toFixed(3)+' lb' : '—';
-  document.getElementById('commissionRule').textContent = referralLabel;
-
-  // ── Right KPIs ──
-  const haveData = price > 0 && fobPrice > 0;
-  if (haveData) {
-    const gpEl = document.getElementById('grossProfit');
-    gpEl.textContent = (grossProfit >= 0 ? '+' : '') + '$' + Math.abs(grossProfit).toFixed(2);
-    gpEl.className = 'kpi-value ' + (grossProfit >= 0 ? 'green' : 'red');
-    document.getElementById('kpiGross').className = 'kpi-card ' + (grossProfit >= 0 ? 'green' : 'red');
-    document.getElementById('grossProfitSub').textContent = `总成本 $${totalCosts.toFixed(2)} | 售价 $${price.toFixed(2)}`;
-
-    const gmEl = document.getElementById('grossMargin');
-    gmEl.textContent = grossMarginPct.toFixed(1) + ' %';
-    gmEl.className = 'kpi-value ' + (grossMarginPct >= 25 ? 'green' : grossMarginPct >= 15 ? 'yellow' : 'red');
-    document.getElementById('kpiMargin').className = 'kpi-card ' + (grossMarginPct >= 25 ? 'green' : grossMarginPct >= 15 ? 'yellow' : 'red');
-    document.getElementById('grossMarginSub').textContent = `毛利 ÷ 前台售价 $${price.toFixed(2)}`;
-
-    const roiEl = document.getElementById('roiVal');
-    roiEl.textContent = roi.toFixed(1) + ' %';
-    roiEl.className = 'kpi-value ' + (roi >= 50 ? 'green' : roi >= 25 ? 'yellow' : 'red');
-    document.getElementById('kpiROI').className = 'kpi-card ' + (roi >= 50 ? 'green' : roi >= 25 ? 'yellow' : 'red');
-    document.getElementById('roiSub').textContent = `毛利 ÷ (供货$${fobPrice.toFixed(2)} + 运费$${seaFreight.toFixed(2)} + 关税$${tariffFee.toFixed(2)})`;
-
-    // Health badge
-    const hb = document.getElementById('healthBadge');
-    const ht = document.getElementById('healthText');
-    if (grossMarginPct >= 30) {
-      hb.className = 'status-badge healthy'; hb.innerHTML = '<span class="status-dot"></span>利润健康';
-      ht.textContent = '客户当前方案毛利达标，您的报价有上行空间';
-    } else if (grossMarginPct >= 15) {
-      hb.className = 'status-badge warning'; hb.innerHTML = '<span class="status-dot"></span>利润偏薄';
-      ht.textContent = '毛利率15-30%，客户可能正在压价，需强化差异化';
-    } else {
-      hb.className = 'status-badge danger'; hb.innerHTML = '<span class="status-dot"></span>利润危险';
-      ht.textContent = '毛利<15%，客户面临亏损风险，您有切入机会';
-    }
-  } else {
-    document.getElementById('grossProfit').textContent = '$ —';
-    document.getElementById('grossProfit').className = 'kpi-value green';
-    document.getElementById('grossMargin').textContent = '— %';
-    document.getElementById('roiVal').textContent = '— %';
-  }
-
-  // ── Full P&L ──
-  const fmt = (v, neg=false) => v > 0 ? (neg?'−':'')+'$'+v.toFixed(2) : '$—';
-  document.getElementById('plPrice').textContent   = price > 0 ? '$'+price.toFixed(2) : '$—';
-  document.getElementById('plFob').textContent     = fmt(fobPrice, true);
-  document.getElementById('plSea').textContent     = fmt(seaFreight, true);
-  document.getElementById('plFba').textContent     = fmt(fbaFee, true);
-  document.getElementById('plStorage').textContent = fmt(storageFee, true);
-  document.getElementById('plRef').textContent     = fmt(referralFee, true);
-  document.getElementById('plTariff').textContent  = fmt(tariffFee, true);
-  document.getElementById('plAd').textContent      = fmt(adFee, true);
-  document.getElementById('plReturn').textContent  = fmt(returnLoss, true);
-  const netEl = document.getElementById('plNet');
-  netEl.textContent = haveData ? (grossProfit>=0?'+':'')+' $'+Math.abs(grossProfit).toFixed(2) : '$—';
-  netEl.style.color = haveData ? (grossProfit >= 0 ? 'var(--green)' : 'var(--red)') : 'var(--text)';
-
-  // ── Left col ──
-  const cv = document.getElementById('donutCenterVal');
-  cv.textContent = price > 0 ? '$'+price.toFixed(0) : '—';
-  updateDonut(price, fobPrice, seaFreight, fbaFee + storageFee, referralFee, tariffFee, adFee, grossProfit);
-  updateCostBars(price, fobPrice, seaFreight, fbaFee + storageFee, referralFee, tariffFee, adFee, grossProfit);
-
-  // ── Backsolve ──
-  backsolve();
+function filterCat(btn, cat) {
+  _tariffCatFilter = cat;
+  document.querySelectorAll('.tariff-chip').forEach(c => c.classList.remove('active-chip'));
+  btn.classList.add('active-chip');
+  renderTariffTable();
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   BACK-SOLVE: Max FOB for target margin
-   ═══════════════════════════════════════════════════════════════ */
-function backsolve() {
-  const price      = parseFloat(document.getElementById('price').value)      || 0;
-  const seaFreight = parseFloat(document.getElementById('seaFreight').value) || 0;
-  const targetPct  = parseFloat(document.getElementById('targetMargin').value)|| 0;
-  const cat        = document.getElementById('category').value;
-  const tariffRate = parseFloat(document.getElementById('tariffRate').value)  || 0;
-  const acosRate   = parseFloat(document.getElementById('acosRate').value)    || 0;
-  const returnRate = parseFloat(document.getElementById('returnRate').value)  || 0;
-  const result     = document.getElementById('backsolveResult');
+function renderTariffTable() {
+  const kw = (document.getElementById('tariffSearch').value || '').toLowerCase();
+  const market = (document.getElementById('marketSel')?.value || 'US');
+  const isEU = ['GB','DE','FR','IT','ES'].includes(market);
 
-  if (price <= 0) {
-    result.innerHTML = '<span style="color:var(--text3)">请先填写前台售价…</span>';
-    return;
-  }
-
-  const targetMargin = price * targetPct / 100;
-  const ref        = calcReferralFee(price, cat);
-  const fba        = (lastResult && lastResult.fbaFee) ? lastResult.fbaFee + lastResult.storageFee : 0;
-  const adFee      = price * acosRate / 100;
-  const returnLoss = price * returnRate / 100;
-
-  // 反推公式（含广告费 + 退货损耗）：
-  // profit = price - fob - sea - fba - ref - tariff - adFee - returnLoss
-  // tariff = (fob + sea) * tariffRate / 100
-  // → fob*(1 + T) = price - fba - ref - sea*T - adFee - returnLoss - targetMargin
-  const T = 1 + tariffRate / 100;
-  const maxFob = (price - fba - ref.fee - seaFreight * T - adFee - returnLoss - targetMargin) / T;
-
-  if (maxFob <= 0) {
-    result.innerHTML = `<span style="color:var(--red)">⚠ 目标毛利率 ${targetPct}% 不可达（广告 $${adFee.toFixed(2)} + 退货 $${returnLoss.toFixed(2)}）。<br>建议：①降低目标毛利率 ②降低退货率 ③客户提升前台售价</span>`;
-    return;
-  }
-
-  result.innerHTML = `
-    客户目标毛利 <strong style="color:var(--yellow)">${targetPct}%</strong>，含广告 ${acosRate}% / 退货 ${returnRate}%：<br>
-    您的最大可报供货价为 <strong style="color:var(--accent3);font-size:16px;">$${maxFob.toFixed(2)}</strong><br>
-    <span style="font-size:10px;color:var(--text3);margin-top:4px;display:block">
-      FBA $${fba.toFixed(2)} | 佣金 $${ref.fee.toFixed(2)} | 关税 ${tariffRate}% | 广告 $${adFee.toFixed(2)} | 退货 $${returnLoss.toFixed(2)}
-    </span>`;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   DONUT CHART (Canvas)
-   ═══════════════════════════════════════════════════════════════ */
-const DONUT_COLORS = ['#3d7ef6','#7c5cfc','#06d6a0','#f59e0b','#f97316','#e879f9','#22c55e'];
-const DONUT_LABELS = ['供货成本','头程海运','FBA配送','平台佣金','关税','广告PPC','客户毛利'];
-
-function updateDonut(price, fob, sea, fba, ref, tariff, ad, profit) {
-  const canvas = document.getElementById('donutChart');
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  ctx.clearRect(0, 0, W, H);
-
-  const vals = [fob, sea, fba, ref, tariff, ad, profit];
-  const total = vals.reduce((a,b)=>a+Math.max(b,0),0);
-
-  if (total <= 0) {
-    ctx.strokeStyle = '#2a3158'; ctx.lineWidth = 20;
-    ctx.beginPath(); ctx.arc(W/2, H/2, 60, 0, Math.PI*2); ctx.stroke();
-    return;
-  }
-
-  let startAngle = -Math.PI / 2;
-  ctx.lineWidth = 22;
-  ctx.lineCap = 'round';
-
-  // Draw background ring
-  ctx.strokeStyle = '#1c2138';
-  ctx.beginPath(); ctx.arc(W/2, H/2, 58, 0, Math.PI*2); ctx.stroke();
-
-  vals.forEach((v, i) => {
-    const portion = Math.max(v, 0) / total;
-    if (portion < 0.001) return;
-    const endAngle = startAngle + portion * Math.PI * 2;
-    ctx.strokeStyle = DONUT_COLORS[i];
-    ctx.beginPath();
-    ctx.arc(W/2, H/2, 58, startAngle + 0.03, endAngle - 0.03);
-    ctx.stroke();
-    startAngle = endAngle;
+  const rows = HTS_TABLE.filter(r => {
+    const matchCat  = !_tariffCatFilter || r.desc.includes(_tariffCatFilter);
+    const matchKw   = !kw || r.hts.includes(kw) || r.desc.toLowerCase().includes(kw);
+    return matchCat && matchKw;
   });
 
-  // Legend values (7 items: idx 0–6)
-  vals.forEach((v, i) => {
-    const pct = total > 0 ? (Math.max(v,0)/total*100).toFixed(1) : '0.0';
-    const lv = document.getElementById(`lval${i}`);
-    const lp = document.getElementById(`lpct${i}`);
-    if (lv) lv.textContent = v > 0 ? '$'+v.toFixed(2) : '$—';
-    if (lp) lp.textContent = v > 0 ? ` ${pct}%` : '';
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   COST BARS (Left col)
-   ═══════════════════════════════════════════════════════════════ */
-function updateCostBars(price, fob, sea, fba, ref, tariff, ad, profit) {
-  const container = document.getElementById('costBars');
-  const items = [
-    { name: '供货成本',    val: fob,    color: '#3d7ef6' },
-    { name: '头程海运',    val: sea,    color: '#7c5cfc' },
-    { name: 'FBA配送+仓储', val: fba,   color: '#06d6a0' },
-    { name: '平台佣金',    val: ref,    color: '#f59e0b' },
-    { name: '关税',        val: tariff, color: '#f97316' },
-    { name: '广告费 PPC',  val: ad,     color: '#e879f9' },
-    { name: '客户毛利',    val: profit, color: profit >= 0 ? '#22c55e' : '#ef4444' }
-  ];
-
-  if (price <= 0) {
-    container.innerHTML = '<div class="empty-state"><span class="icon">📊</span><span>填写参数后<br>自动生成</span></div>';
+  const tbody = document.getElementById('tariffTableBody');
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="padding:20px;text-align:center;color:var(--text3);">未找到匹配品类，请<a href="https://hts.usitc.gov" target="_blank" style="color:var(--accent);">前往 USITC</a>手动查询</td></tr>`;
     return;
   }
 
-  container.innerHTML = items.map(item => {
-    const pct = price > 0 ? Math.max(0, item.val / price * 100).toFixed(1) : 0;
-    return `<div class="cost-bar-item">
-      <div class="cost-bar-header">
-        <span class="cost-bar-name">${item.name}</span>
-        <span class="cost-bar-val" style="color:${item.color}">${item.val > 0 ? '$'+item.val.toFixed(2) : '—'}</span>
-      </div>
-      <div class="cost-bar-track">
-        <div class="cost-bar-fill" style="width:${pct}%;background:${item.color}"></div>
-      </div>
-    </div>`;
+  tbody.innerHTML = rows.map(r => {
+    const usTotal = +(r.us_mfn + r.us_301_cn).toFixed(1);
+    const rateToFill = isEU ? r.eu_mfn : usTotal;
+    const tag301 = r.us_301_cn > 0
+      ? `<span style="color:#ff6b6b;font-weight:700;">+${r.us_301_cn}%</span>`
+      : `<span style="color:var(--text3);">—</span>`;
+    const euTag = r.eu_mfn > 0 ? `${r.eu_mfn}%` : '<span style="color:var(--text3);">0%</span>';
+    return `<tr class="tariff-row">
+      <td style="padding:7px 10px;font-family:monospace;font-size:11px;color:var(--accent2);white-space:nowrap;">${r.hts}</td>
+      <td style="padding:7px 10px;color:var(--text);">${r.desc}</td>
+      <td style="padding:7px 10px;text-align:center;">${r.us_mfn}%</td>
+      <td style="padding:7px 10px;text-align:center;">${tag301}</td>
+      <td style="padding:7px 10px;text-align:center;font-weight:700;color:${usTotal>20?'#ff6b6b':usTotal>10?'#f59e0b':'var(--green)'};">${usTotal}%</td>
+      <td style="padding:7px 10px;text-align:center;">${euTag}</td>
+      <td style="padding:7px 10px;text-align:center;">
+        <button class="apply-btn" onclick="applyTariff(${rateToFill},'${r.hts}','${r.desc}',${r.us_mfn},${r.us_301_cn},${r.eu_mfn})">填入</button>
+      </td>
+    </tr>`;
   }).join('');
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   REPORT GENERATION
-   ═══════════════════════════════════════════════════════════════ */
-function generateReport() {
-  if (!lastResult || lastResult.price <= 0) {
-    alert('请先填写完整的商品数据和供货价格');
-    return;
+function applyTariff(rate, hts, desc, us_mfn, us_301, eu_mfn) {
+  document.getElementById('tariffRate').value = rate;
+  const market = document.getElementById('marketSel')?.value || 'US';
+  const isEU = ['GB','DE','FR','IT','ES'].includes(market);
+  const hint = document.getElementById('tariffHint');
+  if (isEU) {
+    hint.innerHTML = `✅ HTS ${hts} · 欧盟 TARIC ${eu_mfn}% · ${desc}`;
+  } else {
+    const total = +(us_mfn + us_301).toFixed(1);
+    hint.innerHTML = `✅ HTS ${hts} · 美国 MFN ${us_mfn}%${us_301>0?` + 对华301 <span style="color:#ff6b6b">${us_301}%</span> = <b>${total}%</b>`:''}  · ${desc}`;
   }
-  const r = lastResult;
-  const date = new Date().toLocaleDateString('zh-CN');
-  const catName = REFERRAL_RULES[r.cat]?.name || r.cat;
-
-  const html = `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<title>供应链优化与利润推演报告</title>
-<style>
-  body { font-family: 'Segoe UI', system-ui, sans-serif; max-width: 780px; margin: 0 auto;
-    padding: 40px; color: #1a1a2e; background: #fff; font-size: 13px; }
-  h1 { font-size: 22px; color: #1a1a2e; border-bottom: 3px solid #3d7ef6; padding-bottom: 12px; }
-  h2 { font-size: 14px; color: #3d7ef6; margin: 24px 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .meta { color: #666; font-size: 12px; margin: 4px 0 20px; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-  td, th { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; }
-  th { background: #f5f7ff; font-weight: 700; color: #333; font-size: 11px; }
-  .cost-row td:last-child { color: #e53e3e; font-weight: 600; }
-  .profit-row td { font-weight: 800; font-size: 15px; }
-  .profit-pos td:last-child { color: #22863a; }
-  .profit-neg td:last-child { color: #e53e3e; }
-  .kpi-grid { display: flex; gap: 16px; margin: 16px 0; }
-  .kpi-box { flex: 1; padding: 14px; border: 1.5px solid #e2e8ff; border-radius: 8px; text-align: center; }
-  .kpi-box .v { font-size: 26px; font-weight: 800; }
-  .kpi-box .l { font-size: 11px; color: #666; margin-top: 4px; }
-  .green { color: #22863a; } .yellow { color: #b7791f; } .red { color: #c53030; }
-  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #eee;
-    font-size: 11px; color: #999; }
-  @media print { body { padding: 20px; } }
-</style>
-</head>
-<body>
-<h1>📦 供应链优化与利润推演报告</h1>
-<p class="meta">生成日期：${date} &nbsp;|&nbsp; 品类：${catName} &nbsp;|&nbsp; 工具：Amazon FBA 客户利润反向推演系统</p>
-
-<h2>一、商品基本信息</h2>
-<table>
-  <tr><th>参数</th><th>数值</th></tr>
-  <tr><td>Amazon 前台售价</td><td><strong>$${r.price.toFixed(2)}</strong></td></tr>
-  <tr><td>产品品类</td><td>${catName}</td></tr>
-  <tr><td>FBA 尺寸分级</td><td>${r.tierLabel}</td></tr>
-  <tr><td>计费重量</td><td>${r.billWeightLb.toFixed(3)} lb（体积重 ${r.dimWeightLb.toFixed(3)} lb）</td></tr>
-</table>
-
-<h2>二、客户成本结构拆解</h2>
-<table>
-  <tr><th>成本项</th><th>单件金额 (USD)</th><th>占售价比例</th></tr>
-  <tr class="cost-row"><td>① 供货成本（您的报价）</td><td>$${r.fobPrice.toFixed(2)}</td><td>${(r.fobPrice/r.price*100).toFixed(1)}%</td></tr>
-  <tr class="cost-row"><td>② 头程海运费</td><td>$${r.seaFreight.toFixed(2)}</td><td>${(r.seaFreight/r.price*100).toFixed(1)}%</td></tr>
-  <tr class="cost-row"><td>③ Amazon FBA 配送费</td><td>$${r.fbaFee.toFixed(2)}</td><td>${(r.fbaFee/r.price*100).toFixed(1)}%</td></tr>
-  <tr class="cost-row"><td>④ Amazon FBA 仓储费（月均）</td><td>$${r.storageFee.toFixed(2)}</td><td>${(r.storageFee/r.price*100).toFixed(1)}%</td></tr>
-  <tr class="cost-row"><td>⑤ 平台销售佣金（${(r.referralRate*100).toFixed(1)}%）</td><td>$${r.referralFee.toFixed(2)}</td><td>${(r.referralFee/r.price*100).toFixed(1)}%</td></tr>
-  <tr class="cost-row"><td>⑥ 进口关税（${r.tariffRateActual}% on CIF）</td><td>$${r.tariffFee.toFixed(2)}</td><td>${(r.tariffFee/r.price*100).toFixed(1)}%</td></tr>
-  <tr class="cost-row"><td>⑦ 广告费 PPC（ACOS ${r.acosRate}%）</td><td>$${r.adFee.toFixed(2)}</td><td>${(r.adFee/r.price*100).toFixed(1)}%</td></tr>
-  <tr class="cost-row"><td>⑧ 退货损耗（${r.returnRate}%）</td><td>$${r.returnLoss.toFixed(2)}</td><td>${(r.returnLoss/r.price*100).toFixed(1)}%</td></tr>
-  <tr class="${r.grossProfit >= 0 ? 'profit-pos' : 'profit-neg'} profit-row">
-    <td>【客户单件净毛利（含广告+退货）】</td>
-    <td>$${r.grossProfit.toFixed(2)}</td>
-    <td>${r.grossMarginPct.toFixed(1)}%</td>
-  </tr>
-</table>
-
-<h2>三、核心利润指标</h2>
-<div class="kpi-grid">
-  <div class="kpi-box">
-    <div class="v ${r.grossProfit>=0?'green':'red'}">$${r.grossProfit.toFixed(2)}</div>
-    <div class="l">单件毛利</div>
-  </div>
-  <div class="kpi-box">
-    <div class="v ${r.grossMarginPct>=25?'green':r.grossMarginPct>=15?'yellow':'red'}">${r.grossMarginPct.toFixed(1)}%</div>
-    <div class="l">客户毛利率</div>
-  </div>
-  <div class="kpi-box">
-    <div class="v ${r.roi>=50?'green':r.roi>=25?'yellow':'red'}">${r.roi.toFixed(1)}%</div>
-    <div class="l">ROI（毛利÷供货+运+关税）</div>
-  </div>
-</div>
-
-<h2>四、谈判建议</h2>
-<table>
-  <tr><th>评估维度</th><th>结论</th></tr>
-  <tr><td>当前利润健康度</td><td>${r.grossMarginPct>=30?'✅ 健康（≥30%）':r.grossMarginPct>=15?'⚠ 偏薄（15–30%）':'❌ 危险（<15%）'}</td></tr>
-  <tr><td>关税压力</td><td>${r.tariffRateActual>=25?'🔴 高关税（25%+），重点谈判杠杆':'🟡 中等关税，可用于差异化讨论'}</td></tr>
-  <tr><td>FBA 费用结构</td><td>${r.tierLabel} — ${r.fbaFee < 5 ? '费用合理' : '费用较高，可建议优化包装降档'}</td></tr>
-  <tr><td>核心话术方向</td><td>以"利润改善专家"身份，强调您的报价已优化客户 ROI，对比客户当前供应商的隐性成本</td></tr>
-</table>
-
-<div class="footer">
-  本报告由「Amazon FBA 客户利润反向推演系统」自动生成，仅供商务谈判参考。<br>
-  FBA 费率依据 Amazon 2024 年官方公布费率表，实际以亚马逊官方平台为准。
-</div>
-</body></html>`;
-
-  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `利润推演报告_${date.replace(/\//g,'-')}.html`;
-  a.click();
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   TIER REFERENCE TABLE TOGGLE
-   ═══════════════════════════════════════════════════════════════ */
-function toggleTierRef() {
-  const panel = document.getElementById('tierRefTable');
-  const arrow = document.getElementById('tierRefArrow');
-  const btn   = document.getElementById('tierRefToggle');
-  const isOpen = panel.style.display !== 'none';
-  panel.style.display = isOpen ? 'none' : 'block';
-  arrow.style.transform = isOpen ? '' : 'rotate(90deg)';
-  btn.style.borderColor = isOpen ? 'var(--border)' : 'var(--accent)';
-  btn.style.color       = isOpen ? 'var(--text2)'  : 'var(--accent)';
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   RESET
-   ═══════════════════════════════════════════════════════════════ */
-function resetAll() {
-  ['price','dimL','dimW','dimH','weight','fobPrice','seaFreight'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
-  document.getElementById('tariffRate').value = '7.5';
-  document.getElementById('acosRate').value = '20';
-  document.getElementById('returnRate').value = '5';
-  document.getElementById('category').value = 'pet';
-  document.getElementById('urlInput').value = '';
-  document.getElementById('parseHint').textContent = '支持 Amazon.com / Chewy / Wayfair（一期以 Amazon 为核心）';
-  // 重置单位下拉为默认值，并同步追踪变量
-  const duEl = document.getElementById('dimUnit');
-  if (duEl) duEl.value = 'in';
-  _prevDimUnit = 'in';
-  const wuEl = document.getElementById('weightUnit');
-  if (wuEl) wuEl.value = 'lb';
-  _prevWeightUnit = 'lb';
-  const uWtEl = document.getElementById('uWeight');
-  if (uWtEl) uWtEl.textContent = 'lb';
-  lastResult = null;
+  hint.style.display = 'block';
   recalc();
+  closeTariffModal();
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════════════════════════ */
-// Add demo button to header + bind unit-switch events
-window.addEventListener('DOMContentLoaded', () => {
-  const right = document.querySelector('.header-right');
-  const demoBtn = document.createElement('button');
-  demoBtn.className = 'btn btn-ghost';
-  demoBtn.innerHTML = '🧪 演示数据';
-  demoBtn.onclick = demoFill;
-  right.insertBefore(demoBtn, right.firstChild);
-
-  // Initial draw of empty donut
-  updateDonut(0,0,0,0,0,0,0,0);
-
-  // Bind unit-switch handlers (more reliable than inline onchange)
-  document.getElementById('dimUnit').addEventListener('change', onDimUnitChange);
-  document.getElementById('weightUnit').addEventListener('change', onWeightUnitChange);
+// 点击遮罩关闭
+document.getElementById('tariffModal').addEventListener('click', function(e) {
+  if (e.target === this) closeTariffModal();
 });
 </script>
-
-</body>
-</html>
