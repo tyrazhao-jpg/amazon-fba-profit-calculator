@@ -186,6 +186,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', syste
 
     <!-- MODULE 1: 产品信息 -->
     <div class="section-title"><span class="dot"></span>模块一：产品与售价</div>
+    <div class="field-group">
+      <div class="field-label">产品链接（可选）<span data-tip="粘贴 Amazon / Chewy 产品页 URL，将保存到报告中方便下次查看">ⓘ</span></div>
+      <div class="field-unit" style="gap:6px;">
+        <input type="url" class="field-input" id="productUrl" placeholder="https://www.amazon.com/dp/..." style="font-size:11px;" />
+      </div>
+    </div>
 
     <!-- 前台含税售价 -->
     <div class="field-group">
@@ -462,16 +468,16 @@ body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', syste
     <!-- P&L 明细表 -->
     <div class="section-title"><span class="dot"></span>单件 P&amp;L 明细</div>
     <div id="plBreakdown">
-      <div class="info-row"><span class="lbl">① 前台售价（净售价基准）</span><span class="val" id="plPrice" style="color:var(--green);">$—</span></div>
-      <div class="info-row"><span class="lbl">② 供货价 FOB</span><span class="val" id="plFob">−$—</span></div>
-      <div class="info-row"><span class="lbl">③ 头程海运</span><span class="val" id="plSea">−$—</span></div>
-      <div class="info-row" id="plRowTariff"><span class="lbl">④ 关税</span><span class="val" id="plTariff">−$—</span></div>
-      <div class="info-row" id="plRowFba"><span class="lbl">⑤ FBA 配送+仓储</span><span class="val" id="plFba">−$—</span></div>
-      <div class="info-row" id="plRowGateway" style="display:none;"><span class="lbl">⑤ 网关+3PL</span><span class="val" id="plGateway">−$—</span></div>
-      <div class="info-row" id="plRowChewy" style="display:none;"><span class="lbl">⑤ Chewy 配送</span><span class="val" id="plChewy">−$—</span></div>
-      <div class="info-row"><span class="lbl">⑥ 平台佣金</span><span class="val" id="plRef">−$—</span></div>
-      <div class="info-row"><span class="lbl">⑦ 广告费</span><span class="val" id="plAd" style="color:var(--orange);">−$—</span></div>
-      <div class="info-row"><span class="lbl">⑧ 退货损耗</span><span class="val" id="plReturn" style="color:var(--orange);">−$—</span></div>
+      <div class="info-row" data-pl-label="前台售价（净售价基准）"><span class="lbl"></span><span class="val" id="plPrice" style="color:var(--green);">$—</span></div>
+      <div class="info-row" data-pl-label="供货价 FOB"><span class="lbl"></span><span class="val" id="plFob">−$—</span></div>
+      <div class="info-row" data-pl-label="头程海运"><span class="lbl"></span><span class="val" id="plSea">−$—</span></div>
+      <div class="info-row" id="plRowTariff" data-pl-label="关税"><span class="lbl"></span><span class="val" id="plTariff">−$—</span></div>
+      <div class="info-row" id="plRowFba" data-pl-label="FBA 配送+仓储"><span class="lbl"></span><span class="val" id="plFba">−$—</span></div>
+      <div class="info-row" id="plRowGateway" style="display:none;" data-pl-label="网关+3PL"><span class="lbl"></span><span class="val" id="plGateway">−$—</span></div>
+      <div class="info-row" id="plRowChewy" style="display:none;" data-pl-label="Chewy 配送"><span class="lbl"></span><span class="val" id="plChewy">−$—</span></div>
+      <div class="info-row" data-pl-label="平台佣金"><span class="lbl"></span><span class="val" id="plRef">−$—</span></div>
+      <div class="info-row" data-pl-label="广告费"><span class="lbl"></span><span class="val" id="plAd" style="color:var(--orange);">−$—</span></div>
+      <div class="info-row" data-pl-label="退货损耗"><span class="lbl"></span><span class="val" id="plReturn" style="color:var(--orange);">−$—</span></div>
       <div class="info-row" style="margin-top:7px;padding-top:7px;border-top:1.5px solid var(--border);font-weight:700;">
         <span class="lbl" style="color:var(--text);">净毛利（含全部费用）</span>
         <span class="val" style="font-size:14px;" id="plNet">$—</span>
@@ -808,6 +814,7 @@ function onRouteChange() {
   document.getElementById('plRowFba').style.display    = _platform === 'amazon_eu' ? 'flex' : 'none';
   document.getElementById('plRowGateway').style.display= _platform === 'shopify'   ? 'flex' : 'none';
   document.getElementById('plRowChewy').style.display  = _platform === 'chewy'     ? 'flex' : 'none';
+  renumberPL();
   document.getElementById('rowFba').style.display      = _platform === 'amazon_eu' ? 'flex' : 'none';
   document.getElementById('rowStorage').style.display  = _platform === 'amazon_eu' ? 'flex' : 'none';
   document.getElementById('rowGateway').style.display  = _platform === 'shopify'   ? 'flex' : 'none';
@@ -836,14 +843,20 @@ function calcReferral(netPrice, platform, category) {
   if (platform === 'chewy')   table = CHEWY_RATES[category]   || CHEWY_RATES.other;
   else                        table = REFERRAL_RATES[category] || REFERRAL_RATES.other;
 
-  let fee = 0, prev = 0, label = '';
+  let fee = 0, prev = 0;
+  const brackets = [];
   for (const b of table) {
     const base = Math.min(netPrice, b.max) - prev;
-    if (base > 0) { fee += base * b.rate; label += `${(b.rate*100).toFixed(0)}%`; }
+    if (base > 0) { fee += base * b.rate; brackets.push((b.rate*100).toFixed(0)+'%'); }
     if (netPrice <= b.max) break;
     prev = b.max;
   }
-  return { fee: +fee.toFixed(2), rate: fee/netPrice, label };
+  const effectiveRate = netPrice > 0 ? fee / netPrice : 0;
+  // label：单档直接显 "15%"，跨档显 "实际 15.3%（阶梯：15% / 22%）"
+  const label = brackets.length <= 1
+    ? (brackets[0] || '—')
+    : `实际 ${(effectiveRate*100).toFixed(1)}%（阶梯：${brackets.join(' / ')}）`;
+  return { fee: +fee.toFixed(2), rate: effectiveRate, label };
 }
 
 /* ══════════════════════════════════════════
@@ -1226,8 +1239,31 @@ function resetAll() {
 function generateReport() {
   if (!lastResult) { alert('请先完成计算再生成报告'); return; }
   const r = lastResult;
-  const platName = {amazon_eu:'Amazon 欧洲站',shopify:'Shopify 独立站',chewy:'Chewy 宠物垂直'}[_platform]||'';
+  const platName = {amazon_eu:'Amazon',shopify:'Shopify 独立站',chewy:'Chewy 宠物垂直'}[_platform]||'';
+  const tradeLabel = r.tradeMode === 'ddp' ? 'DDP 双清包税' : '传统海运 FOB';
   const now = new Date().toLocaleDateString('zh-CN');
+  const productUrl = (document.getElementById('productUrl')?.value || '').trim();
+
+  // ── P&L 行：按贸易模式分支，序号动态连贯 ──
+  let plRows = '';
+  let n = 2; // ①已被"前台含税价"占用，从②开始
+  const C = ['','①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'];
+  const pct = (v) => r.netPrice > 0 ? (v/r.netPrice*100).toFixed(1)+'%' : '—';
+  const neg = (v) => `−${r.cur.sym}${v.toFixed(2)}`;
+
+  if (r.tradeMode === 'ddp') {
+    plRows += `<tr><td>${C[n++]} 供货价 EXW</td><td>${neg(r.fobPrice)}</td><td>${pct(r.fobPrice)}</td></tr>`;
+    plRows += `<tr><td>${C[n++]} 空/海派运费（含关税清关）</td><td>${neg(r.seaFreight)}</td><td>${pct(r.seaFreight)}</td></tr>`;
+  } else {
+    plRows += `<tr><td>${C[n++]} 供货价 FOB</td><td>${neg(r.fobPrice)}</td><td>${pct(r.fobPrice)}</td></tr>`;
+    plRows += `<tr><td>${C[n++]} 头程海运</td><td>${neg(r.seaFreight)}</td><td>${pct(r.seaFreight)}</td></tr>`;
+    plRows += `<tr><td>${C[n++]} 关税</td><td>${neg(r.tariffFee)}</td><td>${pct(r.tariffFee)}</td></tr>`;
+  }
+  plRows += `<tr><td>${C[n++]} 履约费</td><td>${neg(r.fulfillmentFee)}</td><td>${pct(r.fulfillmentFee)}</td></tr>`;
+  plRows += `<tr><td>${C[n++]} 平台佣金（${r.refLabel}）</td><td>${neg(r.referralFee)}</td><td>${pct(r.referralFee)}</td></tr>`;
+  plRows += `<tr><td>${C[n++]} 广告费（ACOS ${r.acosRate}%）</td><td>${neg(r.adFee)}</td><td>${pct(r.adFee)}</td></tr>`;
+  plRows += `<tr><td>${C[n++]} 退货损耗（${r.returnRate}%）</td><td>${neg(r.returnLoss)}</td><td>${pct(r.returnLoss)}</td></tr>`;
+
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
   <title>全球利润分析报告 ${now}</title>
   <style>
@@ -1244,9 +1280,13 @@ function generateReport() {
     .kpi-box{border:1px solid #e5e7eb;border-radius:8px;padding:12px 16px;text-align:center;}
     .kpi-lbl{font-size:11px;color:#888;margin-bottom:4px;}
     .kpi-val{font-size:22px;font-weight:800;}
+    .url-bar{background:#f5f7ff;border:1px solid #e5e7eb;border-radius:6px;padding:8px 12px;font-size:12px;margin-bottom:16px;word-break:break-all;}
+    .url-bar a{color:#3d7ef6;text-decoration:none;}
+    .trade-tag{display:inline-block;background:${r.tradeMode==='ddp'?'#ede9fe':'#f0fdf4'};color:${r.tradeMode==='ddp'?'#7c3aed':'#16a34a'};border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:6px;}
   </style></head><body>
   <h1>🌍 全球多平台客户利润分析报告</h1>
-  <p style="color:#888;font-size:12px;">生成日期：${now} | 平台：${platName} | 市场：${_market} | 货币：${r.cur.code}</p>
+  <p style="color:#888;font-size:12px;">生成日期：${now} | 平台：${platName} ${_market} | 贸易条款：<span class="trade-tag">${tradeLabel}</span> | 货币：${r.cur.code}</p>
+  ${productUrl ? `<div class="url-bar">🔗 产品链接：<a href="${productUrl}" target="_blank">${productUrl}</a></div>` : ''}
   <div class="kpi-grid">
     <div class="kpi-box"><div class="kpi-lbl">净毛利</div><div class="kpi-val ${r.grossProfit>=0?'green':'red'}">${r.cur.sym}${r.grossProfit.toFixed(2)}</div></div>
     <div class="kpi-box"><div class="kpi-lbl">毛利率</div><div class="kpi-val ${r.grossMarginPct>=20?'green':'red'}">${r.grossMarginPct}%</div></div>
@@ -1255,15 +1295,9 @@ function generateReport() {
   <h2>P&L 明细</h2>
   <table><tr><th>项目</th><th>金额</th><th>占净售价%</th></tr>
   <tr><td>① 前台含税价</td><td>${r.cur.sym}${r.grossPrice.toFixed(2)}</td><td>—</td></tr>
-  ${r.vatRate>0?`<tr><td>　└ VAT 税额（${(r.vatRate*100).toFixed(0)}%）</td><td class="red">−${r.cur.sym}${r.vatTax.toFixed(2)}</td><td>${(r.vatTax/r.netPrice*100).toFixed(1)}%</td></tr>`:''}
+  ${r.vatRate>0?`<tr><td>　└ VAT 税额（${(r.vatRate*100).toFixed(0)}%）</td><td class="red">−${r.cur.sym}${r.vatTax.toFixed(2)}</td><td>${pct(r.vatTax)}</td></tr>`:''}
   <tr><td><b>计算基准（净售价）</b></td><td class="blue"><b>${r.cur.sym}${r.netPrice.toFixed(2)}</b></td><td>100%</td></tr>
-  <tr><td>② 供货价 FOB</td><td>−${r.cur.sym}${r.fobPrice.toFixed(2)}</td><td>${(r.fobPrice/r.netPrice*100).toFixed(1)}%</td></tr>
-  <tr><td>③ 头程海运</td><td>−${r.cur.sym}${r.seaFreight.toFixed(2)}</td><td>${(r.seaFreight/r.netPrice*100).toFixed(1)}%</td></tr>
-  <tr><td>④ 关税</td><td>−${r.cur.sym}${r.tariffFee.toFixed(2)}</td><td>${(r.tariffFee/r.netPrice*100).toFixed(1)}%</td></tr>
-  <tr><td>⑤ 履约费</td><td>−${r.cur.sym}${r.fulfillmentFee.toFixed(2)}</td><td>${(r.fulfillmentFee/r.netPrice*100).toFixed(1)}%</td></tr>
-  <tr><td>⑥ 平台佣金（${r.refLabel}）</td><td>−${r.cur.sym}${r.referralFee.toFixed(2)}</td><td>${(r.referralFee/r.netPrice*100).toFixed(1)}%</td></tr>
-  <tr><td>⑦ 广告费（ACOS ${r.acosRate}%）</td><td>−${r.cur.sym}${r.adFee.toFixed(2)}</td><td>${(r.adFee/r.netPrice*100).toFixed(1)}%</td></tr>
-  <tr><td>⑧ 退货损耗（${r.returnRate}%）</td><td>−${r.cur.sym}${r.returnLoss.toFixed(2)}</td><td>${(r.returnLoss/r.netPrice*100).toFixed(1)}%</td></tr>
+  ${plRows}
   <tr class="profit-row"><td>净毛利</td><td class="${r.grossProfit>=0?'green':'red'}">${r.cur.sym}${r.grossProfit.toFixed(2)}</td><td class="${r.grossMarginPct>=20?'green':'red'}">${r.grossMarginPct}%</td></tr>
   </table>
   <p style="font-size:11px;color:#aaa;margin-top:24px;">本报告由「全球多平台客户利润反向推演系统」生成，仅供商业谈判参考。</p>
@@ -1430,6 +1464,13 @@ function extractFromPaste() {
     return;
   }
 
+  // 自动提取 Amazon / Chewy URL
+  const urlMatch = text.match(/https?:\/\/(www\.)?(amazon\.[a-z.]+\/[^\s]+|chewy\.com\/[^\s]+)/i);
+  if (urlMatch) {
+    const urlEl = document.getElementById('productUrl');
+    if (urlEl && !urlEl.value) urlEl.value = urlMatch[0].split(/[\s\n]/)[0];
+  }
+
   const d = parsePageText(text);
   const filled = [], missing = [];
 
@@ -1509,6 +1550,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('dimUnit').addEventListener('change', onDimUnitChange);
   document.getElementById('weightUnit').addEventListener('change', onWeightUnitChange);
   onRouteChange();
+  renumberPL();
 
   // 全局 Ctrl+V 快捷键：任意位置按下直接弹粘贴框
   document.addEventListener('keydown', function(e) {
@@ -1527,6 +1569,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+/* ══════════════════════════════════════════
+   P&L 序号动态编排
+   遍历 #plBreakdown 中所有可见的 [data-pl-label] 行，按顺序打序号
+   circled numbers: ①②③④⑤⑥⑦⑧⑨⑩
+══════════════════════════════════════════ */
+const CIRCLED = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'];
+function renumberPL() {
+  const rows = document.querySelectorAll('#plBreakdown [data-pl-label]');
+  let n = 0;
+  rows.forEach(row => {
+    const label = row.getAttribute('data-pl-label');
+    const lbl   = row.querySelector('.lbl');
+    if (!lbl) return;
+    if (row.style.display === 'none') {
+      lbl.textContent = label; // 隐藏行保持文字但不编号，以免影响 switchTradeMode 读 textContent
+      return;
+    }
+    lbl.textContent = (CIRCLED[n] || (n+1)+'.') + ' ' + label;
+    n++;
+  });
+}
 
 /* ══════════════════════════════════════════
    贸易条款模式切换
@@ -1548,14 +1612,15 @@ function switchTradeMode(mode) {
     tabDdp.style.cssText += ';background:var(--accent);border-color:var(--accent);color:#fff;';
     tabFob.style.cssText += ';background:var(--surface2);border-color:var(--border);color:var(--text3);';
   }
-  // P&L 标签随模式切换
-  const plFobLabel = document.querySelector('#plFob')?.closest('.info-row')?.querySelector('.lbl');
-  const plSeaLabel = document.querySelector('#plSea')?.closest('.info-row')?.querySelector('.lbl');
-  if (plFobLabel) plFobLabel.textContent = isFob ? '供货价 FOB' : '供货价 EXW';
-  if (plSeaLabel) plSeaLabel.textContent = isFob ? '头程海运费' : '空/海派运费（含关税清关）';
-  // DDP 模式关税行隐藏（已含在运费中，不单列）
-  const plRowTariff = document.getElementById('plRowTariff');
-  if (plRowTariff) plRowTariff.style.display = isFob ? '' : 'none';
+  // P&L data-pl-label 随模式更新（renumberPL 会读这个属性重新编号）
+  const rowFob    = document.querySelector('#plFob')?.closest('[data-pl-label]');
+  const rowSea    = document.querySelector('#plSea')?.closest('[data-pl-label]');
+  const rowTariff = document.getElementById('plRowTariff');
+  if (rowFob)    rowFob.setAttribute('data-pl-label', isFob ? '供货价 FOB' : '供货价 EXW');
+  if (rowSea)    rowSea.setAttribute('data-pl-label', isFob ? '头程海运费' : '空/海派运费（含关税清关）');
+  // DDP 模式关税行隐藏
+  if (rowTariff) rowTariff.style.display = isFob ? '' : 'none';
+  renumberPL();
   recalc();
 }
 
