@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon FBA 客户利润反向推演系统</title>
+<style>
+:root {
+  --bg: #0b0e1a;
+  --surface: #141828;
+  --surface2: #1c2138;
+  --surface3: #242a45;
+  --border: #2a3158;
+  --accent: #3d7ef6;
+  --accent2: #7c5cfc;
+  --accent3: #06d6a0;
+  --green: #22c55e;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --orange: #f97316;
+  --gray: #6b7280;
+  --text: #e8eaf0;
+  --text2: #9ca3b8;
+  --text3: #6b7a9f;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #141828 0%, #0b0e1a 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.header-logo {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.header-info h1 { font-size: 16px; font-weight: 700; letter-spacing: 0.3px; }
+.header-info p { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.header-badge {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; font-size: 10px; font-weight: 700;
+  padding: 3px 9px; border-radius: 20px; letter-spacing: 0.8px;
+  margin-left: 8px; vertical-align: middle;
+}
+.header-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+.btn {
+  padding: 7px 16px; border-radius: var(--radius-sm);
+  border: none; cursor: pointer; font-size: 12px; font-weight: 600;
+  transition: all .15s; display: flex; align-items: center; gap: 6px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+}
+.btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+.btn-ghost {
+  background: var(--surface2); color: var(--text2);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+
+/* ── URL INPUT BAR ── */
+.url-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+  display: flex; gap: 10px; align-items: center;
+}
+.url-bar-label { font-size: 11px; color: var(--accent); font-weight: 700;
+  letter-spacing: 0.5px; white-space: nowrap; }
+.url-input-wrap { flex: 1; position: relative; }
+.url-input {
+  width: 100%; background: var(--surface2);
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text); padding: 8px 14px; font-size: 13px; outline: none;
+  transition: border-color .2s;
+}
+.url-input:focus { border-color: var(--accent); }
+.url-input::placeholder { color: var(--text3); }
+.parse-hint { font-size: 11px; color: var(--text3); white-space: nowrap; }
+
+/* ── THREE-COLUMN LAYOUT ── */
+.workspace {
+  display: grid;
+  grid-template-columns: 260px 1fr 300px;
+  gap: 0;
+  height: calc(100vh - 130px);
+  overflow: hidden;
+}
+.col {
+  overflow-y: auto;
+  padding: 20px 18px;
+  border-right: 1px solid var(--border);
+}
+.col:last-child { border-right: none; }
+
+/* ── SECTION TITLE ── */
+.section-title {
+  font-size: 10px; font-weight: 700; color: var(--accent);
+  letter-spacing: 1px; text-transform: uppercase;
+  padding-bottom: 10px; margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 7px;
+}
+.section-title .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); display: inline-block;
+}
+
+/* ── FORM FIELDS ── */
+.field-group { margin-bottom: 16px; }
+.field-label {
+  font-size: 11px; color: var(--text2); margin-bottom: 5px;
+  display: flex; align-items: center; gap: 6px;
+}
+.field-label .tag-auto {
+  font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px;
+  background: rgba(61,126,246,.18); color: var(--accent); letter-spacing: 0.3px;
+}
+.field-label .tag-manual {
+  font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px;
+  background: rgba(6,214,160,.18); color: var(--accent3); letter-spacing: 0.3px;
+}
+.field-input {
+  width: 100%; background: var(--surface2);
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text); padding: 7px 11px; font-size: 13px; outline: none;
+  transition: border-color .2s;
+}
+.field-input:focus { border-color: var(--accent); }
+.field-input.auto-filled {
+  background: var(--surface3); border-color: rgba(61,126,246,.3);
+  color: var(--text2); cursor: not-allowed;
+}
+.field-input.auto-filled.unlocked {
+  border-color: var(--yellow); color: var(--text); cursor: text;
+}
+.field-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.field-unit {
+  position: relative;
+}
+.field-unit input { padding-right: 36px; }
+.field-unit .unit {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  font-size: 11px; color: var(--text3); pointer-events: none;
+}
+.unlock-btn {
+  font-size: 10px; color: var(--text3); cursor: pointer;
+  padding: 2px 5px; border-radius: 3px;
+  border: 1px solid var(--border); background: none;
+  transition: all .15s; margin-left: auto;
+}
+.unlock-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px; background: var(--border);
+  margin: 16px 0;
+}
+
+/* ── LEFT COL: DONUT CHART ── */
+.donut-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 10px 0 16px;
+}
+.donut-canvas { position: relative; }
+.donut-center {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center; pointer-events: none;
+}
+.donut-center-val { font-size: 20px; font-weight: 800; color: var(--text); }
+.donut-center-lbl { font-size: 10px; color: var(--text3); margin-top: 1px; }
+.legend { width: 100%; margin-top: 14px; display: flex; flex-direction: column; gap: 7px; }
+.legend-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--text2);
+}
+.legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.legend-val { margin-left: auto; font-weight: 600; color: var(--text); }
+.legend-pct { font-size: 10px; color: var(--text3); }
+
+/* ── COST BREAKDOWN BARS (left col) ── */
+.cost-bar-item { margin-bottom: 10px; }
+.cost-bar-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.cost-bar-name { font-size: 11px; color: var(--text2); }
+.cost-bar-val { font-size: 11px; font-weight: 700; }
+.cost-bar-track {
+  height: 5px; background: var(--surface3); border-radius: 3px; overflow: hidden;
+}
+.cost-bar-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
+
+/* ── RIGHT COL: PROFIT KPIs ── */
+.kpi-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px;
+  position: relative; overflow: hidden;
+}
+.kpi-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; border-radius: 3px 0 0 3px;
+}
+.kpi-card.green::before { background: var(--green); }
+.kpi-card.yellow::before { background: var(--yellow); }
+.kpi-card.blue::before { background: var(--accent); }
+.kpi-card.red::before { background: var(--red); }
+.kpi-label { font-size: 10px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 5px; }
+.kpi-value { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+.kpi-value.green { color: var(--green); }
+.kpi-value.yellow { color: var(--yellow); }
+.kpi-value.blue { color: var(--accent); }
+.kpi-value.red { color: var(--red); }
+.kpi-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+/* ── STATUS BADGE ── */
+.status-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700; padding: 3px 9px;
+  border-radius: 20px; letter-spacing: 0.5px;
+}
+.status-badge.healthy { background: rgba(34,197,94,.15); color: var(--green); }
+.status-badge.warning { background: rgba(245,158,11,.15); color: var(--yellow); }
+.status-badge.danger  { background: rgba(239,68,68,.15);  color: var(--red); }
+.status-badge.neutral { background: rgba(107,114,128,.15); color: var(--gray); }
+.status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* ── BACKSOLVE BOX ── */
+.backsolve-box {
+  background: linear-gradient(135deg, rgba(61,126,246,.1), rgba(124,92,252,.1));
+  border: 1px solid rgba(61,126,246,.3);
+  border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px;
+}
+.backsolve-title { font-size: 10px; font-weight: 700; color: var(--accent);
+  letter-spacing: 0.5px; margin-bottom: 10px; }
+.backsolve-row { display: flex; align-items: center; gap: 8px; }
+.backsolve-row .field-input { flex: 1; }
+.backsolve-result {
+  margin-top: 10px; padding: 10px 12px;
+  background: rgba(0,0,0,.3); border-radius: var(--radius-sm);
+  font-size: 12px; color: var(--text2);
+}
+.backsolve-result strong { color: var(--accent3); font-size: 16px; }
+
+/* ── PDF BUTTON ── */
+.pdf-btn {
+  width: 100%; padding: 12px;
+  background: linear-gradient(135deg, #f97316, #ef4444);
+  border: none; border-radius: var(--radius);
+  color: #fff; font-size: 13px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.3px;
+  transition: all .15s; margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.pdf-btn:hover { opacity: .88; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(239,68,68,.3); }
+
+/* ── TIER BADGE ── */
+.tier-badge {
+  display: inline-flex; padding: 4px 10px; border-radius: var(--radius-sm);
+  font-size: 11px; font-weight: 700; border: 1px solid;
+}
+.tier-small-standard { background: rgba(34,197,94,.12); color: var(--green); border-color: rgba(34,197,94,.3); }
+.tier-large-standard { background: rgba(61,126,246,.12); color: var(--accent); border-color: rgba(61,126,246,.3); }
+.tier-small-oversize { background: rgba(245,158,11,.12); color: var(--yellow); border-color: rgba(245,158,11,.3); }
+.tier-medium-oversize { background: rgba(249,115,22,.12); color: var(--orange); border-color: rgba(249,115,22,.3); }
+.tier-large-oversize  { background: rgba(239,68,68,.12);  color: var(--red);    border-color: rgba(239,68,68,.3); }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; height: 200px; gap: 10px;
+  color: var(--text3); font-size: 12px; text-align: center;
+}
+.empty-state .icon { font-size: 36px; opacity: .4; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a4060; }
+
+/* ── TOOLTIP ── */
+[data-tip] { position: relative; cursor: help; }
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
+  background: #1c2138; border: 1px solid var(--border);
+  color: var(--text); font-size: 11px; padding: 5px 9px;
+  border-radius: 5px; white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity .15s; z-index: 99;
+}
+[data-tip]:hover::after { opacity: 1; }
+
+/* ── PRINT / PDF ── */
+@media print {
+  .url-bar, .header-right, .pdf-btn, .btn { display: none !important; }
+  .workspace { height: auto; overflow: visible; display: block; }
+  .col { overflow: visible; border: none; }
+  body { background: #fff; color: #111; }
+}
+
+/* ── UNIT SELECT (per-field dropdown) ── */
+.unit-select {
+  background: var(--surface3); border: 1px solid var(--border);
+  border-radius: 4px; color: var(--accent); font-size: 11px;
+  font-weight: 700; padding: 2px 4px; cursor: pointer;
+  outline: none; margin-left: auto;
+  transition: border-color .15s;
+}
+.unit-select:hover, .unit-select:focus { border-color: var(--accent); }
+.unit-select option { background: var(--surface2); color: var(--text); }
+
+/* ── UNIT TOGGLE ── */
+.unit-toggle {
+  background: var(--surface3); border: 1.5px solid var(--border);
+  border-radius: 20px; padding: 6px 14px; cursor: pointer;
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  transition: all .15s; white-space: nowrap; user-select: none;
+  flex-shrink: 0; outline: none;
+}
+.unit-toggle:hover { border-color: var(--accent); background: rgba(61,126,246,.15); transform: translateY(-1px); }
+.unit-toggle:active { transform: translateY(0); }
+.unit-toggle.metric { color: var(--accent3); border-color: rgba(6,214,160,.5);
+  background: rgba(6,214,160,.1); }
+
+/* ── PARSE STATUS ── */
+.parse-status {
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  font-size: 11px; display: flex; align-items: center; gap: 8px;
+  margin-top: 6px;
+}
+.parse-status.ok  { background: rgba(34,197,94,.12); color: var(--green); }
+.parse-status.err { background: rgba(239,68,68,.12);  color: var(--red); }
+.parse-status.ing { background: rgba(61,126,246,.10); color: var(--accent); }
+
+/* ── LOADING SPINNER ── */
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.info-row {
+  display: flex; justify-content: space-between;
+  font-size: 11px; padding: 5px 0;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.info-row:last-child { border-bottom: none; }
+.info-row .lbl { color: var(--text3); }
+.info-row .val { color: var(--text); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">📦</div>
+  <div class="header-info">
+    <h1>Amazon FBA 客户利润反向推演系统 <span class="header-badge">一客一策</span></h1>
+    <p>输入客户商品链接，一键透视其真实利润底牌，以"利润改善专家"姿态主导谈判</p>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-ghost" onclick="resetAll()">↺ 重置</button>
+    <button class="btn btn-primary" onclick="window.print()">🖨 打印报告</button>
+  </div>
+</div>
+
+<!-- STEP 1: PASTE AREA BAR -->
+<div class="url-bar" style="flex-wrap:wrap;gap:8px;">
+  <div style="display:flex;align-items:center;gap:10px;width:100%;">
+    <span class="url-bar-label" style="flex-shrink:0;">STEP 1</span>
+    <button class="btn btn-primary" id="parseBtn" onclick="openPasteModal()" style="flex-shrink:0;">
+      <span id="parseBtnText">📋 粘贴产品页内容 → 自动识别</span>
+    </button>
+
+    <span class="parse-hint" id="parseHint" style="flex:1;">
+      在 Amazon 产品页按 <kbd style="background:var(--surface3);padding:1px 5px;border-radius:3px;font-size:10px;border:1px solid var(--border)">Ctrl+A</kbd> 全选 → <kbd style="background:var(--surface3);padding:1px 5px;border-radius:3px;font-size:10px;border:1px solid var(--border)">Ctrl+C</kbd> 复制 → 点左侧按钮粘贴，系统自动提取数据
+    </span>
+  </div>
+</div>
+
+<!-- PASTE MODAL -->
+<div id="pasteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;width:620px;max-width:95vw;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.5);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div>
+        <div style="font-size:15px;font-weight:700;">粘贴 Amazon 产品页内容</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px;">打开产品页 → Ctrl+A 全选 → Ctrl+C 复制 → 在下方粘贴</div>
+      </div>
+      <button onclick="closePasteModal()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:4px;">✕</button>
+    </div>
+    <textarea id="pasteArea"
+      style="width:100%;height:220px;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:12px;font-size:12px;resize:vertical;outline:none;font-family:monospace;"
+      placeholder="在此粘贴（Ctrl+V）Amazon 产品页的完整文字内容…&#10;&#10;提示：在浏览器产品页按 Ctrl+A 全选，再 Ctrl+C 复制，然后在这里 Ctrl+V 粘贴即可。&#10;不需要复制 HTML 源码，直接复制页面上显示的文字就行。"></textarea>
+    <div style="display:flex;gap:10px;margin-top:12px;align-items:center;">
+      <button class="btn btn-primary" onclick="extractFromPaste()" style="flex:1;padding:10px;">
+        ⚡ 立即识别提取
+      </button>
+      <button class="btn btn-ghost" onclick="closePasteModal()">取消</button>
+    </div>
+    <div id="pasteResult" style="margin-top:10px;font-size:11px;min-height:16px;"></div>
+  </div>
+</div>
+
+<!-- THREE-COLUMN WORKSPACE -->
+<div class="workspace">
+
+  <!-- LEFT: COST STRUCTURE -->
+  <div class="col" id="colLeft">
+    <div class="section-title"><span class="dot"></span>客户成本大盘透视</div>
+
+    <!-- Donut Chart -->
+    <div class="donut-wrap">
+      <div class="donut-canvas" style="width:160px;height:160px;">
+        <canvas id="donutChart" width="160" height="160"></canvas>
+        <div class="donut-center">
+          <div class="donut-center-val" id="donutCenterVal">—</div>
+          <div class="donut-center-lbl">售价</div>
+        </div>
+      </div>
+      <div class="legend" id="donutLegend">
+        <div class="legend-item"><span class="legend-dot" style="background:#3d7ef6"></span>供货成本<span class="legend-pct" id="lpct0">—</span><span class="legend-val" id="lval0">$—</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:#7c5cfc"></span>头程海运<span class="legend-pct" id="lpct1">—</span><span class="legend-val" id="lval1">$—</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:#06d6a0"></span>FBA 配送<span class="legend-pct" id="lpct2">—</span><span class="legend-val" id="lval2">$—</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>平台佣金<span class="legend-pct" id="lpct3">—</span><span class="legend-val" id="lval3">$—</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:#f97316"></span>关税<span class="legend-pct" id="lpct4">—</span><span class="legend-val" id="lval4">$—</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:#e879f9"></span>广告PPC<span class="legend-pct" id="lpct5">—</span><span class="legend-val" id="lval5">$—</span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>客户毛利<span class="legend-pct" id="lpct6">—</span><span class="legend-val" id="lval6">$—</span></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title" style="margin-top:4px;"><span class="dot"></span>成本占比明细</div>
+    <div id="costBars">
+      <div class="empty-state"><span class="icon">📊</span><span>填写参数后<br>自动生成</span></div>
+    </div>
+  </div>
+
+  <!-- CENTER: INPUT AREA -->
+  <div class="col" id="colCenter">
+
+    <!-- MODULE 1: PRODUCT DATA -->
+    <div class="section-title"><span class="dot"></span>模块一：商品数据（从产品页抄入）</div>
+
+    <div class="field-group">
+      <div class="field-label">前台售价 (USD)</div>
+      <div class="field-unit">
+        <input type="number" class="field-input" id="price" placeholder="例：39.99" oninput="recalc()" />
+        <span class="unit">$</span>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">
+        包装尺寸
+        <span style="font-size:10px;color:var(--text3)">产品页「Product Dimensions」</span>
+        <select class="unit-select" id="dimUnit" title="切换尺寸单位">
+          <option value="in">in</option>
+          <option value="cm">cm</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <div class="field-unit"><input type="number" class="field-input" id="dimL" placeholder="长 L" oninput="recalc()" /><span class="unit">L</span></div>
+        <div class="field-unit"><input type="number" class="field-input" id="dimW" placeholder="宽 W" oninput="recalc()" /><span class="unit">W</span></div>
+        <div class="field-unit"><input type="number" class="field-input" id="dimH" placeholder="高 H" oninput="recalc()" /><span class="unit">H</span></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">
+        实际重量
+        <span style="font-size:10px;color:var(--text3)">「Item Weight」</span>
+        <select class="unit-select" id="weightUnit" title="切换重量单位">
+          <option value="lb">lb</option>
+          <option value="oz">oz</option>
+          <option value="kg">kg</option>
+          <option value="g">g</option>
+        </select>
+      </div>
+      <div class="field-unit">
+        <input type="number" class="field-input" id="weight" placeholder="例：2.5" oninput="recalc()" />
+        <span class="unit" id="uWeight">←选单位</span>
+      </div>
+    </div>
+
+    <div class="field-row-2">
+      <div class="field-group">
+        <div class="field-label">Amazon 品类</div>
+        <select class="field-input" id="category" onchange="onCategoryChange()">
+          <option value="pet">Pet Supplies</option>
+          <option value="home">Home &amp; Kitchen</option>
+          <option value="sports">Sports &amp; Outdoors</option>
+          <option value="toys">Toys &amp; Games</option>
+          <option value="electronics">Electronics</option>
+          <option value="clothing">Clothing &amp; Accessories</option>
+          <option value="beauty">Beauty &amp; Personal Care</option>
+          <option value="grocery">Grocery &amp; Gourmet</option>
+          <option value="other">其他（通用8%）</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <div class="field-label">FBA 尺寸分级 <span style="font-size:10px;color:var(--text3)">自动计算</span></div>
+        <div class="field-input" id="sizeTier" style="display:flex;align-items:center;min-height:34px;background:var(--surface3);cursor:default;">
+          <span class="status-badge neutral" id="tierBadge">填入尺寸后自动</span>
+        </div>
+        <!-- 折叠速查表 -->
+        <div style="margin-top:6px;">
+          <button type="button" id="tierRefToggle" onclick="toggleTierRef()"
+            style="display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--border);border-radius:6px;
+                   padding:4px 10px;font-size:11px;color:var(--text2);cursor:pointer;transition:all .2s;">
+            <span id="tierRefArrow" style="transition:transform .2s;display:inline-block;">▶</span>
+            尺寸分级速查表
+          </button>
+          <div id="tierRefTable" style="display:none;margin-top:8px;overflow:hidden;border-radius:8px;border:1px solid var(--border);">
+            <table style="width:100%;border-collapse:collapse;font-size:11px;line-height:1.5;">
+              <thead>
+                <tr style="background:var(--surface3);color:var(--text2);">
+                  <th style="padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);">分级</th>
+                  <th style="padding:6px 8px;text-align:center;border-bottom:1px solid var(--border);">最长边</th>
+                  <th style="padding:6px 8px;text-align:center;border-bottom:1px solid var(--border);">次长边</th>
+                  <th style="padding:6px 8px;text-align:center;border-bottom:1px solid var(--border);">最短边</th>
+                  <th style="padding:6px 8px;text-align:center;border-bottom:1px solid var(--border);">重量上限</th>
+                  <th style="padding:6px 8px;text-align:center;border-bottom:1px solid var(--border);">参考费率</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background:rgba(34,197,94,.07);">
+                  <td style="padding:5px 8px;color:var(--green);font-weight:600;border-bottom:1px solid var(--border);">📦 Small Standard</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 15"</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 12"</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 0.75"</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 1 lb</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">$3.06–$3.65</td>
+                </tr>
+                <tr style="background:rgba(61,126,246,.07);">
+                  <td style="padding:5px 8px;color:var(--accent);font-weight:600;border-bottom:1px solid var(--border);">📦 Large Standard</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 18"</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 14"</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 8"</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 20 lb</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">$3.86–$7.17</td>
+                </tr>
+                <tr style="background:rgba(245,158,11,.07);">
+                  <td style="padding:5px 8px;color:var(--yellow);font-weight:600;border-bottom:1px solid var(--border);">🟡 Small Oversize</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 60"</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 30"</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">—</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 70 lb</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">$9.61–$13.81</td>
+                </tr>
+                <tr style="background:rgba(249,115,22,.07);">
+                  <td style="padding:5px 8px;color:var(--orange);font-weight:600;border-bottom:1px solid var(--border);">🟠 Medium Oversize</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 108"</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">—</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">—</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">≤ 150 lb</td>
+                  <td style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);">$17.46–$46.34</td>
+                </tr>
+                <tr style="background:rgba(239,68,68,.07);">
+                  <td style="padding:5px 8px;color:var(--red);font-weight:600;">🔴 Large Oversize</td>
+                  <td style="padding:5px 8px;text-align:center;">＞108"</td>
+                  <td style="padding:5px 8px;text-align:center;">—</td>
+                  <td style="padding:5px 8px;text-align:center;">—</td>
+                  <td style="padding:5px 8px;text-align:center;">＞150 lb</td>
+                  <td style="padding:5px 8px;text-align:center;">$76.57+</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="padding:5px 8px 7px;font-size:10px;color:var(--text3);background:var(--surface3);">
+              ℹ️ 体积重公式：L×W×H÷139（单位 in）；计费重取实际重与体积重中的较大值（Small Standard 除外，只用实际重）
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- MODULE 2: SUPPLIER INPUT -->
+    <div class="section-title"><span class="dot"></span>模块二：供应链成本（您的核心控盘区）</div>
+
+    <div class="field-row-2">
+      <div class="field-group">
+        <div class="field-label">单件供货报价 <span class="tag-manual">您输入</span></div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="fobPrice" placeholder="0.00" oninput="recalc()" />
+          <span class="unit">$</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">单件头程海运费 <span class="tag-manual">您输入</span></div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="seaFreight" placeholder="0.00" oninput="recalc()" />
+          <span class="unit">$</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-row-2">
+      <div class="field-group">
+        <div class="field-label">HTS 关税税率 (%)
+          <span data-tip="含 Section 301 加征税。宠物用品典型：7.5%–25%，切换品类自动推荐">ⓘ</span>
+        </div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="tariffRate" value="7.5" oninput="recalc()" />
+          <span class="unit">%</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">广告费 ACOS (%)
+          <span data-tip="广告花费÷广告销售额。亚马逊大卖家典型值 15%–30%，新品期可达 40%+">ⓘ</span>
+        </div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="acosRate" value="20" oninput="recalc()" placeholder="例：20" />
+          <span class="unit">%</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">退货损耗率 (%)
+          <span data-tip="行业参考：普通商品 2–5%，电子/宠物 5–10%，服装 15–30%。退货损耗 = 售价 × 退货率，代表客户因退货承担的库存/处理成本">ⓘ</span>
+          <span style="font-size:10px;color:var(--text3);margin-left:4px;">行业均值 ~5%</span>
+        </div>
+        <div class="field-unit">
+          <input type="number" class="field-input" id="returnRate" value="5" oninput="recalc()" placeholder="例：5" min="0" max="100" step="0.5" />
+          <span class="unit">%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- MODULE 3: PLATFORM FEES (auto) -->
+    <div class="section-title"><span class="dot"></span>模块三：亚马逊官方运营费用（系统计算）</div>
+
+    <div id="platformFees">
+      <div class="info-row">
+        <span class="lbl">FBA 配送费</span>
+        <span class="val" id="fbaFee">$ —</span>
+      </div>
+      <div class="info-row">
+        <span class="lbl">FBA 仓储费（月均）</span>
+        <span class="val" id="storageFee">$ —</span>
+      </div>
+      <div class="info-row">
+        <span class="lbl">平台销售佣金</span>
+        <span class="val" id="referralFee">$ — <span style="color:var(--text3);font-weight:400;" id="referralPct"></span></span>
+      </div>
+      <div class="info-row">
+        <span class="lbl">进口关税</span>
+        <span class="val" id="tariffFee">$ —</span>
+      </div>
+      <div class="info-row">
+        <span class="lbl">广告费 PPC <span style="font-size:10px;color:var(--text3);" id="acosDisplay"></span></span>
+        <span class="val" id="adFee" style="color:var(--orange);">$ —</span>
+      </div>
+      <div class="info-row">
+        <span class="lbl">退货损耗 <span style="font-size:10px;color:var(--text3);" id="returnDisplay"></span></span>
+        <span class="val" id="returnLossFee" style="color:var(--orange);">$ —</span>
+      </div>
+      <div class="info-row" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+        <span class="lbl" style="font-weight:700;color:var(--text2);">平台+广告+退货总费用</span>
+        <span class="val" id="totalPlatformFees" style="color:var(--red);">$ —</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CALC DETAIL -->
+    <div class="section-title"><span class="dot"></span>计算过程详情</div>
+    <div id="calcDetail">
+      <div class="info-row"><span class="lbl">体积重 (lb)</span><span class="val" id="dimWeight">—</span></div>
+      <div class="info-row"><span class="lbl">计费重 (lb)</span><span class="val" id="billWeight">—</span></div>
+      <div class="info-row"><span class="lbl">佣金规则</span><span class="val" id="commissionRule">—</span></div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: PROFIT DASHBOARD -->
+  <div class="col" id="colRight">
+    <div class="section-title"><span class="dot"></span>客户利润说服模型</div>
+
+    <!-- KPI 1: Gross Profit -->
+    <div class="kpi-card green" id="kpiGross">
+      <div class="kpi-label">客户预估单件毛利</div>
+      <div class="kpi-value green" id="grossProfit">$ —</div>
+      <div class="kpi-sub" id="grossProfitSub">等待输入参数</div>
+    </div>
+
+    <!-- KPI 2: Margin -->
+    <div class="kpi-card yellow" id="kpiMargin">
+      <div class="kpi-label">客户预估毛利率</div>
+      <div class="kpi-value yellow" id="grossMargin">— %</div>
+      <div class="kpi-sub" id="grossMarginSub">毛利 ÷ 前台售价</div>
+    </div>
+
+    <!-- KPI 3: ROI -->
+    <div class="kpi-card blue" id="kpiROI">
+      <div class="kpi-label">客户投资回报率 (ROI)</div>
+      <div class="kpi-value blue" id="roiVal">— %</div>
+      <div class="kpi-sub" id="roiSub">毛利 ÷ (供货价 + 海运)</div>
+    </div>
+
+    <!-- Health Status -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+      <span class="status-badge neutral" id="healthBadge"><span class="status-dot"></span>待评估</span>
+      <span style="font-size:11px;color:var(--text3);" id="healthText">输入所有参数后自动评估</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- BACKSOLVE -->
+    <div class="backsolve-box">
+      <div class="backsolve-title">⚡ 报价底线反推器</div>
+      <div class="backsolve-row">
+        <span style="font-size:12px;color:var(--text2);white-space:nowrap;">客户目标毛利率</span>
+        <div class="field-unit" style="flex:1">
+          <input type="number" class="field-input" id="targetMargin" value="30" oninput="backsolve()" />
+          <span class="unit">%</span>
+        </div>
+      </div>
+      <div class="backsolve-result" id="backsolveResult">
+        <span style="color:var(--text3)">填写售价和平台费用后自动反推…</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- FULL P&L -->
+    <div class="section-title"><span class="dot"></span>完整利润拆解</div>
+    <div id="fullPL">
+      <div class="info-row"><span class="lbl">① 前台售价</span><span class="val" id="plPrice">$—</span></div>
+      <div class="info-row"><span class="lbl">② 供货成本（您报价）</span><span class="val" id="plFob" style="color:var(--red)">−$—</span></div>
+      <div class="info-row"><span class="lbl">③ 头程海运费</span><span class="val" id="plSea" style="color:var(--red)">−$—</span></div>
+      <div class="info-row"><span class="lbl">④ FBA 配送费</span><span class="val" id="plFba" style="color:var(--red)">−$—</span></div>
+      <div class="info-row"><span class="lbl">⑤ FBA 仓储费</span><span class="val" id="plStorage" style="color:var(--red)">−$—</span></div>
+      <div class="info-row"><span class="lbl">⑥ 平台佣金</span><span class="val" id="plRef" style="color:var(--red)">−$—</span></div>
+      <div class="info-row"><span class="lbl">⑦ 进口关税</span><span class="val" id="plTariff" style="color:var(--red)">−$—</span></div>
+      <div class="info-row"><span class="lbl">⑧ 广告费 PPC</span><span class="val" id="plAd" style="color:var(--orange)">−$—</span></div>
+      <div class="info-row"><span class="lbl">⑨ 退货损耗</span><span class="val" id="plReturn" style="color:var(--orange)">−$—</span></div>
+      <div class="info-row" style="margin-top:8px;padding-top:8px;border-top:1.5px solid var(--border);font-weight:700;">
+        <span class="lbl" style="color:var(--text);">净毛利（含广告+退货）</span>
+        <span class="val" id="plNet" style="font-size:15px;">$—</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- PDF / REPORT -->
+    <button class="pdf-btn" onclick="generateReport()">
+      📄 生成《供应链优化与利润推演报告》
+    </button>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   DATA TABLES
+   ═══════════════════════════════════════════════════════════════ */
+
+// ── Amazon Referral Fee Table (2024 rates) ──
+const REFERRAL_RULES = {
+  pet: {
+    name: 'Pet Supplies',
+    rules: [
+      { max: 15,       rate: 0.15, label: '≤$15 部分 15%' },
+      { max: Infinity, rate: 0.22, label: '>$15 部分 22%（含宠物用品特别加费）' }
+    ],
+    // tiered: for prices crossing the threshold, apply blended
+    tiered: true
+  },
+  home:        { name: 'Home & Kitchen',          rules: [{ max: Infinity, rate: 0.15 }] },
+  sports:      { name: 'Sports & Outdoors',       rules: [{ max: Infinity, rate: 0.15 }] },
+  toys:        { name: 'Toys & Games',            rules: [{ max: Infinity, rate: 0.15 }] },
+  electronics: { name: 'Electronics',             rules: [{ max: Infinity, rate: 0.08 }] },
+  clothing:    { name: 'Clothing & Accessories',  rules: [
+    { max: 15,       rate: 0.17, label: '≤$15 → 17%' },
+    { max: Infinity, rate: 0.17, label: '>$15 → 17%' }
+  ]},
+  beauty:      { name: 'Beauty & Personal Care',  rules: [
+    { max: 10,       rate: 0.08, label: '≤$10 → 8%' },
+    { max: Infinity, rate: 0.15, label: '>$10 → 15%' }
+  ], tiered: true },
+  grocery:     { name: 'Grocery & Gourmet',       rules: [
+    { max: 15,       rate: 0.08, label: '≤$15 → 8%' },
+    { max: Infinity, rate: 0.15, label: '>$15 → 15%' }
+  ], tiered: true },
+  other:       { name: '通用品类',                 rules: [{ max: Infinity, rate: 0.08 }] }
+};
+
+// ── FBA Size Tiers & Fulfillment Fees (2024) ──
+// Units: dimensions in inches, weight in lb, fee in USD
+const SIZE_TIERS = [
+  {
+    id: 'small_standard',
+    label: '标准小件 Small Standard',
+    cls: 'tier-small-standard',
+    maxL: 15, maxM: 12, maxS: 0.75, maxW: 1,
+    // fee schedule: [{maxBW, fee}]  (billing weight ≤ maxBW → fee)
+    fees: [
+      { maxBW: 0.25, fee: 3.06 },
+      { maxBW: 0.50, fee: 3.15 },
+      { maxBW: 0.75, fee: 3.24 },
+      { maxBW: 1.00, fee: 3.33 }
+    ],
+    storagePer: 0.87   // $/cubic ft/month (Jan-Sep)
+  },
+  {
+    id: 'large_standard',
+    label: '标准大件 Large Standard',
+    cls: 'tier-large-standard',
+    maxL: 18, maxM: 14, maxS: 8, maxW: 20,
+    // Amazon 2024 official fee schedule (non-apparel, non-dangerous goods)
+    fees: [
+      { maxBW: 0.25, fee: 3.06 },
+      { maxBW: 0.50, fee: 3.48 },
+      { maxBW: 0.75, fee: 3.57 },
+      { maxBW: 1.00, fee: 3.61 },
+      { maxBW: 1.50, fee: 4.37 },
+      { maxBW: 2.00, fee: 4.54 },
+      { maxBW: 2.50, fee: 5.06 },
+      { maxBW: 3.00, fee: 5.21 },
+      { maxBW: 4.00, fee: 5.48 },
+      { maxBW: 5.00, fee: 5.74 },
+      { maxBW: 6.00, fee: 6.00 },
+      { maxBW: 7.00, fee: 6.26 },
+      { maxBW: 8.00, fee: 6.52 },
+      { maxBW: 9.00, fee: 6.78 },
+      { maxBW: 10.0, fee: 7.04 },
+      { maxBW: 20.0, fee: null, base: 7.04, perLb: 0.26, baseW: 10 }
+    ],
+    storagePer: 0.87
+  },
+  {
+    id: 'small_oversize',
+    label: '小超大件 Small Oversize',
+    cls: 'tier-small-oversize',
+    maxL: 60, maxM: 30, maxS: Infinity, maxW: 70,
+    fees: [
+      { maxBW: Infinity, fee: null, base: 9.73, perLb: 0.42, baseW: 1, minFee: 9.73 }
+    ],
+    storagePer: 0.56
+  },
+  {
+    id: 'medium_oversize',
+    label: '中超大件 Medium Oversize',
+    cls: 'tier-medium-oversize',
+    maxL: 108, maxM: Infinity, maxS: Infinity, maxW: 150,
+    fees: [
+      { maxBW: Infinity, fee: null, base: 19.05, perLb: 0.42, baseW: 1, minFee: 19.05 }
+    ],
+    storagePer: 0.56
+  },
+  {
+    id: 'large_oversize',
+    label: '大超大件 Large Oversize',
+    cls: 'tier-large-oversize',
+    maxL: Infinity, maxM: Infinity, maxS: Infinity, maxW: Infinity,
+    fees: [
+      { maxBW: Infinity, fee: null, base: 89.98, perLb: 0.83, baseW: 90, minFee: 89.98 }
+    ],
+    storagePer: 0.56
+  }
+];
+
+// ── Default tariff by category ──
+const DEFAULT_TARIFF = {
+  pet: 7.5, home: 25, sports: 7.5, toys: 7.5,
+  electronics: 7.5, clothing: 22.4, beauty: 6.5, grocery: 0, other: 7.5
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   CORE ALGORITHMS
+   ═══════════════════════════════════════════════════════════════ */
+
+function calcReferralFee(price, cat) {
+  const rule = REFERRAL_RULES[cat] || REFERRAL_RULES.other;
+  if (!rule.tiered || rule.rules.length === 1) {
+    return { fee: +(price * rule.rules[0].rate).toFixed(2), label: rule.rules[0].label || (rule.rules[0].rate * 100).toFixed(0) + '%', rate: rule.rules[0].rate };
+  }
+  // Tiered: price straddles threshold
+  let fee = 0;
+  let prev = 0;
+  let labels = [];
+  for (const r of rule.rules) {
+    if (price > prev) {
+      const portion = Math.min(price, r.max === Infinity ? price : r.max) - prev;
+      fee += portion * r.rate;
+      labels.push(r.label || (r.rate*100)+'%');
+    }
+    if (r.max >= price) break;
+    prev = r.max;
+  }
+  const effectiveRate = fee / price;
+  return { fee: +fee.toFixed(2), label: labels.join(' / '), rate: effectiveRate };
+}
+
+function getSizeTier(L, W, H, weight) {
+  // Sort dims descending: long, median, short
+  const dims = [L, W, H].sort((a, b) => b - a);
+  const long = dims[0], med = dims[1], short = dims[2];
+  const dimWeightLb = +(L * W * H / 139).toFixed(3);
+
+  for (const tier of SIZE_TIERS) {
+    if (long  <= tier.maxL &&
+        med   <= tier.maxM &&
+        (tier.maxS === Infinity || short <= tier.maxS) &&
+        weight <= tier.maxW) {
+      // billing weight
+      let billW;
+      if (tier.id === 'small_standard') {
+        billW = weight; // small standard uses actual weight
+      } else {
+        billW = Math.max(weight, dimWeightLb);
+      }
+      billW = +billW.toFixed(3);
+      return { tier, dimWeightLb, billW, long, med, short };
+    }
+  }
+  // fallback: large oversize
+  const dimW2 = +(L * W * H / 139).toFixed(3);
+  const billW2 = Math.max(weight, dimW2);
+  return { tier: SIZE_TIERS[SIZE_TIERS.length - 1], dimWeightLb: dimW2, billW: billW2, long, med, short };
+}
+
+function calcFBAFee(tierResult) {
+  const { tier, billW } = tierResult;
+  let fee = 0;
+  for (const f of tier.fees) {
+    if (billW <= f.maxBW) {
+      if (f.fee !== null) {
+        fee = f.fee;
+      } else {
+        // Variable: base + (billW - baseW) * perLb
+        fee = f.base + Math.max(0, billW - f.baseW) * f.perLb;
+        if (f.minFee) fee = Math.max(fee, f.minFee);
+      }
+      break;
+    }
+  }
+  return +fee.toFixed(2);
+}
+
+function calcStorageFee(L, W, H, tier) {
+  // cubic feet = L*W*H/1728
+  const cubicFt = L * W * H / 1728;
+  return +(cubicFt * (tier.storagePer || 0.87)).toFixed(2);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CATEGORY CHANGE: auto-set tariff default
+   ═══════════════════════════════════════════════════════════════ */
+function onCategoryChange() {
+  const cat = document.getElementById('category').value;
+  document.getElementById('tariffRate').value = DEFAULT_TARIFF[cat] || 7.5;
+  recalc();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UNIT SWITCH — convert field values when user changes the unit dropdown
+   ═══════════════════════════════════════════════════════════════ */
+// lb ↔ any: how many lb per 1 unit
+const WT_TO_LB = { lb: 1, oz: 0.0625, kg: 2.2046226, g: 0.0022046226 };
+
+// JS variables track current unit (more reliable than data-* attributes)
+let _prevDimUnit    = 'in';
+let _prevWeightUnit = 'lb';
+
+function onDimUnitChange() {
+  const sel  = document.getElementById('dimUnit');
+  const prev = _prevDimUnit;
+  const next = sel.value;
+  if (prev !== next) {
+    const factor = (prev === 'in' && next === 'cm') ? 2.54 : 1 / 2.54;
+    ['dimL', 'dimW', 'dimH'].forEach(function(id) {
+      const el = document.getElementById(id);
+      const v  = parseFloat(el.value);
+      if (v > 0) el.value = +(v * factor).toFixed(2);
+    });
+  }
+  _prevDimUnit = next;
+  recalc();
+}
+
+function onWeightUnitChange() {
+  const sel  = document.getElementById('weightUnit');
+  const prev = _prevWeightUnit;
+  const next = sel.value;
+  if (prev !== next) {
+    const el = document.getElementById('weight');
+    const v  = parseFloat(el.value);
+    if (v > 0) {
+      const inLb   = v * (WT_TO_LB[prev] || 1);
+      const inNext = inLb / (WT_TO_LB[next] || 1);
+      const dp = { lb: 3, oz: 2, kg: 4, g: 1 }[next] || 3;
+      el.value = +inNext.toFixed(dp);
+    }
+  }
+  _prevWeightUnit = next;
+  recalc();
+}
+
+// 读取尺寸和重量，按下拉选择的单位统一换算为英制（FBA算法只用 in / lb）
+function getDimsInImperial() {
+  const L   = parseFloat(document.getElementById('dimL').value)    || 0;
+  const W   = parseFloat(document.getElementById('dimW').value)    || 0;
+  const H   = parseFloat(document.getElementById('dimH').value)    || 0;
+  const wt  = parseFloat(document.getElementById('weight').value)  || 0;
+  const dimU = document.getElementById('dimUnit')?.value    || 'in';
+  const wtU  = document.getElementById('weightUnit')?.value || 'lb';
+
+  // 尺寸换算
+  const toIn = dimU === 'cm' ? 1/2.54 : 1;
+  // 重量换算
+  const toLb = { lb: 1, oz: 1/16, kg: 2.2046, g: 1/453.592 }[wtU] || 1;
+
+  return {
+    L:  +(L  * toIn).toFixed(4),
+    W:  +(W  * toIn).toFixed(4),
+    H:  +(H  * toIn).toFixed(4),
+    wt: +(wt * toLb).toFixed(4)
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PASTE MODAL：粘贴产品页文字 → 正则提取数据
+   ═══════════════════════════════════════════════════════════════ */
+function openPasteModal() {
+  const modal = document.getElementById('pasteModal');
+  modal.style.display = 'flex';
+  document.getElementById('pasteArea').value = '';
+  document.getElementById('pasteResult').innerHTML = '';
+  setTimeout(() => document.getElementById('pasteArea').focus(), 100);
+}
+
+function closePasteModal() {
+  document.getElementById('pasteModal').style.display = 'none';
+}
+
+// 点击 modal 背景关闭
+document.getElementById('pasteModal').addEventListener('click', function(e) {
+  if (e.target === this) closePasteModal();
+});
+
+function extractFromPaste() {
+  const text = document.getElementById('pasteArea').value.trim();
+  const resultEl = document.getElementById('pasteResult');
+
+  if (text.length < 50) {
+    resultEl.innerHTML = '<span style="color:var(--red)">内容太少，请确认已复制完整产品页</span>';
+    return;
+  }
+
+  const d = parsePageText(text);
+  const filled = [], missing = [];
+
+  if (d.price > 0) {
+    setField('price', d.price.toFixed(2)); filled.push(`售价 $${d.price.toFixed(2)}`);
+  } else { missing.push('售价'); }
+
+  if (d.dimL > 0) {
+    if (d.dimUnit === 'cm') {
+      // 产品页是 cm，回填 cm 原始值，下拉切到 cm
+      const cL = +(d.dimL*2.54).toFixed(2), cW = +(d.dimW*2.54).toFixed(2), cH = +(d.dimH*2.54).toFixed(2);
+      setField('dimL', cL); setField('dimW', cW); setField('dimH', cH);
+      const duEl = document.getElementById('dimUnit');
+      if (duEl) duEl.value = 'cm';
+      _prevDimUnit = 'cm';
+      filled.push(`尺寸 ${cL}×${cW}×${cH} cm`);
+    } else {
+      setField('dimL', d.dimL); setField('dimW', d.dimW); setField('dimH', d.dimH);
+      const duEl = document.getElementById('dimUnit');
+      if (duEl) duEl.value = 'in';
+      _prevDimUnit = 'in';
+      filled.push(`尺寸 ${d.dimL}×${d.dimW}×${d.dimH} in`);
+    }
+  } else { missing.push('尺寸'); }
+
+  if (d.weight > 0) {
+    // 直接回填原始数值+原始单位，让用户看到和产品页一致的数字
+    if (d.wtRaw) {
+      const rawVal  = parseFloat(d.wtRaw);
+      const rawUnit = d.wtRaw.replace(/[\d.\s]/g,'').toLowerCase().trim();
+      // 映射到下拉选项值
+      const unitMap = { oz: 'oz', ounce: 'oz', ounces: 'oz',
+                        lb: 'lb', lbs: 'lb', pound: 'lb', pounds: 'lb',
+                        kg: 'kg', kilogram: 'kg', kilograms: 'kg',
+                        g: 'g', gram: 'g', grams: 'g' };
+      const selectVal = unitMap[rawUnit] || 'lb';
+      setField('weight', rawVal);
+      const wuEl = document.getElementById('weightUnit');
+      if (wuEl) wuEl.value = selectVal;
+      _prevWeightUnit = selectVal;
+      filled.push(`重量 ${rawVal} ${selectVal}`);
+    } else {
+      setField('weight', +d.weight.toFixed(3));
+      filled.push(`重量 ${d.weight.toFixed(3)} lb`);
+    }
+  } else { missing.push('重量'); }
+
+  if (d.category) {
+    document.getElementById('category').value = d.category;
+    document.getElementById('tariffRate').value = DEFAULT_TARIFF[d.category] || 7.5;
+    filled.push(`品类 ${REFERRAL_RULES[d.category].name}`);
+  } else { missing.push('品类（请手动选择）'); }
+
+  recalc();
+
+  if (filled.length === 0) {
+    resultEl.innerHTML = '<span style="color:var(--red)">⚠ 未识别到数据。请确认粘贴的是 Amazon 英文产品页的文字内容（含 Price、Product Dimensions、Item Weight 等字段）</span>';
+    return;
+  }
+
+  resultEl.innerHTML = `<span style="color:var(--green)">✅ 已识别：${filled.join(' | ')}</span>`
+    + (missing.length ? `<br><span style="color:var(--yellow)">请手动补充：${missing.join('、')}</span>` : '');
+
+  // 成功后1.5秒自动关闭
+  if (missing.length === 0 || (missing.length === 1 && missing[0].includes('品类'))) {
+    setTimeout(closePasteModal, 1500);
+  }
+
+  // 更新顶部提示
+  const hint = document.getElementById('parseHint');
+  hint.innerHTML = filled.length > 0
+    ? `<span style="color:var(--accent3)">✅ 已自动填充：${filled.join(' | ')}${missing.length ? ' | 请补：'+missing.join('、') : ''}</span>`
+    : hint.innerHTML;
+}
+
+// ── 从纯文本中提取产品数据（针对 Amazon 英文页面复制内容优化）──
+function parsePageText(text) {
+  const result = { dimUnit: 'in' };
+
+  // ── 售价 ──
+  // 匹配 "$39.99" / "Price: $39.99" / "$39\n.99"
+  const pricePatterns = [
+    /\$\s*([\d,]+\.\d{2})\b/,           // $39.99
+    /Price[^$]{0,20}\$\s*([\d,]+\.?\d*)/i,
+    /^[\s$]*([\d]+\.[\d]{2})\s*$/m,    // 单独一行数字
+  ];
+  for (const p of pricePatterns) {
+    const m = text.match(p);
+    if (m) {
+      const v = parseFloat(m[1].replace(/,/g,''));
+      if (v > 0.5 && v < 10000) { result.price = v; break; }
+    }
+  }
+
+  // ── 尺寸 ──
+  // Amazon 产品页文字：通常出现 "12 x 8 x 6 inches" 或 "30.5 x 20.3 x 15.2 cm"
+  const dimPatterns = [
+    /([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(inches|inch|in)\b/i,
+    /Product\s+Dimensions[^\d]*([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(inches|inch|in|cm)/i,
+    /([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)\s*(cm|centimeters?)\b/i,
+    /([\d.]+)\s*[xX×]\s*([\d.]+)\s*[xX×]\s*([\d.]+)/,  // 无单位 fallback
+  ];
+  for (const p of dimPatterns) {
+    const m = text.match(p);
+    if (m) {
+      let a = +m[1], b = +m[2], c = +m[3];
+      const unit = (m[4]||'').toLowerCase();
+      if (unit.includes('cm') || unit.includes('centimeter')) {
+        a = +(a/2.54).toFixed(3); b = +(b/2.54).toFixed(3); c = +(c/2.54).toFixed(3);
+        result.dimUnit = 'cm';
+      }
+      const sorted = [a,b,c].sort((x,y) => y-x);
+      [result.dimL, result.dimW, result.dimH] = sorted;
+      break;
+    }
+  }
+
+  // ── 重量（统一转 lb 存储，支持 oz / ounces / lbs / pounds / kg / g / grams）──
+  // 优先匹配 "Item Weight" 字段，再 fallback 到任意位置
+  // 单位换算：1 lb=16 oz, 1 kg=2.2046 lb, 1 g=0.002205 lb
+  const toLib = (val, unit) => {
+    const u = unit.toLowerCase();
+    if (u.startsWith('kg') || u.startsWith('kilo')) return +(val * 2.2046).toFixed(4);
+    if (u === 'g' || u.startsWith('gram'))           return +(val * 0.002205).toFixed(4);
+    if (u.startsWith('oz') || u.startsWith('ounce')) return +(val / 16).toFixed(4);
+    return val;  // lb / pound
+  };
+
+  // 所有支持的单位（顺序很重要：长的放前面防止 g 误匹配 grams）
+  const unitGroup = '(pounds?|lbs?|ounces?|oz|kilograms?|kg|grams?|g)';
+  const wtPatterns = [
+    new RegExp(`Item\\s+Weight[^\\d]{0,30}?([\\d.]+)\\s*${unitGroup}`, 'i'),
+    new RegExp(`Weight[^\\d]{0,20}?([\\d.]+)\\s*${unitGroup}`, 'i'),
+    new RegExp(`([\\d.]+)\\s*${unitGroup}\\b`, 'i'),   // fallback: 任意位置
+  ];
+
+  for (const p of wtPatterns) {
+    const m = text.match(p);
+    if (!m) continue;
+    const val = parseFloat(m[1]);
+    const unit = m[2] || '';
+    if (!val || val <= 0) continue;
+
+    // 单位 'g' 单独一字母时要防止误命中"图形g"——要求前后有空白或数字边界
+    if ((unit === 'g' || unit === 'G') && !/[\d.]\s*g\s*($|\n|\r|[,;)])/i.test(text.slice(m.index, m.index+20))) continue;
+
+    const lb = toLib(val, unit);
+    if (lb > 0 && lb < 300) {
+      result.weight = lb;
+      result.wtRaw  = `${val} ${unit}`;   // 保留原始值供显示
+      break;
+    }
+  }
+
+  // ── 品类 ──
+  const catMap = [
+    ['pet',         /pet\s+supplies|dog\s+food|cat\s+food|aquatic|reptile|bird\s+food|small\s+animal/i],
+    ['home',        /home\s*&\s*kitchen|kitchen\s*&\s*dining|household|bedding|furniture/i],
+    ['sports',      /sports\s*&\s*outdoors|fitness|exercise|hiking|camping/i],
+    ['toys',        /toys\s*&\s*games|children|kids|infant|baby\s+toy/i],
+    ['electronics', /electronics|computers|camera|cell\s+phone|headphone/i],
+    ['clothing',    /clothing|apparel|shoes|fashion|accessories/i],
+    ['beauty',      /beauty\s*&\s*personal\s+care|skin\s+care|hair\s+care|cosmetic/i],
+    ['grocery',     /grocery|gourmet\s+food|food\s*&\s*drink/i],
+  ];
+  for (const [cat, re] of catMap) {
+    if (re.test(text)) { result.category = cat; break; }
+  }
+
+  return result;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DEMO FILL (for quick demo / testing)
+   ═══════════════════════════════════════════════════════════════ */
+function demoFill() {
+  // 典型智能宠物喂食器示例数据
+  setField('price', 39.99);
+  setField('dimL', 12); setField('dimW', 8); setField('dimH', 6);
+  setField('weight', 2.5);
+  setField('tariffRate', 7.5);
+  setField('acosRate', 22);
+  document.getElementById('category').value = 'pet';
+  setField('fobPrice', 12.5);
+  setField('seaFreight', 2.8);
+  recalc();
+}
+
+function setField(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN CALCULATION ENGINE
+   ═══════════════════════════════════════════════════════════════ */
+let lastResult = null;
+
+function recalc() {
+  const price          = parseFloat(document.getElementById('price').value)      || 0;
+  const fobPrice       = parseFloat(document.getElementById('fobPrice').value)   || 0;
+  const seaFreight     = parseFloat(document.getElementById('seaFreight').value) || 0;
+  const tariffRateActual = parseFloat(document.getElementById('tariffRate').value) || 0;
+  const acosRate       = parseFloat(document.getElementById('acosRate').value)   || 0;
+  const returnRate     = parseFloat(document.getElementById('returnRate').value) || 0;
+  const cat            = document.getElementById('category').value;
+
+  // 同步重量单位显示标签
+  const wtUnitVal = document.getElementById('weightUnit')?.value || 'lb';
+  const uWtEl = document.getElementById('uWeight');
+  if (uWtEl) uWtEl.textContent = wtUnitVal;
+
+  // 读取尺寸和重量，统一换算为英制（FBA算法只使用 in / lb）
+  const { L: dimL, W: dimW, H: dimH, wt: weight } = getDimsInImperial();
+
+  // ── FBA Calculation ──
+  let fbaFee = 0, storageFee = 0, dimWeightLb = 0, billWeightLb = 0, tierResult = null, tierLabel = '—';
+  if (dimL > 0 && dimW > 0 && dimH > 0 && weight > 0) {
+    tierResult   = getSizeTier(dimL, dimW, dimH, weight);
+    fbaFee       = calcFBAFee(tierResult);
+    storageFee   = calcStorageFee(dimL, dimW, dimH, tierResult.tier);
+    dimWeightLb  = tierResult.dimWeightLb;
+    billWeightLb = tierResult.billW;
+    tierLabel    = tierResult.tier.label;
+    // Update tier badge
+    const badge = document.getElementById('tierBadge');
+    badge.className = 'status-badge ' + tierResult.tier.cls.replace('tier-','').replace(/-/g, ' ');
+    badge.className = 'tier-badge ' + tierResult.tier.cls;
+    badge.textContent = tierResult.tier.label;
+  } else {
+    const badge = document.getElementById('tierBadge');
+    badge.className = 'status-badge neutral';
+    badge.textContent = '待计算';
+  }
+
+  // ── Referral Fee ──
+  let referralFee = 0, referralLabel = '—', referralRate = 0;
+  if (price > 0) {
+    const ref = calcReferralFee(price, cat);
+    referralFee = ref.fee;
+    referralLabel = ref.label;
+    referralRate = ref.rate;
+  }
+
+  // ── Tariff ──
+  // Tariff is applied on FOB + sea freight (CIF basis simplified)
+  const tariffFee = fobPrice > 0 ? +((fobPrice + seaFreight) * tariffRateActual / 100).toFixed(2) : 0;
+
+  // ── Ad Fee (ACOS × price) ──
+  const adFee = price > 0 ? +(price * acosRate / 100).toFixed(2) : 0;
+
+  // ── Return Loss (退货损耗 = 售价 × 退货率%) ──
+  // 代表每卖出1件，客户需计提的退货处理成本（退款+处理费+二次销售折损）
+  const returnLoss = price > 0 ? +(price * returnRate / 100).toFixed(2) : 0;
+
+  // ── Totals ──
+  const totalCosts = fobPrice + seaFreight + fbaFee + storageFee + referralFee + tariffFee + adFee + returnLoss;
+  const grossProfit = price > 0 ? +(price - totalCosts).toFixed(2) : 0;
+  const grossMarginPct = price > 0 ? +(grossProfit / price * 100).toFixed(1) : 0;
+  // ROI分母：供货价 + 头程 + 关税（客户真实前端资金投入）
+  const investBase = fobPrice + seaFreight + tariffFee;
+  const roi = investBase > 0 ? +(grossProfit / investBase * 100).toFixed(1) : 0;
+
+  lastResult = { price, fobPrice, seaFreight, fbaFee, storageFee, referralFee,
+    tariffFee, adFee, acosRate, returnLoss, returnRate, grossProfit, grossMarginPct, roi,
+    referralRate, referralLabel, dimWeightLb, billWeightLb, tierLabel, tariffRateActual, cat };
+
+  // ── Update Module 3 ──
+  document.getElementById('fbaFee').textContent     = fbaFee     > 0 ? '$'+fbaFee.toFixed(2)     : '$ —';
+  // 仓储费即使极小也显示实际值，不显示 —（避免误判为0）
+  document.getElementById('storageFee').textContent = (dimL > 0 && dimW > 0 && dimH > 0)
+    ? '$' + storageFee.toFixed(2) : '$ —';
+  document.getElementById('referralFee').innerHTML  = referralFee > 0
+    ? `$${referralFee.toFixed(2)} <span style="color:var(--text3);font-weight:400;">(${(referralRate*100).toFixed(1)}%)</span>` : '$ —';
+  document.getElementById('tariffFee').textContent  = tariffFee  > 0 ? '$'+tariffFee.toFixed(2)  : '$ —';
+  document.getElementById('adFee').textContent        = adFee       > 0 ? '$'+adFee.toFixed(2)       : '$ —';
+  document.getElementById('acosDisplay').textContent  = acosRate    > 0 ? `ACOS ${acosRate}%`         : '';
+  document.getElementById('returnLossFee').textContent= returnLoss  > 0 ? '$'+returnLoss.toFixed(2)   : '$ —';
+  document.getElementById('returnDisplay').textContent= returnRate  > 0 ? `${returnRate}%`            : '';
+  const totalPlat = fbaFee + storageFee + referralFee + tariffFee + adFee + returnLoss;
+  document.getElementById('totalPlatformFees').textContent = totalPlat > 0 ? '$'+totalPlat.toFixed(2) : '$ —';
+
+  // ── Calc Detail ──
+  document.getElementById('dimWeight').textContent    = dimWeightLb  > 0 ? dimWeightLb.toFixed(3)+' lb'  : '—';
+  document.getElementById('billWeight').textContent   = billWeightLb > 0 ? billWeightLb.toFixed(3)+' lb' : '—';
+  document.getElementById('commissionRule').textContent = referralLabel;
+
+  // ── Right KPIs ──
+  const haveData = price > 0 && fobPrice > 0;
+  if (haveData) {
+    const gpEl = document.getElementById('grossProfit');
+    gpEl.textContent = (grossProfit >= 0 ? '+' : '') + '$' + Math.abs(grossProfit).toFixed(2);
+    gpEl.className = 'kpi-value ' + (grossProfit >= 0 ? 'green' : 'red');
+    document.getElementById('kpiGross').className = 'kpi-card ' + (grossProfit >= 0 ? 'green' : 'red');
+    document.getElementById('grossProfitSub').textContent = `总成本 $${totalCosts.toFixed(2)} | 售价 $${price.toFixed(2)}`;
+
+    const gmEl = document.getElementById('grossMargin');
+    gmEl.textContent = grossMarginPct.toFixed(1) + ' %';
+    gmEl.className = 'kpi-value ' + (grossMarginPct >= 25 ? 'green' : grossMarginPct >= 15 ? 'yellow' : 'red');
+    document.getElementById('kpiMargin').className = 'kpi-card ' + (grossMarginPct >= 25 ? 'green' : grossMarginPct >= 15 ? 'yellow' : 'red');
+    document.getElementById('grossMarginSub').textContent = `毛利 ÷ 前台售价 $${price.toFixed(2)}`;
+
+    const roiEl = document.getElementById('roiVal');
+    roiEl.textContent = roi.toFixed(1) + ' %';
+    roiEl.className = 'kpi-value ' + (roi >= 50 ? 'green' : roi >= 25 ? 'yellow' : 'red');
+    document.getElementById('kpiROI').className = 'kpi-card ' + (roi >= 50 ? 'green' : roi >= 25 ? 'yellow' : 'red');
+    document.getElementById('roiSub').textContent = `毛利 ÷ (供货$${fobPrice.toFixed(2)} + 运费$${seaFreight.toFixed(2)} + 关税$${tariffFee.toFixed(2)})`;
+
+    // Health badge
+    const hb = document.getElementById('healthBadge');
+    const ht = document.getElementById('healthText');
+    if (grossMarginPct >= 30) {
+      hb.className = 'status-badge healthy'; hb.innerHTML = '<span class="status-dot"></span>利润健康';
+      ht.textContent = '客户当前方案毛利达标，您的报价有上行空间';
+    } else if (grossMarginPct >= 15) {
+      hb.className = 'status-badge warning'; hb.innerHTML = '<span class="status-dot"></span>利润偏薄';
+      ht.textContent = '毛利率15-30%，客户可能正在压价，需强化差异化';
+    } else {
+      hb.className = 'status-badge danger'; hb.innerHTML = '<span class="status-dot"></span>利润危险';
+      ht.textContent = '毛利<15%，客户面临亏损风险，您有切入机会';
+    }
+  } else {
+    document.getElementById('grossProfit').textContent = '$ —';
+    document.getElementById('grossProfit').className = 'kpi-value green';
+    document.getElementById('grossMargin').textContent = '— %';
+    document.getElementById('roiVal').textContent = '— %';
+  }
+
+  // ── Full P&L ──
+  const fmt = (v, neg=false) => v > 0 ? (neg?'−':'')+'$'+v.toFixed(2) : '$—';
+  document.getElementById('plPrice').textContent   = price > 0 ? '$'+price.toFixed(2) : '$—';
+  document.getElementById('plFob').textContent     = fmt(fobPrice, true);
+  document.getElementById('plSea').textContent     = fmt(seaFreight, true);
+  document.getElementById('plFba').textContent     = fmt(fbaFee, true);
+  document.getElementById('plStorage').textContent = fmt(storageFee, true);
+  document.getElementById('plRef').textContent     = fmt(referralFee, true);
+  document.getElementById('plTariff').textContent  = fmt(tariffFee, true);
+  document.getElementById('plAd').textContent      = fmt(adFee, true);
+  document.getElementById('plReturn').textContent  = fmt(returnLoss, true);
+  const netEl = document.getElementById('plNet');
+  netEl.textContent = haveData ? (grossProfit>=0?'+':'')+' $'+Math.abs(grossProfit).toFixed(2) : '$—';
+  netEl.style.color = haveData ? (grossProfit >= 0 ? 'var(--green)' : 'var(--red)') : 'var(--text)';
+
+  // ── Left col ──
+  const cv = document.getElementById('donutCenterVal');
+  cv.textContent = price > 0 ? '$'+price.toFixed(0) : '—';
+  updateDonut(price, fobPrice, seaFreight, fbaFee + storageFee, referralFee, tariffFee, adFee, grossProfit);
+  updateCostBars(price, fobPrice, seaFreight, fbaFee + storageFee, referralFee, tariffFee, adFee, grossProfit);
+
+  // ── Backsolve ──
+  backsolve();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BACK-SOLVE: Max FOB for target margin
+   ═══════════════════════════════════════════════════════════════ */
+function backsolve() {
+  const price      = parseFloat(document.getElementById('price').value)      || 0;
+  const seaFreight = parseFloat(document.getElementById('seaFreight').value) || 0;
+  const targetPct  = parseFloat(document.getElementById('targetMargin').value)|| 0;
+  const cat        = document.getElementById('category').value;
+  const tariffRate = parseFloat(document.getElementById('tariffRate').value)  || 0;
+  const acosRate   = parseFloat(document.getElementById('acosRate').value)    || 0;
+  const returnRate = parseFloat(document.getElementById('returnRate').value)  || 0;
+  const result     = document.getElementById('backsolveResult');
+
+  if (price <= 0) {
+    result.innerHTML = '<span style="color:var(--text3)">请先填写前台售价…</span>';
+    return;
+  }
+
+  const targetMargin = price * targetPct / 100;
+  const ref        = calcReferralFee(price, cat);
+  const fba        = (lastResult && lastResult.fbaFee) ? lastResult.fbaFee + lastResult.storageFee : 0;
+  const adFee      = price * acosRate / 100;
+  const returnLoss = price * returnRate / 100;
+
+  // 反推公式（含广告费 + 退货损耗）：
+  // profit = price - fob - sea - fba - ref - tariff - adFee - returnLoss
+  // tariff = (fob + sea) * tariffRate / 100
+  // → fob*(1 + T) = price - fba - ref - sea*T - adFee - returnLoss - targetMargin
+  const T = 1 + tariffRate / 100;
+  const maxFob = (price - fba - ref.fee - seaFreight * T - adFee - returnLoss - targetMargin) / T;
+
+  if (maxFob <= 0) {
+    result.innerHTML = `<span style="color:var(--red)">⚠ 目标毛利率 ${targetPct}% 不可达（广告 $${adFee.toFixed(2)} + 退货 $${returnLoss.toFixed(2)}）。<br>建议：①降低目标毛利率 ②降低退货率 ③客户提升前台售价</span>`;
+    return;
+  }
+
+  result.innerHTML = `
+    客户目标毛利 <strong style="color:var(--yellow)">${targetPct}%</strong>，含广告 ${acosRate}% / 退货 ${returnRate}%：<br>
+    您的最大可报供货价为 <strong style="color:var(--accent3);font-size:16px;">$${maxFob.toFixed(2)}</strong><br>
+    <span style="font-size:10px;color:var(--text3);margin-top:4px;display:block">
+      FBA $${fba.toFixed(2)} | 佣金 $${ref.fee.toFixed(2)} | 关税 ${tariffRate}% | 广告 $${adFee.toFixed(2)} | 退货 $${returnLoss.toFixed(2)}
+    </span>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DONUT CHART (Canvas)
+   ═══════════════════════════════════════════════════════════════ */
+const DONUT_COLORS = ['#3d7ef6','#7c5cfc','#06d6a0','#f59e0b','#f97316','#e879f9','#22c55e'];
+const DONUT_LABELS = ['供货成本','头程海运','FBA配送','平台佣金','关税','广告PPC','客户毛利'];
+
+function updateDonut(price, fob, sea, fba, ref, tariff, ad, profit) {
+  const canvas = document.getElementById('donutChart');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const vals = [fob, sea, fba, ref, tariff, ad, profit];
+  const total = vals.reduce((a,b)=>a+Math.max(b,0),0);
+
+  if (total <= 0) {
+    ctx.strokeStyle = '#2a3158'; ctx.lineWidth = 20;
+    ctx.beginPath(); ctx.arc(W/2, H/2, 60, 0, Math.PI*2); ctx.stroke();
+    return;
+  }
+
+  let startAngle = -Math.PI / 2;
+  ctx.lineWidth = 22;
+  ctx.lineCap = 'round';
+
+  // Draw background ring
+  ctx.strokeStyle = '#1c2138';
+  ctx.beginPath(); ctx.arc(W/2, H/2, 58, 0, Math.PI*2); ctx.stroke();
+
+  vals.forEach((v, i) => {
+    const portion = Math.max(v, 0) / total;
+    if (portion < 0.001) return;
+    const endAngle = startAngle + portion * Math.PI * 2;
+    ctx.strokeStyle = DONUT_COLORS[i];
+    ctx.beginPath();
+    ctx.arc(W/2, H/2, 58, startAngle + 0.03, endAngle - 0.03);
+    ctx.stroke();
+    startAngle = endAngle;
+  });
+
+  // Legend values (7 items: idx 0–6)
+  vals.forEach((v, i) => {
+    const pct = total > 0 ? (Math.max(v,0)/total*100).toFixed(1) : '0.0';
+    const lv = document.getElementById(`lval${i}`);
+    const lp = document.getElementById(`lpct${i}`);
+    if (lv) lv.textContent = v > 0 ? '$'+v.toFixed(2) : '$—';
+    if (lp) lp.textContent = v > 0 ? ` ${pct}%` : '';
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COST BARS (Left col)
+   ═══════════════════════════════════════════════════════════════ */
+function updateCostBars(price, fob, sea, fba, ref, tariff, ad, profit) {
+  const container = document.getElementById('costBars');
+  const items = [
+    { name: '供货成本',    val: fob,    color: '#3d7ef6' },
+    { name: '头程海运',    val: sea,    color: '#7c5cfc' },
+    { name: 'FBA配送+仓储', val: fba,   color: '#06d6a0' },
+    { name: '平台佣金',    val: ref,    color: '#f59e0b' },
+    { name: '关税',        val: tariff, color: '#f97316' },
+    { name: '广告费 PPC',  val: ad,     color: '#e879f9' },
+    { name: '客户毛利',    val: profit, color: profit >= 0 ? '#22c55e' : '#ef4444' }
+  ];
+
+  if (price <= 0) {
+    container.innerHTML = '<div class="empty-state"><span class="icon">📊</span><span>填写参数后<br>自动生成</span></div>';
+    return;
+  }
+
+  container.innerHTML = items.map(item => {
+    const pct = price > 0 ? Math.max(0, item.val / price * 100).toFixed(1) : 0;
+    return `<div class="cost-bar-item">
+      <div class="cost-bar-header">
+        <span class="cost-bar-name">${item.name}</span>
+        <span class="cost-bar-val" style="color:${item.color}">${item.val > 0 ? '$'+item.val.toFixed(2) : '—'}</span>
+      </div>
+      <div class="cost-bar-track">
+        <div class="cost-bar-fill" style="width:${pct}%;background:${item.color}"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REPORT GENERATION
+   ═══════════════════════════════════════════════════════════════ */
+function generateReport() {
+  if (!lastResult || lastResult.price <= 0) {
+    alert('请先填写完整的商品数据和供货价格');
+    return;
+  }
+  const r = lastResult;
+  const date = new Date().toLocaleDateString('zh-CN');
+  const catName = REFERRAL_RULES[r.cat]?.name || r.cat;
+
+  const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>供应链优化与利润推演报告</title>
+<style>
+  body { font-family: 'Segoe UI', system-ui, sans-serif; max-width: 780px; margin: 0 auto;
+    padding: 40px; color: #1a1a2e; background: #fff; font-size: 13px; }
+  h1 { font-size: 22px; color: #1a1a2e; border-bottom: 3px solid #3d7ef6; padding-bottom: 12px; }
+  h2 { font-size: 14px; color: #3d7ef6; margin: 24px 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .meta { color: #666; font-size: 12px; margin: 4px 0 20px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  td, th { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; }
+  th { background: #f5f7ff; font-weight: 700; color: #333; font-size: 11px; }
+  .cost-row td:last-child { color: #e53e3e; font-weight: 600; }
+  .profit-row td { font-weight: 800; font-size: 15px; }
+  .profit-pos td:last-child { color: #22863a; }
+  .profit-neg td:last-child { color: #e53e3e; }
+  .kpi-grid { display: flex; gap: 16px; margin: 16px 0; }
+  .kpi-box { flex: 1; padding: 14px; border: 1.5px solid #e2e8ff; border-radius: 8px; text-align: center; }
+  .kpi-box .v { font-size: 26px; font-weight: 800; }
+  .kpi-box .l { font-size: 11px; color: #666; margin-top: 4px; }
+  .green { color: #22863a; } .yellow { color: #b7791f; } .red { color: #c53030; }
+  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #eee;
+    font-size: 11px; color: #999; }
+  @media print { body { padding: 20px; } }
+</style>
+</head>
+<body>
+<h1>📦 供应链优化与利润推演报告</h1>
+<p class="meta">生成日期：${date} &nbsp;|&nbsp; 品类：${catName} &nbsp;|&nbsp; 工具：Amazon FBA 客户利润反向推演系统</p>
+
+<h2>一、商品基本信息</h2>
+<table>
+  <tr><th>参数</th><th>数值</th></tr>
+  <tr><td>Amazon 前台售价</td><td><strong>$${r.price.toFixed(2)}</strong></td></tr>
+  <tr><td>产品品类</td><td>${catName}</td></tr>
+  <tr><td>FBA 尺寸分级</td><td>${r.tierLabel}</td></tr>
+  <tr><td>计费重量</td><td>${r.billWeightLb.toFixed(3)} lb（体积重 ${r.dimWeightLb.toFixed(3)} lb）</td></tr>
+</table>
+
+<h2>二、客户成本结构拆解</h2>
+<table>
+  <tr><th>成本项</th><th>单件金额 (USD)</th><th>占售价比例</th></tr>
+  <tr class="cost-row"><td>① 供货成本（您的报价）</td><td>$${r.fobPrice.toFixed(2)}</td><td>${(r.fobPrice/r.price*100).toFixed(1)}%</td></tr>
+  <tr class="cost-row"><td>② 头程海运费</td><td>$${r.seaFreight.toFixed(2)}</td><td>${(r.seaFreight/r.price*100).toFixed(1)}%</td></tr>
+  <tr class="cost-row"><td>③ Amazon FBA 配送费</td><td>$${r.fbaFee.toFixed(2)}</td><td>${(r.fbaFee/r.price*100).toFixed(1)}%</td></tr>
+  <tr class="cost-row"><td>④ Amazon FBA 仓储费（月均）</td><td>$${r.storageFee.toFixed(2)}</td><td>${(r.storageFee/r.price*100).toFixed(1)}%</td></tr>
+  <tr class="cost-row"><td>⑤ 平台销售佣金（${(r.referralRate*100).toFixed(1)}%）</td><td>$${r.referralFee.toFixed(2)}</td><td>${(r.referralFee/r.price*100).toFixed(1)}%</td></tr>
+  <tr class="cost-row"><td>⑥ 进口关税（${r.tariffRateActual}% on CIF）</td><td>$${r.tariffFee.toFixed(2)}</td><td>${(r.tariffFee/r.price*100).toFixed(1)}%</td></tr>
+  <tr class="cost-row"><td>⑦ 广告费 PPC（ACOS ${r.acosRate}%）</td><td>$${r.adFee.toFixed(2)}</td><td>${(r.adFee/r.price*100).toFixed(1)}%</td></tr>
+  <tr class="cost-row"><td>⑧ 退货损耗（${r.returnRate}%）</td><td>$${r.returnLoss.toFixed(2)}</td><td>${(r.returnLoss/r.price*100).toFixed(1)}%</td></tr>
+  <tr class="${r.grossProfit >= 0 ? 'profit-pos' : 'profit-neg'} profit-row">
+    <td>【客户单件净毛利（含广告+退货）】</td>
+    <td>$${r.grossProfit.toFixed(2)}</td>
+    <td>${r.grossMarginPct.toFixed(1)}%</td>
+  </tr>
+</table>
+
+<h2>三、核心利润指标</h2>
+<div class="kpi-grid">
+  <div class="kpi-box">
+    <div class="v ${r.grossProfit>=0?'green':'red'}">$${r.grossProfit.toFixed(2)}</div>
+    <div class="l">单件毛利</div>
+  </div>
+  <div class="kpi-box">
+    <div class="v ${r.grossMarginPct>=25?'green':r.grossMarginPct>=15?'yellow':'red'}">${r.grossMarginPct.toFixed(1)}%</div>
+    <div class="l">客户毛利率</div>
+  </div>
+  <div class="kpi-box">
+    <div class="v ${r.roi>=50?'green':r.roi>=25?'yellow':'red'}">${r.roi.toFixed(1)}%</div>
+    <div class="l">ROI（毛利÷供货+运+关税）</div>
+  </div>
+</div>
+
+<h2>四、谈判建议</h2>
+<table>
+  <tr><th>评估维度</th><th>结论</th></tr>
+  <tr><td>当前利润健康度</td><td>${r.grossMarginPct>=30?'✅ 健康（≥30%）':r.grossMarginPct>=15?'⚠ 偏薄（15–30%）':'❌ 危险（<15%）'}</td></tr>
+  <tr><td>关税压力</td><td>${r.tariffRateActual>=25?'🔴 高关税（25%+），重点谈判杠杆':'🟡 中等关税，可用于差异化讨论'}</td></tr>
+  <tr><td>FBA 费用结构</td><td>${r.tierLabel} — ${r.fbaFee < 5 ? '费用合理' : '费用较高，可建议优化包装降档'}</td></tr>
+  <tr><td>核心话术方向</td><td>以"利润改善专家"身份，强调您的报价已优化客户 ROI，对比客户当前供应商的隐性成本</td></tr>
+</table>
+
+<div class="footer">
+  本报告由「Amazon FBA 客户利润反向推演系统」自动生成，仅供商务谈判参考。<br>
+  FBA 费率依据 Amazon 2024 年官方公布费率表，实际以亚马逊官方平台为准。
+</div>
+</body></html>`;
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `利润推演报告_${date.replace(/\//g,'-')}.html`;
+  a.click();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TIER REFERENCE TABLE TOGGLE
+   ═══════════════════════════════════════════════════════════════ */
+function toggleTierRef() {
+  const panel = document.getElementById('tierRefTable');
+  const arrow = document.getElementById('tierRefArrow');
+  const btn   = document.getElementById('tierRefToggle');
+  const isOpen = panel.style.display !== 'none';
+  panel.style.display = isOpen ? 'none' : 'block';
+  arrow.style.transform = isOpen ? '' : 'rotate(90deg)';
+  btn.style.borderColor = isOpen ? 'var(--border)' : 'var(--accent)';
+  btn.style.color       = isOpen ? 'var(--text2)'  : 'var(--accent)';
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESET
+   ═══════════════════════════════════════════════════════════════ */
+function resetAll() {
+  ['price','dimL','dimW','dimH','weight','fobPrice','seaFreight'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('tariffRate').value = '7.5';
+  document.getElementById('acosRate').value = '20';
+  document.getElementById('returnRate').value = '5';
+  document.getElementById('category').value = 'pet';
+  document.getElementById('urlInput').value = '';
+  document.getElementById('parseHint').textContent = '支持 Amazon.com / Chewy / Wayfair（一期以 Amazon 为核心）';
+  // 重置单位下拉为默认值，并同步追踪变量
+  const duEl = document.getElementById('dimUnit');
+  if (duEl) duEl.value = 'in';
+  _prevDimUnit = 'in';
+  const wuEl = document.getElementById('weightUnit');
+  if (wuEl) wuEl.value = 'lb';
+  _prevWeightUnit = 'lb';
+  const uWtEl = document.getElementById('uWeight');
+  if (uWtEl) uWtEl.textContent = 'lb';
+  lastResult = null;
+  recalc();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════════════ */
+// Add demo button to header + bind unit-switch events
+window.addEventListener('DOMContentLoaded', () => {
+  const right = document.querySelector('.header-right');
+  const demoBtn = document.createElement('button');
+  demoBtn.className = 'btn btn-ghost';
+  demoBtn.innerHTML = '🧪 演示数据';
+  demoBtn.onclick = demoFill;
+  right.insertBefore(demoBtn, right.firstChild);
+
+  // Initial draw of empty donut
+  updateDonut(0,0,0,0,0,0,0,0);
+
+  // Bind unit-switch handlers (more reliable than inline onchange)
+  document.getElementById('dimUnit').addEventListener('change', onDimUnitChange);
+  document.getElementById('weightUnit').addEventListener('change', onWeightUnitChange);
+});
+</script>
+
+</body>
+</html>
