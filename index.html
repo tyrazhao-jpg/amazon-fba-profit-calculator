@@ -157,9 +157,16 @@ body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', syste
 <div class="route-bar">
   <span class="route-label">PLATFORM</span>
   <select class="route-select" id="routePlatform" onchange="onRouteChange()">
-    <option value="amazon_eu">🏪 Amazon</option>
-    <option value="shopify">🛍 Shopify 独立站</option>
-    <option value="chewy">🐾 Chewy 宠物垂直</option>
+    <optgroup label="Amazon">
+      <option value="amazon_eu">🏪 Amazon（EU/US/CA/AU）</option>
+      <option value="amazon_ae">🏪 Amazon UAE</option>
+      <option value="amazon_tr">🏪 Amazon Turkey</option>
+    </optgroup>
+    <optgroup label="其他平台">
+      <option value="bol">🇳🇱 bol.com</option>
+      <option value="shopify">🛍 Shopify 独立站</option>
+      <option value="chewy">🐾 Chewy 宠物垂直</option>
+    </optgroup>
   </select>
   <span class="route-sep">›</span>
   <select class="route-select" id="routeMarket" onchange="onRouteChange()">
@@ -171,9 +178,13 @@ body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', syste
     <option value="US" selected>🇺🇸 美国 (USD · No VAT)</option>
     <option value="CA">🇨🇦 加拿大 (CAD · No VAT)</option>
     <option value="AU">🇦🇺 澳大利亚 (AUD · GST 10%)</option>
+    <option value="AE">🇦🇪 阿联酋 (AED · No VAT)</option>
+    <option value="TR">🇹🇷 土耳其 (TRY · No VAT)</option>
+    <option value="NL">🇳🇱 荷兰/比利时 (EUR · VAT 21%)</option>
   </select>
   <div id="routeActivePill" class="route-pill amazon">Amazon EU</div>
   <div id="vatActivePill" class="vat-pill" style="display:none;">VAT 已剥离</div>
+  <div id="tryWarning" style="display:none;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:5px;padding:2px 9px;font-size:10px;color:#ef4444;font-weight:600;">⚠ TRY 汇率波动风险</div>
   <span style="margin-left:auto;font-size:11px;color:var(--text3);" id="routeSubtitle">FBA 欧洲费率 | 佣金 15% | 计费重取大值</span>
 </div>
 
@@ -698,16 +709,17 @@ const HTS_TABLE = [
    数据表
 ══════════════════════════════════════════ */
 const VAT_TABLE = {
-  GB:0.20, DE:0.19, FR:0.20, IT:0.22, ES:0.21, AU:0.10,
-  US:0, CA:0
+  GB:0.20, DE:0.19, FR:0.20, IT:0.22, ES:0.21, AU:0.10, NL:0.21,
+  US:0, CA:0, AE:0, TR:0
 };
 const CURRENCY = {
   GB:{sym:'£',code:'GBP'}, DE:{sym:'€',code:'EUR'}, FR:{sym:'€',code:'EUR'},
   IT:{sym:'€',code:'EUR'}, ES:{sym:'€',code:'EUR'}, AU:{sym:'A$',code:'AUD'},
-  US:{sym:'$',code:'USD'}, CA:{sym:'C$',code:'CAD'}
+  US:{sym:'$',code:'USD'}, CA:{sym:'C$',code:'CAD'},
+  AE:{sym:'AED ',code:'AED'}, TR:{sym:'₺',code:'TRY'}, NL:{sym:'€',code:'EUR'}
 };
 
-/* Amazon 平台佣金（欧洲与美国费率相近，同品类保持一致） */
+/* Amazon 平台佣金（EU/US/CA/AU，同品类费率基本一致） */
 const REFERRAL_RATES = {
   pet:[{max:15,rate:.15},{max:Infinity,rate:.22}],
   home:[{max:Infinity,rate:.15}],
@@ -717,6 +729,42 @@ const REFERRAL_RATES = {
   beauty:[{max:Infinity,rate:.08}],
   clothing:[{max:Infinity,rate:.17}],
   other:[{max:Infinity,rate:.15}],
+};
+/* Amazon UAE（AED 计价，品类费率与欧洲站基本一致） */
+const REFERRAL_RATES_AE = {
+  pet:[{max:Infinity,rate:.15}],
+  home:[{max:Infinity,rate:.15}],
+  electronics:[{max:Infinity,rate:.07}],
+  toys:[{max:Infinity,rate:.10}],
+  sports:[{max:Infinity,rate:.15}],
+  beauty:[{max:Infinity,rate:.15}],
+  clothing:[{max:Infinity,rate:.15}],
+  other:[{max:Infinity,rate:.15}],
+};
+/* Amazon Turkey（TRY 计价） */
+const REFERRAL_RATES_TR = {
+  pet:[{max:Infinity,rate:.15}],
+  home:[{max:Infinity,rate:.15}],
+  electronics:[{max:Infinity,rate:.07}],
+  toys:[{max:Infinity,rate:.08}],
+  sports:[{max:Infinity,rate:.15}],
+  beauty:[{max:Infinity,rate:.15}],
+  clothing:[{max:Infinity,rate:.15}],
+  other:[{max:Infinity,rate:.15}],
+};
+/* bol.com 佣金 = 比例 × 净价（含VAT）+ 固定额（€）
+   固定额根据售价档位：<10€→0.20, <20€→0.40, <50€→0.83, >=50€→0.83（宠物/家居）
+   服装/鞋类固定额略高 */
+const BOL_RATES = {
+  //              pct   固定额(€)
+  pet:      { pct:.09,  fixed:0.83 },
+  home:     { pct:.07,  fixed:0.83 },
+  electronics:{ pct:.07, fixed:0.83 },
+  toys:     { pct:.05,  fixed:0.83 },
+  sports:   { pct:.08,  fixed:0.83 },
+  beauty:   { pct:.07,  fixed:0.83 },
+  clothing: { pct:.133, fixed:0.85 },
+  other:    { pct:.07,  fixed:0.83 },
 };
 const CHEWY_RATES = {
   pet:[{max:Infinity,rate:.22}],
@@ -781,10 +829,40 @@ function onRouteChange() {
   document.getElementById('rowNetPrice').style.display     = _isVatMarket ? 'flex' : 'none';
   document.getElementById('rowVatAmount').style.display    = _isVatMarket ? 'flex' : 'none';
 
-  // 平台 pill — 动态显示所选市场站点
+  // ── 市场下拉联动：不同平台只显示相关市场 ──
+  const marketSel = document.getElementById('routeMarket');
+  const allMarkets = [...marketSel.options];
+  const platformMarkets = {
+    amazon_eu: ['GB','DE','FR','IT','ES','US','CA','AU'],
+    amazon_ae: ['AE'],
+    amazon_tr: ['TR'],
+    bol:       ['NL'],
+    shopify:   ['GB','DE','FR','IT','ES','US','CA','AU','AE','TR','NL'],
+    chewy:     ['US'],
+  };
+  const allowed = platformMarkets[_platform] || [];
+  allMarkets.forEach(o => { o.hidden = allowed.length && !allowed.includes(o.value); });
+  // 如当前市场不在允许列表，自动跳到第一个允许市场
+  if (allowed.length && !allowed.includes(_market)) {
+    marketSel.value = allowed[0];
+    _market = allowed[0];
+    _isVatMarket = (VAT_TABLE[_market] || 0) > 0;
+  }
+
+  // 土耳其里拉货币风险提示
+  const tryWarning = document.getElementById('tryWarning');
+  if (tryWarning) tryWarning.style.display = _market === 'TR' ? 'block' : 'none';
+
+  // 平台 pill
   const pillEl = document.getElementById('routeActivePill');
-  const marketLabel = { GB:'UK', DE:'DE', FR:'FR', IT:'IT', ES:'ES', US:'US', CA:'CA', AU:'AU' };
-  if (_platform === 'amazon_eu') {
+  const marketLabel = { GB:'UK',DE:'DE',FR:'FR',IT:'IT',ES:'ES',US:'US',CA:'CA',AU:'AU',AE:'UAE',TR:'TR',NL:'NL/BE' };
+  if (_platform === 'amazon_ae') {
+    pillEl.className = 'route-pill amazon'; pillEl.textContent = 'Amazon UAE';
+  } else if (_platform === 'amazon_tr') {
+    pillEl.className = 'route-pill amazon'; pillEl.textContent = 'Amazon TR';
+  } else if (_platform === 'bol') {
+    pillEl.className = 'route-pill shopify'; pillEl.textContent = 'bol.com NL/BE';
+  } else if (_platform === 'amazon_eu') {
     pillEl.className = 'route-pill amazon';
     pillEl.textContent = 'Amazon ' + (marketLabel[_market] || _market);
   } else if (_platform === 'shopify') {
@@ -793,11 +871,13 @@ function onRouteChange() {
     pillEl.className = 'route-pill chewy'; pillEl.textContent = 'Chewy';
   }
 
-  // 路由说明 — Amazon 区分有/无 FBA VAT 市场
-  const isAmazonVat = _platform === 'amazon_eu' && _isVatMarket;
+  // 路由说明
+  const isAmazonVat = ['amazon_eu','amazon_ae','amazon_tr'].includes(_platform) && _isVatMarket;
   const subtitles = {
-    amazon_eu: isAmazonVat ? 'FBA 费率 | 品类佣金 | 计费重取大值 | VAT 自动剥离'
-                           : 'FBA 费率 | 品类佣金 | 计费重取大值',
+    amazon_eu: _isVatMarket ? 'FBA 费率 | 品类佣金 | 计费重取大值 | VAT 自动剥离' : 'FBA 费率 | 品类佣金 | 计费重取大值',
+    amazon_ae: '无 VAT | FBA 费率 | 品类佣金（7-15%）| AED 计价',
+    amazon_tr: '无 VAT | FBA 费率 | 品类佣金（7-15%）| TRY 计价 ⚠ 汇率波动风险',
+    bol:       'VAT 21% 自动剥离 | 佣金 = 比例 + 固定额 | 自配送/LvB',
     shopify:   '支付网关 2.9% | 3PL 独立配送 | 无平台佣金',
     chewy:     '宠物垂直佣金 22% | 官方仓配送 | 体积重计费',
   };
@@ -809,15 +889,38 @@ function onRouteChange() {
   if (_platform === 'shopify') document.getElementById('sec_shopify_gateway').classList.add('active');
   if (_platform === 'chewy')   document.getElementById('sec_chewy').classList.add('active');
 
+  // Amazon 系平台（含 AE/TR）都用 FBA；bol/shopify/chewy 不用
+  const isAmazon = ['amazon_eu','amazon_ae','amazon_tr'].includes(_platform);
+  const isBol    = _platform === 'bol';
+
+  // bol.com 无 FBA，用「自配送费」字段（复用 sec_shopify_gateway 的 3PL 行，或单独提示）
+  ['sec_shopify_gateway','sec_chewy'].forEach(id =>
+    document.getElementById(id).classList.remove('active'));
+  if (_platform === 'shopify' || _platform === 'bol') document.getElementById('sec_shopify_gateway').classList.add('active');
+  if (_platform === 'chewy') document.getElementById('sec_chewy').classList.add('active');
+  // bol.com 配送费提示（隐藏网关费行，只保留 3PL 配送费行）
+  const bolFulfillHint = document.getElementById('bolFulfillHint');
+  if (bolFulfillHint) bolFulfillHint.style.display = isBol ? 'block' : 'none';
+  const rowGatewayInput = document.getElementById('sec_shopify_gateway')?.querySelector('.field-group');
+  // 仅隐藏网关费那行（bol 不需要），3PL 行保留
+  const allGatewayGroups = document.getElementById('sec_shopify_gateway')?.querySelectorAll('.field-group');
+  if (allGatewayGroups) {
+    allGatewayGroups.forEach((g, i) => {
+      // 第一行是网关费率，第二行是网关固定额，第三行是3PL — bol 只显示第三行
+      if (isBol) g.style.display = i >= 2 ? '' : 'none';
+      else       g.style.display = '';
+    });
+  }
+
   // P&L 行
-  document.getElementById('plRowFba').style.display    = _platform === 'amazon_eu' ? 'flex' : 'none';
-  document.getElementById('plRowGateway').style.display= _platform === 'shopify'   ? 'flex' : 'none';
-  document.getElementById('plRowChewy').style.display  = _platform === 'chewy'     ? 'flex' : 'none';
+  document.getElementById('plRowFba').style.display    = isAmazon ? 'flex' : 'none';
+  document.getElementById('plRowGateway').style.display= _platform === 'shopify' ? 'flex' : 'none';
+  document.getElementById('plRowChewy').style.display  = _platform === 'chewy'   ? 'flex' : 'none';
   renumberPL();
-  document.getElementById('rowFba').style.display      = _platform === 'amazon_eu' ? 'flex' : 'none';
-  document.getElementById('rowStorage').style.display  = _platform === 'amazon_eu' ? 'flex' : 'none';
-  document.getElementById('rowGateway').style.display  = _platform === 'shopify'   ? 'flex' : 'none';
-  document.getElementById('row3pl').style.display      = _platform === 'shopify'   ? 'flex' : 'none';
+  document.getElementById('rowFba').style.display      = isAmazon ? 'flex' : 'none';
+  document.getElementById('rowStorage').style.display  = isAmazon ? 'flex' : 'none';
+  document.getElementById('rowGateway').style.display  = _platform === 'shopify' ? 'flex' : 'none';
+  document.getElementById('row3pl').style.display      = _platform === 'shopify' ? 'flex' : 'none';
   document.getElementById('rowChewyFulfill').style.display = _platform === 'chewy' ? 'flex' : 'none';
 
   recalc();
@@ -837,10 +940,24 @@ function calcVat(grossPrice, market) {
    佣金计算
 ══════════════════════════════════════════ */
 function calcReferral(netPrice, platform, category) {
-  let table;
+  // ── bol.com：固定额 + 比例（以含VAT净售价计，不支持阶梯） ──
+  if (platform === 'bol') {
+    const r = BOL_RATES[category] || BOL_RATES.other;
+    const fee = +(netPrice * r.pct + r.fixed).toFixed(2);
+    const effectiveRate = netPrice > 0 ? fee / netPrice : 0;
+    return { fee, rate: effectiveRate,
+      label: `${(r.pct*100).toFixed(1)}% + €${r.fixed.toFixed(2)} 固定额` };
+  }
+
+  // ── Shopify：无佣金 ──
   if (platform === 'shopify') return { fee: 0, rate: 0, label: '无平台佣金' };
-  if (platform === 'chewy')   table = CHEWY_RATES[category]   || CHEWY_RATES.other;
-  else                        table = REFERRAL_RATES[category] || REFERRAL_RATES.other;
+
+  // ── 选佣金费率表 ──
+  let table;
+  if (platform === 'chewy')      table = CHEWY_RATES[category]      || CHEWY_RATES.other;
+  else if (platform === 'amazon_ae') table = REFERRAL_RATES_AE[category] || REFERRAL_RATES_AE.other;
+  else if (platform === 'amazon_tr') table = REFERRAL_RATES_TR[category] || REFERRAL_RATES_TR.other;
+  else                           table = REFERRAL_RATES[category]   || REFERRAL_RATES.other;
 
   let fee = 0, prev = 0;
   const brackets = [];
@@ -851,7 +968,6 @@ function calcReferral(netPrice, platform, category) {
     prev = b.max;
   }
   const effectiveRate = netPrice > 0 ? fee / netPrice : 0;
-  // label：单档直接显 "15%"，跨档显 "实际 15.3%（阶梯：15% / 22%）"
   const label = brackets.length <= 1
     ? (brackets[0] || '—')
     : `实际 ${(effectiveRate*100).toFixed(1)}%（阶梯：${brackets.join(' / ')}）`;
@@ -979,8 +1095,13 @@ function recalc() {
 
   // 5. 平台履约费（路由分支）
   let fulfillmentFee = 0, gatewayFeeVal = 0, thirdplVal = 0, chewyFulfillVal = 0;
-  if (_platform === 'amazon_eu') {
+  if (['amazon_eu','amazon_ae','amazon_tr'].includes(_platform)) {
     fulfillmentFee = fbaFeeVal + storageFeeVal;
+  } else if (_platform === 'bol') {
+    // bol.com：自配送/LvB，用户自填，复用 3PL 字段
+    const tplFee   = parseFloat(document.getElementById('thirdplFee').value) || 0;
+    thirdplVal     = tplFee;
+    fulfillmentFee = thirdplVal;
   } else if (_platform === 'shopify') {
     const gwRate   = parseFloat(document.getElementById('gatewayRate').value)  || 0;
     const gwFixed  = parseFloat(document.getElementById('gatewayFixed').value) || 0;
